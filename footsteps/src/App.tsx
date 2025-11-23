@@ -1,17 +1,8 @@
-import { Route, Routes } from 'react-router'
-import './App.css'
-import Home from './Home'
-import LocalGame from './pages/LocalGame'
-import GameJson from './pages/LocalGameJson'
+import { useRoutes } from 'react-router-dom';
+import routes from './routes';
+import './App.css';
 
 export default function App() {
-  return (
-    <>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/game/:id" element={<LocalGame />} />
-      <Route path="/game/:id/json" element={<GameJson />} />
-    </Routes>
-    </>
-  )
-};
+  return useRoutes(routes);
+}
+
