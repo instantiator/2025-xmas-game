@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite-react-ssg build",
+    "build:gh-pages": "BASE_URL=/2025-xmas-game/ vite-react-ssg build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
