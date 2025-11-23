@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import gameRepository from './src/assets/game-repository.json'
@@ -17,6 +18,11 @@ export default defineConfig(({ mode }) => {
         const dynamicRoutes = ids.flatMap(id => [`/game/${id}`, `/game/${id}/json`]);
         return ['/', ...dynamicRoutes];
       }
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './tests/setup.ts',
     },
   }
 })
