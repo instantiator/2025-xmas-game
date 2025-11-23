@@ -7,6 +7,7 @@ export interface GameData {
   title: string;
   displays: GameDisplay[];
   challenges: GameChallenge[];
+  css: string;
 }
 
 export interface GameChallenge {

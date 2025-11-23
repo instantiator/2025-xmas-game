@@ -1,15 +1,10 @@
-import type { GameId } from "../entities/GameData";
 import { useGameData } from "../providers/GameDataHook";
+import { GameCss } from "./GameCss";
 
-export interface GameParams {
-  id: GameId;
-}
-
-export default function Game({id} : GameParams) {
-  const gameData = useGameData(id);
+export default function Game() {
+  const { game } = useGameData();
   return (<>
-    <code>
-      {JSON.stringify(gameData, null, 2)}
-    </code>
+    <GameCss />
+    <h1>{game?.title}</h1>
   </>);
 }

@@ -5,4 +5,5 @@
 | Dependency | License | Notes |
 |-|-|-|
 | react-router | | Provides `BrowserRouter` to manage application paths. |
-| react-mustache-template-component | | |
+| remix-utils | | Extensions for `react-router` |
+| react-mustache-template-component | | Mustache templating engine. |

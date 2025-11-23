@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import type { GameId } from "../entities/GameData";
-import { GameRepositoryContext } from "./GameRepositoryProvider";
+import { GameDataContext } from "./GameDataProvider";
 
-export function useGameData(id: GameId) {
-  const repository = useContext(GameRepositoryContext);
-  return { gameData: repository.games[id] };
+export function useGameData() {
+  const context = useContext(GameDataContext);
+  return { game: context?.game };
 }

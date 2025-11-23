@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import Game from "../components/Game";
 import type { GameId } from "../entities/GameData";
+import { GameDataProvider } from "../providers/GameDataProvider";
 import GameRepositoryProvider from "../providers/GameRepositoryProvider";
 import GameStateProvider from "../providers/GameStateProvider";
 
@@ -9,9 +10,11 @@ export default function LocalGame() {
 
   return (<>
     <GameRepositoryProvider source={{ type: "LocalRepository" }}>
-      <GameStateProvider gameId={id as GameId}>
-        <Game id={id as GameId} />
-      </GameStateProvider>
+      <GameDataProvider id={id as GameId}>
+        <GameStateProvider gameId={id as GameId}>
+          <Game />
+        </GameStateProvider>
+      </GameDataProvider>
     </GameRepositoryProvider>
     </>);
 }
