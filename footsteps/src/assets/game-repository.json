@@ -1,0 +1,10 @@
+{
+  "games": {
+    "test-game": { 
+      "id": "test-game",
+      "title": "Test Game",
+      "displays": [],
+      "challenges": []
+    }
+  }
+}
