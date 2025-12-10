@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import localRepository from "../assets/game-repository.json";
 import type { GameRepository } from "../entities/GameRepository";
 import type { GameSource } from "../entities/GameSource";
-import { BLANK_REPOSITORY, GameRepositoryContext } from "./GameRepositoryContext";
+import { GameRepositoryContext, LOADING_REPOSITORY } from "./GameRepositoryContext";
 
 interface GameRepositoryProviderParams {
   source: GameSource;
@@ -11,20 +11,21 @@ interface GameRepositoryProviderParams {
 }
 
 export default function GameRepositoryProvider({ source, children }: GameRepositoryProviderParams) {
-  const [repository, setRepository] = useState<GameRepository>(BLANK_REPOSITORY);
+  const [repository, setRepository] = useState<GameRepository>(LOADING_REPOSITORY);
 
   useEffect(() => {
     switch (source.type) {
       case "RemoteRepository":
         fetch(source.src.toString())
           .then(response => response.json())
-          .then(data => setRepository({ ...data, ready: true } as GameRepository));
-        break;
+          .then(data => setRepository({ ...data, ready: true } as GameRepository))
+          .catch(error => { console.error(error); setRepository(LOADING_REPOSITORY); });
+          break;
       case "LocalRepository":
-        setRepository({ ...localRepository, ready: true } as GameRepository);
+        setRepository({ ...localRepository, ready: true });
         break;
       case "RawRepository":
-        setRepository({ ...source.repository, ready: true } as GameRepository);
+        setRepository({ ...source.repository, ready: true });
         break;
     }
   }, [source]);

@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 import gameRepository from './src/assets/game-repository.json'
 
 // https://vitejs.dev/config/

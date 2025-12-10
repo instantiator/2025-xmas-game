@@ -4,11 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "sh generate-licenses.sh",
     "dev": "vite",
+    "prebuild": "sh generate-licenses.sh",
     "build": "vite-react-ssg build",
     "build:gh-pages": "BASE_URL=/2025-xmas-game/ vite-react-ssg build",
+    "prelint": "sh generate-licenses.sh",
     "lint": "eslint .",
+    "prepreview": "sh generate-licenses.sh",
     "preview": "vite preview",
+    "pretest": "sh generate-licenses.sh",
     "test": "vitest"
   },
   "dependencies": {
