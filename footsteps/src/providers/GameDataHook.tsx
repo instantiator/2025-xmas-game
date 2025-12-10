@@ -1,7 +1,10 @@
 import { useContext } from "react";
-import { GameDataContext } from "./GameDataContext";
+import { GameDataContext, GameDataLoadingContext } from "./GameDataContext";
+
+export function useGameLoadingData() {
+  return useContext(GameDataLoadingContext);
+}
 
 export function useGameData() {
-  const context = useContext(GameDataContext);
-  return { game: context?.game, state: context?.state };
+  return useContext(GameDataContext);
 }

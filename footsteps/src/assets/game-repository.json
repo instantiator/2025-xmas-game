@@ -3,7 +3,11 @@
     "test-game": { 
       "id": "test-game",
       "title": "Test Game",
-      "displays": [],
+      "displays": [{
+        "type": "GameOverview",
+        "template": "<h1>{{title}}</h1>",
+        "data": {}
+      }],
       "challenges": [],
       "css": "body { background-color: lightblue; }"
     }

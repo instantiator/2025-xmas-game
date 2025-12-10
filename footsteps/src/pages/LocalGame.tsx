@@ -11,7 +11,7 @@ export function Component() {
   return (<>
     <GameRepositoryProvider source={{ type: "LocalRepository" }}>
       <GameDataProvider id={id as GameId}>
-        <GameStateProvider gameId={id as GameId}>
+        <GameStateProvider>
           <Game />
         </GameStateProvider>
       </GameDataProvider>

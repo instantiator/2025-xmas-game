@@ -1,16 +1,11 @@
-import { useState } from "react";
-import type { GameId } from "../entities/GameData";
-import type { GameState } from "../entities/GameState";
+import { useState, type ReactNode } from "react";
+import { blankGameState, type GameState } from "../entities/GameState";
+import { useGameData } from "./GameDataHook";
 import { GameStateContext } from "./GameStateContext";
 
-export interface GameStateProviderParams {
-  gameId: GameId;
-}
-
-export default function GameStateProvider({ gameId, children }: React.PropsWithChildren<GameStateProviderParams>) {
-  const [gameState, setGameState] = useState<GameState>({
-    gameId: gameId,
-  });
+export default function GameStateProvider({ children }: { children: ReactNode }) {
+  const { gameData } = useGameData();
+  const [gameState, setGameState] = useState<GameState>(blankGameState(gameData));
 
   return (
     <GameStateContext.Provider value={{ gameState, setGameState }}>

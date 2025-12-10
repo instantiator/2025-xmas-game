@@ -14,7 +14,8 @@
     "prepreview": "sh generate-licenses.sh",
     "preview": "vite preview",
     "pretest": "sh generate-licenses.sh",
-    "test": "vitest"
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "react": "^19.2.0",

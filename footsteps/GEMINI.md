@@ -8,7 +8,8 @@ The core of this project is a game engine called `footsteps`. It's a vite/react/
 * Build static pages with: `npm run build`
 * View the static preview with: `npm run preview`
 * Build for GitHub Pages with: `npm run build:gh-pages`
-* Run the tests with: `npm run test`
+* Run the tests once: `npm run test:run`
+* Run the tests (and watch for changes): `npm run test`
 * Run eslint with: `npm run lint`
 
 The license file in `src/assets/license-report.json` is generated before each action.
@@ -30,4 +31,6 @@ All games in the local repository at `src/assets/game-repository.json` are avail
 When generating code, use formatting and style that matches the style of existing code - and follow good practices.
 
 * Always test the code that you have written will build
-* Always check eslint warnings
+* Always check eslint for errors (ignore warnings unless they're new)
+
+Explain new errors and warnings after a build, but only fix errors. After you've explained a warning to the user, ask if it's important to fix. Remember the answer.
