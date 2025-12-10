@@ -4,7 +4,6 @@ import type { GameId } from "../entities/GameData";
 import { GameDataProvider } from "../providers/GameDataProvider";
 import GameRepositoryProvider from "../providers/GameRepositoryProvider";
 import GameStateProvider from "../providers/GameStateProvider";
-import gameRepository from '../assets/game-repository.json';
 
 export function Component() {
   const { id } = useParams();

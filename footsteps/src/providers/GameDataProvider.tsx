@@ -1,17 +1,11 @@
-import { createContext, useContext } from "react";
-import type { GameData, GameId } from "../entities/GameData";
-import { GameRepositoryContext } from "./GameRepositoryProvider";
+import { useContext } from "react";
+import type { GameId } from "../entities/GameData";
+import { GameDataContext, type GameDataContextType } from "./GameDataContext";
+import { GameRepositoryContext } from "./GameRepositoryContext";
 
-export interface GameDataProviderParams {
+interface GameDataProviderParams {
   id: GameId;
 }
-
-export interface GameDataContextType {
-  state: "ready" | "loading" | "not found";
-  game?: GameData;
-}
-
-export const GameDataContext = createContext<GameDataContextType>(null!);
 
 export function GameDataProvider({ id, children }: React.PropsWithChildren<GameDataProviderParams>) {
   const repository = useContext(GameRepositoryContext);

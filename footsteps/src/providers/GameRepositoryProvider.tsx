@@ -1,17 +1,14 @@
 import type { ReactNode } from "react";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import localRepository from "../assets/game-repository.json";
 import type { GameRepository } from "../entities/GameRepository";
 import type { GameSource } from "../entities/GameSource";
+import { BLANK_REPOSITORY, GameRepositoryContext } from "./GameRepositoryContext";
 
-export interface GameRepositoryProviderParams {
+interface GameRepositoryProviderParams {
   source: GameSource;
   children: ReactNode;
 }
-
-const BLANK_REPOSITORY: GameRepository = { ready: false, games: {} };
-
-export const GameRepositoryContext = createContext<GameRepository>(null!);
 
 export default function GameRepositoryProvider({ source, children }: GameRepositoryProviderParams) {
   const [repository, setRepository] = useState<GameRepository>(BLANK_REPOSITORY);
@@ -20,7 +17,7 @@ export default function GameRepositoryProvider({ source, children }: GameReposit
     switch (source.type) {
       case "RemoteRepository":
         fetch(source.src.toString())
-          .then(response => response.json() as Promise<any>)
+          .then(response => response.json())
           .then(data => setRepository({ ...data, ready: true } as GameRepository));
         break;
       case "LocalRepository":
