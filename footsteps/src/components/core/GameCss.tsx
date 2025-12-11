@@ -1,4 +1,4 @@
-import { useGameData } from "../providers/GameDataHook";
+import { useGameData } from "../../providers/GameDataHook";
 
 export function GameCss() {
   const { gameData: game } = useGameData();

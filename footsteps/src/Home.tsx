@@ -1,5 +1,5 @@
-import Attributions from "./components/Attributions";
-import Dependencies from "./components/Dependencies";
+import Attributions from "./components/landing/Attributions";
+import Dependencies from "./components/landing/Dependencies";
 
 export default function Home() {
   return (

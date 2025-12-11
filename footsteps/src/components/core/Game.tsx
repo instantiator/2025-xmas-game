@@ -1,11 +1,15 @@
-import { useGameData } from "../providers/GameDataHook";
-import { useGameState } from "../providers/GameStateHook";
+import { useGameData } from "../../providers/GameDataHook";
+import { useGameState } from "../../providers/GameStateHook";
+import { isDefined } from "../../util/ObjectUtils";
 import { GameCss } from "./GameCss";
 import GameDisplay from "./GameDisplay";
 
 export default function Game() {
   const { gameData } = useGameData();
   const { gameState } = useGameState();
+
+  const overview = gameData.displays.find((d) => d.type === "game-overview");
+
   return (
     <>
       <div
@@ -18,7 +22,9 @@ export default function Game() {
         }}
       >
         <GameCss />
-        <GameDisplay display={gameData.displays[0]} gameData={gameData} gameState={gameState} />
+        {gameState.currentChallenge === null && isDefined(overview) && (
+          <GameDisplay display={overview} gameData={gameData} gameState={gameState} />
+        )}
       </div>
     </>
   );

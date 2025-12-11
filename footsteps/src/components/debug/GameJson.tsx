@@ -1,5 +1,5 @@
-import { useGameData } from "../providers/GameDataHook";
-import { useGameState } from "../providers/GameStateHook";
+import { useGameData } from "../../providers/GameDataHook";
+import { useGameState } from "../../providers/GameStateHook";
 
 export default function GameJson() {
   const { gameData } = useGameData();

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import Game from "../components/Game";
+import Game from "../components/core/Game";
 import type { GameId } from "../entities/GameData";
 import { GameDataProvider } from "../providers/GameDataProvider";
 import GameRepositoryProvider from "../providers/GameRepositoryProvider";

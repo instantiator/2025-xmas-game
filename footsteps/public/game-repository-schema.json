@@ -58,6 +58,9 @@
         },
         "GameDisplayData": {
             "properties": {
+                "containerCss": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -101,6 +104,9 @@
                 "game-overview"
             ],
             "type": "string"
+        },
+        "React.CSSProperties": {
+            "type": "object"
         },
         "Record<string,unknown>": {
             "type": "object"

@@ -1,8 +1,8 @@
 import { type PropsWithChildren } from "react";
 import MustacheTemplate from "react-mustache-template-component";
-import type { GameData } from "../entities/GameData";
-import type { GameDisplayData } from "../entities/GameDisplayData";
-import type { GameState } from "../entities/GameState";
+import type { GameData } from "../../entities/GameData";
+import type { GameDisplayData } from "../../entities/GameDisplayData";
+import type { GameState } from "../../entities/GameState";
 
 interface GameDisplayProps {
   display: GameDisplayData;
@@ -16,9 +16,11 @@ export default function GameDisplay({ display, gameData, gameState }: PropsWithC
     <>
       <div
         style={{
+          width: "100%",
+          height: "100%",
           border: "solid 4px red",
           boxSizing: "border-box",
-          height: "100%",
+          ...display.containerCss,
         }}
       >
         <MustacheTemplate template={display.template.content ?? ""} data={templateData} />

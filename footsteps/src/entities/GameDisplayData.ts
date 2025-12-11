@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react";
+
 export type GameDisplayType =
   | "game-overview"
   | "challenge-preview"
@@ -17,6 +19,7 @@ export interface GameDisplayData {
   type: GameDisplayType;
   template: GameDisplayTemplate;
   data: Record<string, unknown>;
+  containerCss?: CSSProperties;
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {

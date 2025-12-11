@@ -1,4 +1,4 @@
-import licenses from "../assets/license-report.json";
+import licenses from "../../assets/license-report.json";
 
 export default function Dependencies() {
   return (
