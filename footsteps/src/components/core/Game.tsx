@@ -20,7 +20,7 @@ export default function Game() {
           position: "absolute",
           top: 0,
           left: 0,
-          border: "solid 2px blue",
+          // border: "solid 2px blue",
         }}
       >
         <GameCss />

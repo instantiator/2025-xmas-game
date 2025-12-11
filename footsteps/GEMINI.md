@@ -35,7 +35,3 @@ When generating code, use formatting and style that matches the style of existin
 - Always check eslint for errors (ignore warnings unless they're new)
 
 Explain new errors and warnings after a build, but only fix errors. After you've explained a warning to the user, ask if it's important to fix. Remember the answer.
-
-## Mac OS instructions
-
-In each new session (or if you have not done this yet for the current session), check if you are running on Mac OS. If you are, then before returning control to the user (eg. with a question or a summary, or with a change you want them to review), execute `say ready` - this will draw their attention back to the terminal you are operating through.
