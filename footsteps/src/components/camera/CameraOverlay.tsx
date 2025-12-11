@@ -19,27 +19,13 @@ export default function CameraOverlay() {
   }, [initCamera]);
 
   return (
-    // ,
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        // border: "solid 4px green",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "stretch",
-      }}
-    >
+    <>
       <video
         ref={videoRef}
         style={{
           position: "absolute",
-          left: "2vh",
-          bottom: "2vh",
+          right: "2vw",
+          top: "2vh",
           width: "12vw",
           height: "auto",
           border: "solid 2px grey",
@@ -47,7 +33,23 @@ export default function CameraOverlay() {
         autoPlay
         playsInline
       />
-      {video && stream && <BackgroundRemover video={video} mediaStream={stream} />}
-    </div>
+      {video && stream && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "stretch",
+          }}
+        >
+          <BackgroundRemover video={video} mediaStream={stream} style={{ height: "100%" }} />
+        </div>
+      )}
+    </>
   );
 }

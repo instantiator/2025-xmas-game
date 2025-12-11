@@ -8,12 +8,18 @@
         "type": "game-overview",
         "template": {
           "sourceType": "embedded",
-          "content": "<h1>{{gameData.title}}</h1>"
+          "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
+        },
+        "containerCss": {
+          "background": "black",
+          "backgroundImage": "url('/samples/test-game/lava-cave-01.png')",
+          "backgroundSize": "cover",
+          "backgroundPosition": "center"
         },
         "data": {}
       }],
       "challenges": [],
-      "css": "body { background-color: #222222; }"
+      "css": "body { background-color: #dddddd; }"
     }
   }
 }
