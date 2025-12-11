@@ -21,7 +21,7 @@ export default function GameDisplay({ display, gameData, gameState }: PropsWithC
           height: "100%",
         }}
       >
-        <MustacheTemplate template={display.template} data={templateData} />
+        <MustacheTemplate template={display.template.content ?? ""} data={templateData} />
       </div>
     </>
   );
