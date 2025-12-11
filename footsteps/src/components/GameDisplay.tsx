@@ -10,11 +10,7 @@ interface GameDisplayProps {
   gameState: GameState;
 }
 
-export default function GameDisplay({
-  display,
-  gameData,
-  gameState,
-}: PropsWithChildren<GameDisplayProps>) {
+export default function GameDisplay({ display, gameData, gameState }: PropsWithChildren<GameDisplayProps>) {
   const templateData = { ...display.data, gameData, gameState };
   return (
     <>

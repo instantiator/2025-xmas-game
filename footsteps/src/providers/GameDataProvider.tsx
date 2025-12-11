@@ -1,16 +1,12 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
 import type { GameData, GameId } from "../entities/GameData";
 import type { GameDisplayData } from "../entities/GameDisplayData";
+import { isDefined, isUrl as isDefinedUrl, isWhitespaceOrEmpty } from "../util/ObjectUtils";
 import {
-  isDefined,
-  isUrl as isDefinedUrl,
-  isWhitespaceOrEmpty,
-} from "../util/ObjectUtils";
-import {
-  GameDataContext,
-  GameDataLoadingContext,
-  type GameDataContextType,
-  type GameDataLoadingContextType,
+    GameDataContext,
+    GameDataLoadingContext,
+    type GameDataContextType,
+    type GameDataLoadingContextType,
 } from "./GameDataContext";
 import { GameRepositoryContext } from "./GameRepositoryContext";
 
@@ -19,11 +15,7 @@ interface GameDataProviderParams {
   loadingView?: ReactNode;
 }
 
-export function GameDataProvider({
-  id,
-  children,
-  loadingView,
-}: React.PropsWithChildren<GameDataProviderParams>) {
+export function GameDataProvider({ id, children, loadingView }: React.PropsWithChildren<GameDataProviderParams>) {
   const { repository, source } = useContext(GameRepositoryContext);
 
   const [gameLoading, setGameLoading] = useState<GameDataLoadingContextType>({
@@ -31,9 +23,7 @@ export function GameDataProvider({
     gameData: undefined,
   });
 
-  const [gameData, setGameData] = useState<GameDataContextType | undefined>(
-    undefined,
-  );
+  const [gameData, setGameData] = useState<GameDataContextType | undefined>(undefined);
 
   useEffect(() => {
     setGameLoading({
@@ -46,16 +36,9 @@ export function GameDataProvider({
     });
   }, [repository, id]);
 
-  const fetchDisplay = async (
-    display: GameDisplayData,
-  ): Promise<GameDisplayData> => {
-    if (
-      isWhitespaceOrEmpty(display.template) &&
-      !isDefinedUrl(display.templateUrl)
-    ) {
-      console.warn(
-        `Display missing both template and templateUrl: ${JSON.stringify(display)}`,
-      );
+  const fetchDisplay = async (display: GameDisplayData): Promise<GameDisplayData> => {
+    if (isWhitespaceOrEmpty(display.template) && !isDefinedUrl(display.templateUrl)) {
+      console.warn(`Display missing both template and templateUrl: ${JSON.stringify(display)}`);
     }
 
     if (isWhitespaceOrEmpty(display.template)) {
@@ -72,9 +55,7 @@ export function GameDataProvider({
 
   useEffect(() => {
     const loadContent = async (data: GameData) => {
-      const tasks: Promise<GameDisplayData>[] = data.displays.map((display) =>
-        fetchDisplay(display),
-      );
+      const tasks: Promise<GameDisplayData>[] = data.displays.map((display) => fetchDisplay(display));
       const templates = await Promise.all(tasks);
       setGameLoading({
         loadingState: "ready",
@@ -82,18 +63,13 @@ export function GameDataProvider({
       });
     };
 
-    if (
-      gameLoading.loadingState === "loading-content" &&
-      isDefined(gameLoading.gameData)
-    ) {
+    if (gameLoading.loadingState === "loading-content" && isDefined(gameLoading.gameData)) {
       loadContent(gameLoading.gameData);
     }
 
     if (gameLoading.loadingState === "ready") {
       setGameData(
-        isDefined(gameLoading.gameData)
-          ? ({ gameData: gameLoading.gameData } as GameDataContextType)
-          : undefined,
+        isDefined(gameLoading.gameData) ? ({ gameData: gameLoading.gameData } as GameDataContextType) : undefined,
       );
     }
   }, [gameLoading]);
@@ -106,11 +82,7 @@ export function GameDataProvider({
     <>
       <GameDataLoadingContext.Provider value={gameLoading}>
         {!isDefined(gameData) && loadingView}
-        {isDefined(gameData) && (
-          <GameDataContext.Provider value={gameData}>
-            {children}
-          </GameDataContext.Provider>
-        )}
+        {isDefined(gameData) && <GameDataContext.Provider value={gameData}>{children}</GameDataContext.Provider>}
       </GameDataLoadingContext.Provider>
     </>
   );

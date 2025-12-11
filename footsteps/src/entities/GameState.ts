@@ -9,18 +9,17 @@ export interface GameState {
 }
 
 export function blankGameState(game: GameData): GameState {
-  const challenges: { [index: GameChallengeId]: GameChallengeState } =
-    game.challenges.reduce(
-      (obj, challenge) => {
-        obj[challenge.id] = {
-          challenge: challenge,
-          attempts: [],
-          succeeded: false,
-        };
-        return obj;
-      },
-      {} as { [index: GameChallengeId]: GameChallengeState },
-    );
+  const challenges: { [index: GameChallengeId]: GameChallengeState } = game.challenges.reduce(
+    (obj, challenge) => {
+      obj[challenge.id] = {
+        challenge: challenge,
+        attempts: [],
+        succeeded: false,
+      };
+      return obj;
+    },
+    {} as { [index: GameChallengeId]: GameChallengeState },
+  );
 
   return {
     gameId: game.id,

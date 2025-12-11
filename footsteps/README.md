@@ -2,13 +2,13 @@
 
 ## Invocations
 
-* Run locally with: `npm run dev`
-* Build static pages with: `npm run build`
-* View the static preview with: `npm run preview`
-* Build for GitHub Pages with: `npm run build:gh-pages`
-* Run the tests once: `npm run test:run`
-* Run the tests (and watch for changes): `npm run test`
-* Run eslint with: `npm run lint`
+- Run locally with: `npm run dev`
+- Build static pages with: `npm run build`
+- View the static preview with: `npm run preview`
+- Build for GitHub Pages with: `npm run build:gh-pages`
+- Run the tests once: `npm run test:run`
+- Run the tests (and watch for changes): `npm run test`
+- Run eslint with: `npm run lint`
 
 The license file in `src/assets/license-report.json` is generated before each action.
 
@@ -22,8 +22,8 @@ Launch footsteps locally with `npm run dev`
 
 All games in the local repository at `src/assets/game-repository.json` are available at their own url.
 
-| Game | Game URL | Game data URL |
-|-|-|-|
+| Game        | Game URL                             | Game data URL                             |
+| ----------- | ------------------------------------ | ----------------------------------------- |
 | `test-game` | http://localhost:5173/game/test-game | http://localhost:5173/game/test-game/json |
 
 ## GitHub Pages

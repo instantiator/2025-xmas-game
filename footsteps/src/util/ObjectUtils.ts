@@ -2,15 +2,11 @@ export function isDefined<T>(value: T | undefined | null): value is T {
   return value !== undefined && value !== null;
 }
 
-export function isDefinedAndHasContent(
-  value: string | undefined | null,
-): value is string {
+export function isDefinedAndHasContent(value: string | undefined | null): value is string {
   return !isUndefinedOrWhitespaceOrEmpty(value);
 }
 
-export function isUndefinedOrWhitespaceOrEmpty(
-  value: string | undefined | null,
-): boolean {
+export function isUndefinedOrWhitespaceOrEmpty(value: string | undefined | null): boolean {
   return value === undefined || value === null || isWhitespaceOrEmpty(value);
 }
 

@@ -18,11 +18,7 @@ export default function Game() {
         }}
       >
         <GameCss />
-        <GameDisplay
-          display={gameData.displays[0]}
-          gameData={gameData}
-          gameState={gameState}
-        />
+        <GameDisplay display={gameData.displays[0]} gameData={gameData} gameState={gameState} />
       </div>
     </>
   );

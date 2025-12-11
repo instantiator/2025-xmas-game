@@ -15,10 +15,7 @@ export default defineConfig(({ mode }) => {
       formatting: "prettify",
       includedRoutes: async () => {
         const ids = Object.keys(gameRepository.games);
-        const dynamicRoutes = ids.flatMap((id) => [
-          `/game/${id}`,
-          `/game/${id}/json`,
-        ]);
+        const dynamicRoutes = ids.flatMap((id) => [`/game/${id}`, `/game/${id}/json`]);
         return ["/", ...dynamicRoutes];
       },
     },

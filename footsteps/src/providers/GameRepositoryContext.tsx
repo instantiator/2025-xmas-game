@@ -7,6 +7,4 @@ export interface GameRepositoryContextType {
   repository: GameRepository;
 }
 
-export const GameRepositoryContext = createContext<GameRepositoryContextType>(
-  null!,
-);
+export const GameRepositoryContext = createContext<GameRepositoryContextType>(null!);
