@@ -1,6 +1,7 @@
 {
+  "$schema": "./game-repository-schema.json",
   "games": {
-    "test-game": { 
+    "test-game": {
       "id": "test-game",
       "title": "Test Game",
       "displays": [{

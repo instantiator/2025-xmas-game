@@ -1,0 +1,139 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "GameChallengeData": {
+            "properties": {
+                "displays": {
+                    "items": {
+                        "$ref": "#/definitions/GameDisplayData"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "solution": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "displays",
+                "id",
+                "solution"
+            ],
+            "type": "object"
+        },
+        "GameData": {
+            "properties": {
+                "challenges": {
+                    "items": {
+                        "$ref": "#/definitions/GameChallengeData"
+                    },
+                    "type": "array"
+                },
+                "css": {
+                    "type": "string"
+                },
+                "displays": {
+                    "items": {
+                        "$ref": "#/definitions/GameDisplayData"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "challenges",
+                "css",
+                "displays",
+                "id",
+                "title"
+            ],
+            "type": "object"
+        },
+        "GameDisplayData": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "template": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "type": {
+                    "$ref": "#/definitions/GameDisplayType"
+                }
+            },
+            "required": [
+                "data",
+                "template",
+                "type"
+            ],
+            "type": "object"
+        },
+        "GameDisplayTemplate": {
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "sourceType": {
+                    "$ref": "#/definitions/TemplateSourceType"
+                },
+                "templateSource": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sourceType"
+            ],
+            "type": "object"
+        },
+        "GameDisplayType": {
+            "enum": [
+                "challenge-completed",
+                "challenge-introduction",
+                "challenge-preview",
+                "challenge-solution-entry",
+                "game-overview"
+            ],
+            "type": "string"
+        },
+        "Record<string,unknown>": {
+            "type": "object"
+        },
+        "TemplateSourceType": {
+            "enum": [
+                "embedded",
+                "relative",
+                "url"
+            ],
+            "type": "string"
+        }
+    },
+    "properties": {
+        "error": {
+            "type": "string"
+        },
+        "games": {
+            "additionalProperties": {
+                "$ref": "#/definitions/GameData"
+            },
+            "type": "object"
+        },
+        "loading": {
+            "type": "boolean"
+        },
+        "ready": {
+            "type": "boolean"
+        }
+    },
+    "required": [
+        "games"
+    ],
+    "type": "object"
+}
+

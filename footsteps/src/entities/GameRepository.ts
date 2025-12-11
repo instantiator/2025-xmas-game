@@ -1,8 +1,8 @@
 import type { GameData, GameId } from "./GameData";
 
 export interface GameRepository {
-  ready: boolean;
-  loading: boolean;
+  ready?: boolean;
+  loading?: boolean;
   error?: string;
   games: { [id: GameId]: GameData };
 }
