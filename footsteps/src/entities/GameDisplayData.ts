@@ -8,9 +8,10 @@ export type GameDisplayType =
 export interface GameDisplayData {
   type: GameDisplayType;
   template: string;
+  templateUrl?: string;
   data: Record<string, unknown>;
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {
   type: "GameOverview";
-};
+}

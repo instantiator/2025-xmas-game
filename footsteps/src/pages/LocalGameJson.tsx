@@ -8,13 +8,15 @@ import GameStateProvider from "../providers/GameStateProvider";
 export function Component() {
   const { id } = useParams();
 
-  return (<>
-    <GameRepositoryProvider source={{ type: "LocalRepository" }}>
-      <GameDataProvider id={id as GameId}>
-        <GameStateProvider>
-          <GameJson />
-        </GameStateProvider>
-      </GameDataProvider>
-    </GameRepositoryProvider>
-  </>);
+  return (
+    <>
+      <GameRepositoryProvider source={{ type: "LocalRepository" }}>
+        <GameDataProvider id={id as GameId}>
+          <GameStateProvider>
+            <GameJson />
+          </GameStateProvider>
+        </GameDataProvider>
+      </GameRepositoryProvider>
+    </>
+  );
 }

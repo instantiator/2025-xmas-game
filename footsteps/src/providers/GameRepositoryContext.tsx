@@ -1,6 +1,12 @@
 import { createContext } from "react";
 import type { GameRepository } from "../entities/GameRepository";
+import type { GameSource } from "../entities/GameSource";
 
-export const LOADING_REPOSITORY: GameRepository = { ready: false, games: {} };
+export interface GameRepositoryContextType {
+  source: GameSource;
+  repository: GameRepository;
+}
 
-export const GameRepositoryContext = createContext<GameRepository>(null!);
+export const GameRepositoryContext = createContext<GameRepositoryContextType>(
+  null!,
+);
