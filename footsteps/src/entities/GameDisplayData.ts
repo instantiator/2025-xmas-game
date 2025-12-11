@@ -1,15 +1,15 @@
 export type GameDisplayType =
-  | "GameOverview"
-  | "ChallengePreview"
-  | "ChallengeIntroduction"
-  | "ChallengeSolutionEntry"
-  | "ChallengeCompleted";
+  | "game-overview"
+  | "challenge-preview"
+  | "challenge-introduction"
+  | "challenge-solution-entry"
+  | "challenge-completed";
 
 export type TemplateSourceType = "relative" | "url" | "embedded";
 
 export interface GameDisplayTemplate {
   sourceType: TemplateSourceType;
-  templateSource: string;
+  templateSource?: string;
   content?: string;
 }
 
@@ -20,5 +20,5 @@ export interface GameDisplayData {
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {
-  type: "GameOverview";
+  type: "game-overview";
 }

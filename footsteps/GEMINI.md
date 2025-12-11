@@ -8,9 +8,9 @@ The core of this project is a game engine called `footsteps`. It's a vite/react/
 - Build static pages with: `npm run build`
 - View the static preview with: `npm run preview`
 - Build for GitHub Pages with: `npm run build:gh-pages`
-- Run the tests once: `npm run test:run`
-- Run the tests (and watch for changes): `npm run test`
-- Run eslint with: `npm run lint`
+- Run the tests once: `npm run test:run` (ideal an automatic test of new changes)
+- Run the tests (and watch for changes): `npm run test` (for the user)
+- Run linting with: `npm run lint`
 
 The license file in `src/assets/license-report.json` is generated before each action.
 

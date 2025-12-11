@@ -1,13 +1,7 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
 import type { GameData, GameId } from "../entities/GameData";
 import type { GameDisplayData } from "../entities/GameDisplayData";
-import {
-  getBaseURL,
-  getDirectoryURL,
-  isDefined,
-  isUrl as isDefinedUrl,
-  isUndefinedOrWhitespaceOrEmpty,
-} from "../util/ObjectUtils";
+import { getBaseURL, getDirectoryURL, isDefined, isUndefinedOrWhitespaceOrEmpty } from "../util/ObjectUtils";
 import {
   GameDataContext,
   GameDataLoadingContext,
@@ -51,6 +45,9 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
             return display;
 
           case "relative":
+            if (isUndefinedOrWhitespaceOrEmpty(display.template.templateSource)) {
+              throw new Error(`Display template source is missing: ${JSON.stringify(display)}`);
+            }
             switch (repositorySource.type) {
               case "RemoteRepository":
                 // rewrite the display to be a url, relative to the repository url
@@ -60,7 +57,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
                     ...display.template,
                     sourceType: "url",
                     templateSource: new URL(
-                      display.template.templateSource,
+                      display.template.templateSource!,
                       getDirectoryURL(repositorySource.src),
                     ).toString(),
                   },
@@ -73,7 +70,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
                   template: {
                     ...display.template,
                     sourceType: "url",
-                    templateSource: new URL(display.template.templateSource, getBaseURL()).toString(),
+                    templateSource: new URL(display.template.templateSource!, getBaseURL()).toString(),
                   },
                 });
 
@@ -82,15 +79,15 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
             }
             break;
 
-          case "url":
-            if (isDefinedUrl(display.template.templateSource)) {
-              console.debug(`Fetching template at: ${display.template.templateSource}`);
-              const response = await fetch(display.template.templateSource);
-              const text = await response.text();
-              return { ...display, template: { ...display.template, content: text } };
-            } else {
-              throw new Error(`Display template source is not a valid url: ${JSON.stringify(display)}`);
+          case "url": {
+            if (isUndefinedOrWhitespaceOrEmpty(display.template.templateSource)) {
+              throw new Error(`Display template source is missing: ${JSON.stringify(display)}`);
             }
+            console.debug(`Fetching template at: ${display.template.templateSource}`);
+            const response = await fetch(display.template.templateSource!);
+            const text = await response.text();
+            return { ...display, template: { ...display.template, content: text } };
+          }
         }
       }
       return display;
