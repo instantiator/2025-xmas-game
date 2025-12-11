@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 import gameRepository from "./src/assets/game-repository.json";
 
 // https://vitejs.dev/config/
+// @ts-expect-error keeping mode here, for future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ mode }) => {
   const base = process.env.BASE_URL ?? "/";
 

@@ -5,10 +5,17 @@ export type GameDisplayType =
   | "ChallengeSolutionEntry"
   | "ChallengeCompleted";
 
+export type TemplateSourceType = "relative" | "url" | "embedded";
+
+export interface GameDisplayTemplate {
+  sourceType: TemplateSourceType;
+  templateSource: string;
+  content?: string;
+}
+
 export interface GameDisplayData {
   type: GameDisplayType;
-  template: string;
-  templateUrl?: string;
+  template: GameDisplayTemplate;
   data: Record<string, unknown>;
 }
 

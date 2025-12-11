@@ -1,12 +1,18 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
 import type { GameData, GameId } from "../entities/GameData";
 import type { GameDisplayData } from "../entities/GameDisplayData";
-import { isDefined, isUrl as isDefinedUrl, isWhitespaceOrEmpty } from "../util/ObjectUtils";
 import {
-    GameDataContext,
-    GameDataLoadingContext,
-    type GameDataContextType,
-    type GameDataLoadingContextType,
+  getBaseURL,
+  getDirectoryURL,
+  isDefined,
+  isUrl as isDefinedUrl,
+  isUndefinedOrWhitespaceOrEmpty,
+} from "../util/ObjectUtils";
+import {
+  GameDataContext,
+  GameDataLoadingContext,
+  type GameDataContextType,
+  type GameDataLoadingContextType,
 } from "./GameDataContext";
 import { GameRepositoryContext } from "./GameRepositoryContext";
 
@@ -16,7 +22,7 @@ interface GameDataProviderParams {
 }
 
 export function GameDataProvider({ id, children, loadingView }: React.PropsWithChildren<GameDataProviderParams>) {
-  const { repository, source } = useContext(GameRepositoryContext);
+  const { repository, source: repositorySource } = useContext(GameRepositoryContext);
 
   const [gameLoading, setGameLoading] = useState<GameDataLoadingContextType>({
     loadingState: "waiting-for-repository",
@@ -36,24 +42,60 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
     });
   }, [repository, id]);
 
-  const fetchDisplay = async (display: GameDisplayData): Promise<GameDisplayData> => {
-    if (isWhitespaceOrEmpty(display.template) && !isDefinedUrl(display.templateUrl)) {
-      console.warn(`Display missing both template and templateUrl: ${JSON.stringify(display)}`);
-    }
-
-    if (isWhitespaceOrEmpty(display.template)) {
-      if (isDefinedUrl(display.templateUrl)) {
-        console.debug(`Fetching template at: ${display.templateUrl}`);
-        const response = await fetch(display.templateUrl);
-        const text = await response.text();
-        return { ...display, template: text };
-      }
-    }
-
-    return display;
-  };
-
   useEffect(() => {
+    const fetchDisplay = async (display: GameDisplayData): Promise<GameDisplayData> => {
+      if (isUndefinedOrWhitespaceOrEmpty(display.template.content)) {
+        switch (display.template.sourceType) {
+          case "embedded":
+            console.warn(`Display template marked as embedded but no content found: ${JSON.stringify(display)}`);
+            return display;
+
+          case "relative":
+            switch (repositorySource.type) {
+              case "RemoteRepository":
+                // rewrite the display to be a url, relative to the repository url
+                return await fetchDisplay({
+                  ...display,
+                  template: {
+                    ...display.template,
+                    sourceType: "url",
+                    templateSource: new URL(
+                      display.template.templateSource,
+                      getDirectoryURL(repositorySource.src),
+                    ).toString(),
+                  },
+                });
+
+              case "LocalRepository":
+                // rewrite to fetch the template content from the public directory
+                return await fetchDisplay({
+                  ...display,
+                  template: {
+                    ...display.template,
+                    sourceType: "url",
+                    templateSource: new URL(display.template.templateSource, getBaseURL()).toString(),
+                  },
+                });
+
+              case "RawRepository":
+                throw new Error(`Raw repositories do not support paths to content: ${JSON.stringify(display)}`);
+            }
+            break;
+
+          case "url":
+            if (isDefinedUrl(display.template.templateSource)) {
+              console.debug(`Fetching template at: ${display.template.templateSource}`);
+              const response = await fetch(display.template.templateSource);
+              const text = await response.text();
+              return { ...display, template: { ...display.template, content: text } };
+            } else {
+              throw new Error(`Display template source is not a valid url: ${JSON.stringify(display)}`);
+            }
+        }
+      }
+      return display;
+    };
+
     const loadContent = async (data: GameData) => {
       const tasks: Promise<GameDisplayData>[] = data.displays.map((display) => fetchDisplay(display));
       const templates = await Promise.all(tasks);
@@ -72,7 +114,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
         isDefined(gameLoading.gameData) ? ({ gameData: gameLoading.gameData } as GameDataContextType) : undefined,
       );
     }
-  }, [gameLoading]);
+  }, [gameLoading, repositorySource]);
 
   useEffect(() => {
     console.info(`Game loading state: ${gameLoading.loadingState}`);

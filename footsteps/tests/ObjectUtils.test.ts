@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getDirectoryURL,
   isDefined,
   isDefinedAndHasContent,
   isUndefinedOrWhitespaceOrEmpty,
@@ -71,6 +72,29 @@ describe("ObjectUtils", () => {
       expect(isUrl("   ")).toBe(false);
       expect(isUrl(undefined)).toBe(false);
       expect(isUrl(null)).toBe(false);
+    });
+  });
+
+  describe("getDirectoryURL", () => {
+    it("should return the directory URL of a given file URL", () => {
+      const fileURL = new URL("http://example.com/path/to/file.txt");
+      const dirURL = getDirectoryURL(fileURL);
+      expect(dirURL.toString()).toBe("http://example.com/path/to/");
+    });
+    it("should handle root directory correctly", () => {
+      const fileURL = new URL("http://example.com/file.txt");
+      const dirURL = getDirectoryURL(fileURL);
+      expect(dirURL.toString()).toBe("http://example.com/");
+    });
+    it("should handle URLs with no path correctly", () => {
+      const fileURL = new URL("http://example.com");
+      const dirURL = getDirectoryURL(fileURL);
+      expect(dirURL.toString()).toBe("http://example.com/");
+    });
+    it("should handle non-file URLs correctly", () => {
+      const fileURL = new URL("http://example.com/path/to/resource/");
+      const dirURL = getDirectoryURL(fileURL);
+      expect(dirURL.toString()).toBe("http://example.com/path/to/resource/");
     });
   });
 });

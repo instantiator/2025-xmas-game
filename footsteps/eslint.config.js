@@ -24,6 +24,7 @@ export default defineConfig([
       "react-hooks/set-state-in-effect": "off", // Disable the warning about setState in effect
       "@typescript-eslint/no-explicit-any": "off", // Allow use of 'any' type
       "@typescript-eslint/no-unused-vars": "warn", // Change unused var to warn
+      "@typescript-eslint/indent": "off", // Explicitly disable indent rule to avoid conflict with Prettier
     },
   },
   eslintPluginPrettierRecommended,

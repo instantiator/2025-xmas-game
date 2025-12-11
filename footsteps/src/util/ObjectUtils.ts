@@ -25,3 +25,11 @@ export function isUrl(value: string | undefined | null): value is string {
   }
   return false;
 }
+
+export function getDirectoryURL(fileURL: URL): URL {
+  return new URL("./", fileURL);
+}
+
+export function getBaseURL(): URL {
+  return new URL(import.meta.env.BASE_URL, window.location.origin);
+}

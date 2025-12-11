@@ -1,6 +1,4 @@
-# Context
-
-The core of this project is a game engine called `footsteps`. It's a vite/react/ts application, found inside the `footsteps/` directory.
+# Developer overview
 
 ## Invocations
 
@@ -20,18 +18,14 @@ Output from builds goes to the `dist/` directory. A simple way to serve from the
 
 Launch footsteps locally with `npm run dev`
 
+## Test and sample games
+
 All games in the local repository at `src/assets/game-repository.json` are available at their own url.
 
 | Game        | Game URL                             | Game data URL                             |
 | ----------- | ------------------------------------ | ----------------------------------------- |
 | `test-game` | http://localhost:5173/game/test-game | http://localhost:5173/game/test-game/json |
 
-## Coding practices
+## GitHub Pages
 
-When generating code, use formatting and style that matches the style of existing code - and follow good practices.
-
-- Always test that the code you have written will build
-- Always run the tests with `npm run test:run` to check for regressions
-- Always check eslint for errors (ignore warnings unless they're new)
-
-Explain new errors and warnings after a build, but only fix errors. After you've explained a warning to the user, ask if it's important to fix. Remember the answer.
+The app is served through GitHub Pages, and there's a GitHub Actions workflow to deploy to GitHub Pages in `.github/workflows/deploy-pages.yaml`
