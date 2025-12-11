@@ -1,5 +1,10 @@
 # Developer overview
 
+## Prerequisites
+
+- The basics: `bash`, `git`, `npm`
+- [Code formatting configuration](code-formatting.md)
+
 ## Invocations
 
 - Run locally with: `npm run dev`
@@ -18,13 +23,32 @@ Output from builds goes to the `dist/` directory. A simple way to serve from the
 
 Launch footsteps locally with `npm run dev`
 
-## Test and sample games
+## Sample games
 
-All games in the local repository at `src/assets/game-repository.json` are available at their own url.
+All games in the local repository at `src/assets/game-repository.json` are pre-built and made available at their own url.
 
 | Game        | Game URL                             | Game data URL                             |
 | ----------- | ------------------------------------ | ----------------------------------------- |
 | `test-game` | http://localhost:5173/game/test-game | http://localhost:5173/game/test-game/json |
+
+## Schemas
+
+JSON schemas are generated and placed into the `src/assets/` directory by the `pre-build.sh` script.
+
+| Type             | Schema                                   |
+| ---------------- | ---------------------------------------- |
+| `GameRepository` | `src/assets/game-repository-schema.json` |
+| `GameData`       | `src/assets/game-data-schema.json`       |
+
+### Validate data
+
+```bash
+$ ./validate-repository.sh src/assets/game-repository.json
+```
+
+```bash
+$ ./validate-game.sh path/to/some-game.json
+```
 
 ## GitHub Pages
 
