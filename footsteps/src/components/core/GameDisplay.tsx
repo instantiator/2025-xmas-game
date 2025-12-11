@@ -18,8 +18,7 @@ export default function GameDisplay({ display, gameData, gameState }: PropsWithC
         style={{
           width: "100%",
           height: "100%",
-          border: "solid 4px red",
-          boxSizing: "border-box",
+          border: "solid 6px red",
           ...display.containerCss,
         }}
       >
