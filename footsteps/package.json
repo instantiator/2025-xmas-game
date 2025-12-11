@@ -15,7 +15,7 @@
     "preview": "vite preview",
     "pretest": "sh pre-build.sh",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "sh run-tests.sh"
   },
   "dependencies": {
     "react": "^19.2.0",
