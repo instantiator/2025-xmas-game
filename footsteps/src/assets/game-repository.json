@@ -1,5 +1,5 @@
 {
-  "$schema": "./game-repository-schema.json",
+  "$schema": "../../public/game-repository-schema.json",
   "games": {
     "test-game": {
       "id": "test-game",

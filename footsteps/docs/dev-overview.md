@@ -35,10 +35,10 @@ All games in the local repository at `src/assets/game-repository.json` are pre-b
 
 JSON schemas are generated and placed into the `src/assets/` directory by the `pre-build.sh` script.
 
-| Type             | Schema                                   |
-| ---------------- | ---------------------------------------- |
-| `GameRepository` | `src/assets/game-repository-schema.json` |
-| `GameData`       | `src/assets/game-data-schema.json`       |
+| Type             | Schema                               |
+| ---------------- | ------------------------------------ |
+| `GameRepository` | `public/game-repository-schema.json` |
+| `GameData`       | `public/game-data-schema.json`       |
 
 ### Validate data
 
