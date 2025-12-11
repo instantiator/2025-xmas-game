@@ -11,7 +11,7 @@ interface GameDisplayProps {
 }
 
 export default function GameDisplay({display, gameData, gameState }: PropsWithChildren<GameDisplayProps>) {
-  const templateData = { ...display.data, title: gameData.title };
+  const templateData = { ...display.data, gameData, gameState };
   return (<>
   <div style={{border: "solid 4px red", height: "100%"}}>
     <MustacheTemplate template={display.template} data={templateData} />

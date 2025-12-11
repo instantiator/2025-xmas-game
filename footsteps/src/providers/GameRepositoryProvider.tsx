@@ -22,10 +22,10 @@ export default function GameRepositoryProvider({ source, children }: GameReposit
           .catch(error => { console.error(error); setRepository(LOADING_REPOSITORY); });
           break;
       case "LocalRepository":
-        setRepository({ ...localRepository, ready: true });
+        setRepository({ ...localRepository, ready: true } as GameRepository);
         break;
       case "RawRepository":
-        setRepository({ ...source.repository, ready: true });
+        setRepository({ ...source.repository, ready: true } as GameRepository);
         break;
     }
   }, [source]);

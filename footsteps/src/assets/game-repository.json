@@ -5,7 +5,7 @@
       "title": "Test Game",
       "displays": [{
         "type": "GameOverview",
-        "template": "<h1>{{title}}</h1>",
+        "template": "<h1>{{gameData.title}}</h1>",
         "data": {}
       }],
       "challenges": [],
