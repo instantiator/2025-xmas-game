@@ -33,5 +33,6 @@ When generating code, use formatting and style that matches the style of existin
 - Always test that the code you have written will build
 - Always run the tests with `npm run test:run` to check for regressions
 - Always check eslint for errors (ignore warnings unless they're new)
+- After you change code, run the linter with the `--fix` option to update formatting
 
 Explain new errors and warnings after a build, but only fix errors. After you've explained a warning to the user, ask if it's important to fix. Remember the answer.

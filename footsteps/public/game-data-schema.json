@@ -1,11 +1,42 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
+        "ChallengeGameDisplay": {
+            "properties": {
+                "containerCss": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
+                "data": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "template": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "type": {
+                    "$ref": "#/definitions/ChallengeGameDisplayType"
+                }
+            },
+            "required": [
+                "data",
+                "template",
+                "type"
+            ],
+            "type": "object"
+        },
+        "ChallengeGameDisplayType": {
+            "enum": [
+                "challenge-completed",
+                "challenge-introduction",
+                "challenge-preview",
+                "challenge-solution-entry"
+            ],
+            "type": "string"
+        },
         "GameChallengeData": {
             "properties": {
                 "displays": {
                     "items": {
-                        "$ref": "#/definitions/GameDisplayData"
+                        "$ref": "#/definitions/ChallengeGameDisplay"
                     },
                     "type": "array"
                 },
@@ -20,28 +51,6 @@
                 "displays",
                 "id",
                 "solution"
-            ],
-            "type": "object"
-        },
-        "GameDisplayData": {
-            "properties": {
-                "containerCss": {
-                    "$ref": "#/definitions/React.CSSProperties"
-                },
-                "data": {
-                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
-                },
-                "template": {
-                    "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "type": {
-                    "$ref": "#/definitions/GameDisplayType"
-                }
-            },
-            "required": [
-                "data",
-                "template",
-                "type"
             ],
             "type": "object"
         },
@@ -61,16 +70,6 @@
                 "sourceType"
             ],
             "type": "object"
-        },
-        "GameDisplayType": {
-            "enum": [
-                "challenge-completed",
-                "challenge-introduction",
-                "challenge-preview",
-                "challenge-solution-entry",
-                "game-overview"
-            ],
-            "type": "string"
         },
         "OverviewGameDisplay": {
             "properties": {

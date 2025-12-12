@@ -1,11 +1,14 @@
 import type { CSSProperties } from "react";
 
-export type GameDisplayType =
-  | "game-overview"
+export type OverviewGameDisplayType = "game-overview";
+
+export type ChallengeGameDisplayType =
   | "challenge-preview"
   | "challenge-introduction"
   | "challenge-solution-entry"
   | "challenge-completed";
+
+export type GameDisplayType = OverviewGameDisplayType | ChallengeGameDisplayType;
 
 export type TemplateSourceType = "relative" | "url" | "embedded";
 
@@ -23,5 +26,9 @@ export interface GameDisplayData {
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {
-  type: "game-overview";
+  type: OverviewGameDisplayType;
+}
+
+export interface ChallengeGameDisplay extends GameDisplayData {
+  type: ChallengeGameDisplayType;
 }

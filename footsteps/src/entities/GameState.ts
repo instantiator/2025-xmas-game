@@ -5,7 +5,9 @@ import type { GameData, GameId } from "./GameData";
 export interface GameState {
   gameId: GameId;
   challenges: { [index: GameChallengeId]: GameChallengeState };
-  currentChallenge: GameChallengeId | null;
+  current: {
+    challengeId: GameChallengeId | null;
+  };
 }
 
 export function blankGameState(game: GameData): GameState {
@@ -24,6 +26,6 @@ export function blankGameState(game: GameData): GameState {
   return {
     gameId: game.id,
     challenges: challenges,
-    currentChallenge: null,
+    current: { challengeId: null },
   };
 }

@@ -1,8 +1,10 @@
+import { NO_OVERVIEW_GAME_DISPLAY } from "../../constants/DefaultGameDisplays";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
 import { isDefined } from "../../util/ObjectUtils";
+import ChallengeGameDisplay from "./ChallengeGameDisplay";
 import { GameCss } from "./GameCss";
-import GameDisplay from "./GameDisplay";
+import OverviewGameDisplay from "./OverviewGameDisplay";
 
 export default function Game() {
   const { gameData } = useGameData();
@@ -23,8 +25,14 @@ export default function Game() {
         }}
       >
         <GameCss />
-        {gameState.currentChallenge === null && isDefined(overview) && (
-          <GameDisplay display={overview} gameData={gameData} gameState={gameState} />
+        {!isDefined(gameState.current.challengeId) && !isDefined(overview) && (
+          <OverviewGameDisplay display={NO_OVERVIEW_GAME_DISPLAY} gameData={gameData} gameState={gameState} />
+        )}
+        {!isDefined(gameState.current.challengeId) && isDefined(overview) && (
+          <OverviewGameDisplay display={overview} gameData={gameData} gameState={gameState} />
+        )}
+        {isDefined(gameState.current.challengeId) && (
+          <ChallengeGameDisplay gameData={gameData} gameState={gameState} challengeId={gameState.current.challengeId} />
         )}
       </div>
     </>
