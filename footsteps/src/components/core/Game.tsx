@@ -2,6 +2,7 @@ import { NO_OVERVIEW_GAME_DISPLAY } from "../../constants/DefaultGameDisplays";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
 import { isDefined, isDefinedAndHasContent, isUndefinedOrWhitespaceOrEmpty } from "../../util/ObjectUtils";
+import CameraOverlay from "../camera/CameraOverlay";
 import ChallengeGameDisplay from "./ChallengeGameDisplay";
 import { GameCss } from "./GameCss";
 import OverviewGameDisplay from "./OverviewGameDisplay";
@@ -25,12 +26,16 @@ export default function Game() {
         }}
       >
         <GameCss />
+        <CameraOverlay />
+
         {!isDefined(gameState.current.challengeId) && isUndefinedOrWhitespaceOrEmpty(overview.template.content) && (
           <OverviewGameDisplay display={NO_OVERVIEW_GAME_DISPLAY} gameData={gameData} gameState={gameState} />
         )}
+
         {!isDefined(gameState.current.challengeId) && isDefinedAndHasContent(overview.template.content) && (
           <OverviewGameDisplay display={overview} gameData={gameData} gameState={gameState} />
         )}
+
         {isDefined(gameState.current.challengeId) && (
           <ChallengeGameDisplay gameData={gameData} gameState={gameState} challengeId={gameState.current.challengeId} />
         )}

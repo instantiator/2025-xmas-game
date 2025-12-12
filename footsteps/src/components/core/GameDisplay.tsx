@@ -1,6 +1,5 @@
 import MustacheTemplate from "react-mustache-template-component";
 import type { GameDisplayData } from "../../entities/GameDisplayData";
-import CameraOverlay from "../camera/CameraOverlay";
 
 interface GameDisplayProps {
   display: GameDisplayData;
@@ -18,7 +17,6 @@ export default function GameDisplay({ display, gameContextData }: GameDisplayPro
         ...display.containerCss,
       }}
     >
-      <CameraOverlay />
       <MustacheTemplate template={display.template.content ?? ""} data={templateData} />
     </div>
   );
