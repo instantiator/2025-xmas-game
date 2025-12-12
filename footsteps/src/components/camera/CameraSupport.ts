@@ -18,7 +18,7 @@ export function findFeet(
   personMask: ImageData,
   width: number,
   height: number,
-  removeCloseUps: boolean,
+  offScreenThreshold_percent?: number,
 ): FootPosition | null {
   const data = personMask.data;
   let lowestY: number | undefined = undefined;
@@ -38,11 +38,14 @@ export function findFeet(
     }
   }
 
-  if (lowestY === undefined || (removeCloseUps && lowestY > height - 5)) {
-    return null; // nothing found, or lowest pixels too close to the bottom
+  if (lowestY === undefined) {
+    return null; // No pixels found
   }
 
   const lowestY_percent = (100 * lowestY) / height;
+  if (isDefined(offScreenThreshold_percent) && lowestY_percent > offScreenThreshold_percent) {
+    return null; // lowest pixels too close to the bottom
+  }
 
   // Collect all pixels at the lowest y-coordinate band
   for (let y = lowestY; y > lowestY - 20 && y > 0; y--) {

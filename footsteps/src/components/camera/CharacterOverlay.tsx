@@ -14,6 +14,7 @@ interface CharacterOverlayProps {
   video: HTMLVideoElement;
   mediaStream: MediaStream;
   style?: CSSProperties;
+  offScreenThreshold_percent?: number;
   onFeetPositionsChange?: (feetPositions: FeetPositions) => void;
 }
 
@@ -21,6 +22,7 @@ export default function CharacterOverlay({
   video,
   mediaStream,
   style,
+  offScreenThreshold_percent,
   onFeetPositionsChange,
   children,
 }: PropsWithChildren<CharacterOverlayProps>) {
@@ -102,7 +104,7 @@ export default function CharacterOverlay({
               { r: 0, g: 0, b: 0, a: 0 },
             );
 
-            const feet = findFeet(personMask, personMask.width, personMask.height, false);
+            const feet = findFeet(personMask, personMask.width, personMask.height, offScreenThreshold_percent);
             if (feet) {
               feetPositions[i] = feet;
             }

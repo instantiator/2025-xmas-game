@@ -83,6 +83,7 @@ export default function CameraOverlay() {
             mediaStream={stream}
             style={{ height: "100%", overflow: "hidden" }}
             onFeetPositionsChange={setFeetPositions}
+            offScreenThreshold_percent={99}
           >
             {isDefined(feetPositions) &&
               Object.values(feetPositions).map((pos, i) => (
