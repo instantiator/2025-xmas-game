@@ -44,11 +44,13 @@ export function findFeet(
 
   const lowestY_percent = (100 * lowestY) / height;
 
-  // Collect all pixels at the lowest y-coordinate
-  for (let x = 0; x < width; x++) {
-    const alpha = data[(lowestY * width + x) * 4 + 3];
-    if (alpha > 0) {
-      feetPixels.push({ x, y: lowestY });
+  // Collect all pixels at the lowest y-coordinate band
+  for (let y = lowestY; y > lowestY - 20 && y > 0; y--) {
+    for (let x = 0; x < width; x++) {
+      const alpha = data[(y * width + x) * 4 + 3];
+      if (alpha > 0) {
+        feetPixels.push({ x, y: y });
+      }
     }
   }
 

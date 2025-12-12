@@ -1,32 +1,11 @@
-import useResizeObserver from "@react-hook/resize-observer";
-import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isDefined } from "../../util/ObjectUtils";
 import { getCameraStream } from "./CameraSupport";
 import CharacterOverlay, { type FeetPositions } from "./CharacterOverlay";
 
-const useSize = (target: RefObject<HTMLElement | null>) => {
-  const [size, setSize] = useState<DOMRect>();
-
-  useLayoutEffect(() => {
-    setSize(target.current?.getBoundingClientRect());
-  }, [target]);
-
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
-  return size;
-};
-
 export default function CameraOverlay() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const displayRef = useRef<HTMLDivElement>(null);
-
-  // const videoSize = useSize(videoRef);
-  // const displaySize = useSize(displayRef);
-
-  // const [videoRef, { width: videoWidth, height: videoHeight }] = useMeasure();
-  // const [displayRef, { width: displayWidth, height: displayHeight }] = useMeasure();
-
-  // const [videoRef, videoSize] = useElementSize<HTMLVideoElement>();
-  // const [displayRef, displaySize] = useElementSize<HTMLDivElement>();
 
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const [display, setDisplay] = useState<HTMLDivElement | null>(null);
@@ -56,26 +35,12 @@ export default function CameraOverlay() {
     };
   }, [video, stream]);
 
-  // useEffect(() => {
-  //   if (isDefined(videoSize) && isDefined(displaySize)) {
-  //     setScale({
-  //       x: displaySize.width / videoSize.width,
-  //       y: displaySize.height / videoSize.height,
-  //     });
-  //   }
-  // }, [videoSize, displaySize]);
-
   const DebugData = ({ color }: { color: string }) => {
     return (
       <div>
         <p style={{ color: color }}>
           feetPositions: {isDefined(feetPositions) ? JSON.stringify(feetPositions) : "undefined"}
         </p>
-        {/* <p style={{ color: color }}>
-          displaySize: {isDefined(displaySize) ? JSON.stringify(displaySize) : "undefined"}
-        </p>
-        <p style={{ color: color }}>videoSize: {isDefined(videoSize) ? JSON.stringify(videoSize) : "undefined"}</p>
-        <p style={{ color: color }}>scale: {isDefined(scale) ? JSON.stringify(scale) : "undefined"}</p> */}
       </div>
     );
   };
@@ -91,6 +56,7 @@ export default function CameraOverlay() {
           width: "12vw",
           height: "auto",
           border: "solid 2px grey",
+          transform: "scaleX(-1)",
         }}
         autoPlay
         playsInline
@@ -109,7 +75,7 @@ export default function CameraOverlay() {
           justifyContent: "stretch",
         }}
       >
-        <DebugData color="white" />
+        {/* <DebugData color="white" /> */}
 
         {isDefined(video) && isDefined(display) && stream && (
           <CharacterOverlay
@@ -119,7 +85,6 @@ export default function CameraOverlay() {
             onFeetPositionsChange={setFeetPositions}
           >
             {isDefined(feetPositions) &&
-              // isDefined(scale) &&
               Object.values(feetPositions).map((pos, i) => (
                 <div
                   key={`foot-marker-${i}`}

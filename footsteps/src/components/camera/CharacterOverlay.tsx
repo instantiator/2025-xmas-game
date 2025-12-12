@@ -77,9 +77,9 @@ export default function CharacterOverlay({
 
       const segmentFrame = async () => {
         const segmentation = await net.segmentPeople(video, {
-          internalResolution: "medium", // Adjust resolution for performance
+          internalResolution: "high", // Adjust resolution for performance
           flipHorizontal: true, // Often needed for webcams
-          segmentationThreshold: 0.7, // Confidence threshold
+          segmentationThreshold: 0.65, // Confidence threshold
         });
 
         if (segmentation.length === 0) {
@@ -145,16 +145,17 @@ export default function CharacterOverlay({
     }
   }, [net, mediaStream, video, onFeetPositionsChange]);
 
+  const containerStyle: CSSProperties = {
+    ...style,
+    transform: "scaleX(-1)", // mirror the canvas
+  };
+
   return (
     <>
-      <div style={style}>
+      {!net && <p style={{ color: "white" }}>Loading...</p>}
+      <div style={containerStyle}>
         {children}
-        {net && (
-          <>
-            <canvas ref={canvasRef} style={{ ...style }} />
-          </>
-        )}
-        {!net && <p style={{ color: "white" }}>Loading...</p>}
+        {net && <canvas ref={canvasRef} style={{ height: "100%", width: "auto" }} />}
       </div>
     </>
   );
