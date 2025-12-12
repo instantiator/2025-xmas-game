@@ -1,23 +1,35 @@
 import * as bodySeg from "@tensorflow-models/body-segmentation";
 import * as tf from "@tensorflow/tfjs";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type PropsWithChildren } from "react";
+import { findFeet, type FootPosition } from "./CameraSupport";
 
 // Define a type for the loaded model network
 type BodySegNet = bodySeg.BodySegmenter;
 
-interface BackgroundRemoverProps {
+export type FeetPositions = {
+  [personId: number]: FootPosition;
+};
+
+interface CharacterOverlayProps {
   video: HTMLVideoElement;
   mediaStream: MediaStream;
   style?: CSSProperties;
+  onFeetPositionsChange?: (feetPositions: FeetPositions) => void;
 }
 
-export default function BackgroundRemover({ video, mediaStream, style }: BackgroundRemoverProps) {
+export default function CharacterOverlay({
+  video,
+  mediaStream,
+  style,
+  onFeetPositionsChange,
+  children,
+}: PropsWithChildren<CharacterOverlayProps>) {
   const [net, setNet] = useState<BodySegNet | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Load the model
   useEffect(() => {
-    async function loadModel() {
+    const loadModel = async () => {
       // Wait for TensorFlow.js to be ready
       await tf.ready();
 
@@ -37,9 +49,20 @@ export default function BackgroundRemover({ video, mediaStream, style }: Backgro
       } catch (error) {
         console.error("Failed to load BodySeg model:", error);
       }
+    };
+
+    const unloadModel = async () => {
+      net?.dispose();
+      setNet(null);
+    };
+
+    if (mediaStream && !net) {
+      loadModel();
     }
-    loadModel();
-  }, []);
+    if (!mediaStream) {
+      unloadModel();
+    }
+  }, [mediaStream, net]);
 
   // Process the video stream
   useEffect(() => {
@@ -61,8 +84,30 @@ export default function BackgroundRemover({ video, mediaStream, style }: Backgro
 
         if (segmentation.length === 0) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          if (onFeetPositionsChange) {
+            onFeetPositionsChange({});
+          }
           requestAnimationFrame(segmentFrame);
           return;
+        }
+
+        // 1. Find the feet positions
+        if (onFeetPositionsChange) {
+          const feetPositions: FeetPositions = {};
+          for (let i = 0; i < segmentation.length; i++) {
+            const person = segmentation[i];
+            const personMask = await bodySeg.toBinaryMask(
+              [person],
+              { r: 0, g: 0, b: 0, a: 255 },
+              { r: 0, g: 0, b: 0, a: 0 },
+            );
+
+            const feet = findFeet(personMask, personMask.width, personMask.height, false);
+            if (feet) {
+              feetPositions[i] = feet;
+            }
+          }
+          onFeetPositionsChange(feetPositions);
         }
 
         // 2. Create the mask for background removal
@@ -98,7 +143,19 @@ export default function BackgroundRemover({ video, mediaStream, style }: Backgro
         mediaStream.getTracks().forEach((track) => track.stop());
       };
     }
-  }, [net, mediaStream, video]);
+  }, [net, mediaStream, video, onFeetPositionsChange]);
 
-  return <>{net ? <canvas ref={canvasRef} style={{ ...style }} /> : <p>Loading Machine Learning Model...</p>}</>;
+  return (
+    <>
+      <div style={style}>
+        {children}
+        {net && (
+          <>
+            <canvas ref={canvasRef} style={{ ...style }} />
+          </>
+        )}
+        {!net && <p style={{ color: "white" }}>Loading...</p>}
+      </div>
+    </>
+  );
 }

@@ -1,22 +1,84 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import BackgroundRemover from "./BackgroundRemover";
+import useResizeObserver from "@react-hook/resize-observer";
+import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
+import { isDefined } from "../../util/ObjectUtils";
 import { getCameraStream } from "./CameraSupport";
+import CharacterOverlay, { type FeetPositions } from "./CharacterOverlay";
+
+const useSize = (target: RefObject<HTMLElement | null>) => {
+  const [size, setSize] = useState<DOMRect>();
+
+  useLayoutEffect(() => {
+    setSize(target.current?.getBoundingClientRect());
+  }, [target]);
+
+  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  return size;
+};
 
 export default function CameraOverlay() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const displayRef = useRef<HTMLDivElement>(null);
 
-  const [video, setVideo] = useState<HTMLVideoElement>();
+  // const videoSize = useSize(videoRef);
+  // const displaySize = useSize(displayRef);
+
+  // const [videoRef, { width: videoWidth, height: videoHeight }] = useMeasure();
+  // const [displayRef, { width: displayWidth, height: displayHeight }] = useMeasure();
+
+  // const [videoRef, videoSize] = useElementSize<HTMLVideoElement>();
+  // const [displayRef, displaySize] = useElementSize<HTMLDivElement>();
+
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const [display, setDisplay] = useState<HTMLDivElement | null>(null);
   const [stream, setStream] = useState<MediaStream>();
-
-  const initCamera = useCallback(async () => {
-    const newStream = await getCameraStream(videoRef);
-    setVideo(videoRef.current!);
-    setStream(newStream);
-  }, []);
+  const [feetPositions, setFeetPositions] = useState<FeetPositions>();
+  // const [scale, setScale] = useState<{ x: number; y: number }>();
+  // const videoAvailable = isDefined(video);
 
   useEffect(() => {
-    initCamera();
-  }, [initCamera]);
+    setVideo(videoRef.current);
+  }, [videoRef]);
+
+  useEffect(() => {
+    setDisplay(displayRef.current);
+  }, [displayRef]);
+
+  useEffect(() => {
+    if (video && !stream) {
+      getCameraStream().then((mediaStream) => {
+        setStream(mediaStream);
+        videoRef.current!.srcObject = mediaStream;
+        videoRef.current!.play();
+      });
+    }
+    return () => {
+      stream?.getTracks().forEach((track) => track.stop());
+    };
+  }, [video, stream]);
+
+  // useEffect(() => {
+  //   if (isDefined(videoSize) && isDefined(displaySize)) {
+  //     setScale({
+  //       x: displaySize.width / videoSize.width,
+  //       y: displaySize.height / videoSize.height,
+  //     });
+  //   }
+  // }, [videoSize, displaySize]);
+
+  const DebugData = ({ color }: { color: string }) => {
+    return (
+      <div>
+        <p style={{ color: color }}>
+          feetPositions: {isDefined(feetPositions) ? JSON.stringify(feetPositions) : "undefined"}
+        </p>
+        {/* <p style={{ color: color }}>
+          displaySize: {isDefined(displaySize) ? JSON.stringify(displaySize) : "undefined"}
+        </p>
+        <p style={{ color: color }}>videoSize: {isDefined(videoSize) ? JSON.stringify(videoSize) : "undefined"}</p>
+        <p style={{ color: color }}>scale: {isDefined(scale) ? JSON.stringify(scale) : "undefined"}</p> */}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -33,23 +95,49 @@ export default function CameraOverlay() {
         autoPlay
         playsInline
       />
-      {video && stream && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "stretch",
-          }}
-        >
-          <BackgroundRemover video={video} mediaStream={stream} style={{ height: "100%" }} />
-        </div>
-      )}
+      <div
+        ref={displayRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "stretch",
+        }}
+      >
+        <DebugData color="white" />
+
+        {isDefined(video) && isDefined(display) && stream && (
+          <CharacterOverlay
+            video={video}
+            mediaStream={stream}
+            style={{ height: "100%", overflow: "hidden" }}
+            onFeetPositionsChange={setFeetPositions}
+          >
+            {isDefined(feetPositions) &&
+              // isDefined(scale) &&
+              Object.values(feetPositions).map((pos, i) => (
+                <div
+                  key={`foot-marker-${i}`}
+                  style={{
+                    position: "absolute",
+                    left: `${pos.percent.x}%`,
+                    top: `${pos.percent.y}%`,
+                    width: "40px",
+                    height: "40px",
+                    backgroundColor: "cyan",
+                    borderRadius: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              ))}
+          </CharacterOverlay>
+        )}
+      </div>
     </>
   );
 }

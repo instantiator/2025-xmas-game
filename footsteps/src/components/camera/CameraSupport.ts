@@ -1,13 +1,64 @@
-export const getCameraStream = async (videoRef: React.RefObject<HTMLVideoElement | null>) => {
+import { isDefined } from "../../util/ObjectUtils";
+
+export const getCameraStream = async () => {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    if (videoRef.current) {
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
-    }
-    return stream;
+    return await navigator.mediaDevices.getUserMedia({ video: true });
   } catch (err) {
     console.error("Error accessing the camera: ", err);
     throw err;
   }
 };
+
+export interface FootPosition {
+  absolute: { x: number; y: number };
+  percent: { x: number; y: number };
+}
+
+export function findFeet(
+  personMask: ImageData,
+  width: number,
+  height: number,
+  removeCloseUps: boolean,
+): FootPosition | null {
+  const data = personMask.data;
+  let lowestY: number | undefined = undefined;
+  const feetPixels: { x: number; y: number }[] = [];
+
+  // Find the lowest y-coordinate
+  for (let y = height - 1; y >= 0; y--) {
+    for (let x = 0; x < width; x++) {
+      const alpha = data[(y * width + x) * 4 + 3];
+      if (alpha > 0) {
+        lowestY = y;
+        break;
+      }
+    }
+    if (isDefined(lowestY)) {
+      break;
+    }
+  }
+
+  if (lowestY === undefined || (removeCloseUps && lowestY > height - 5)) {
+    return null; // nothing found, or lowest pixels too close to the bottom
+  }
+
+  const lowestY_percent = (100 * lowestY) / height;
+
+  // Collect all pixels at the lowest y-coordinate
+  for (let x = 0; x < width; x++) {
+    const alpha = data[(lowestY * width + x) * 4 + 3];
+    if (alpha > 0) {
+      feetPixels.push({ x, y: lowestY });
+    }
+  }
+
+  // Calculate the average x-coordinate of the feet pixels
+  if (feetPixels.length > 0) {
+    const totalX = feetPixels.reduce((sum, p) => sum + p.x, 0);
+    const centerX = totalX / feetPixels.length;
+    const centerX_percent = (100 * centerX) / width;
+    return { absolute: { x: centerX, y: lowestY }, percent: { x: centerX_percent, y: lowestY_percent } };
+  }
+
+  return null;
+}
