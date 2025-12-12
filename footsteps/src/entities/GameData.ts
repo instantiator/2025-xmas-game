@@ -1,12 +1,14 @@
 import type { GameChallengeData } from "./GameChallengeData";
-import type { GameDisplayData } from "./GameDisplayData";
+import type { OverviewGameDisplay } from "./GameDisplayData";
 
 export type GameId = string;
 
 export interface GameData {
   id: GameId;
   title: string;
-  displays: GameDisplayData[];
+  displays: {
+    overview: OverviewGameDisplay;
+  };
   challenges: GameChallengeData[];
   css: string;
 }

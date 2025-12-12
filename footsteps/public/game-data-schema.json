@@ -72,6 +72,29 @@
             ],
             "type": "string"
         },
+        "OverviewGameDisplay": {
+            "properties": {
+                "containerCss": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
+                "data": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "template": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "type": {
+                    "const": "game-overview",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "data",
+                "template",
+                "type"
+            ],
+            "type": "object"
+        },
         "React.CSSProperties": {
             "type": "object"
         },
@@ -98,10 +121,15 @@
             "type": "string"
         },
         "displays": {
-            "items": {
-                "$ref": "#/definitions/GameDisplayData"
+            "properties": {
+                "overview": {
+                    "$ref": "#/definitions/OverviewGameDisplay"
+                }
             },
-            "type": "array"
+            "required": [
+                "overview"
+            ],
+            "type": "object"
         },
         "id": {
             "type": "string"

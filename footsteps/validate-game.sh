@@ -21,6 +21,9 @@ if [ ! -f "$SCHEMA_PATH" ]; then
   exit 1
 fi
 
+# regenerate schemas
+./generate-schemas.sh
+
 echo "Validating $DATA_FILE against $SCHEMA_PATH..."
 npx --yes ajv-cli validate -s "$SCHEMA_PATH" -d "$DATA_FILE" --verbose
 

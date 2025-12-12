@@ -8,7 +8,7 @@ export default function Game() {
   const { gameData } = useGameData();
   const { gameState } = useGameState();
 
-  const overview = gameData.displays.find((d) => d.type === "game-overview");
+  const overview = gameData.displays.overview;
 
   return (
     <>

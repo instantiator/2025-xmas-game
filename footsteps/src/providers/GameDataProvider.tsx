@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
 import type { GameData, GameId } from "../entities/GameData";
-import type { GameDisplayData } from "../entities/GameDisplayData";
+import type { GameDisplayData, OverviewGameDisplay } from "../entities/GameDisplayData";
 import { getBaseURL, getDirectoryURL, isDefined, isUndefinedOrWhitespaceOrEmpty } from "../util/ObjectUtils";
 import {
   GameDataContext,
@@ -94,11 +94,11 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
     };
 
     const loadContent = async (data: GameData) => {
-      const tasks: Promise<GameDisplayData>[] = data.displays.map((display) => fetchDisplay(display));
+      const tasks: Promise<GameDisplayData>[] = [fetchDisplay(data.displays.overview)];
       const templates = await Promise.all(tasks);
       setGameLoading({
         loadingState: "ready",
-        gameData: { ...data, displays: templates },
+        gameData: { ...data, displays: { overview: templates[0] as OverviewGameDisplay } },
       });
     };
 
