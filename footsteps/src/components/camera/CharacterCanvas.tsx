@@ -1,6 +1,7 @@
 import * as bodySeg from "@tensorflow-models/body-segmentation";
 import * as tf from "@tensorflow/tfjs";
 import { useEffect, useRef, useState } from "react";
+import { drawMask } from "./BodySegSupport";
 import { findFeet, type FeetPositions } from "./CameraSupport";
 
 // Define a type for the loaded model network
@@ -12,6 +13,7 @@ interface CharacterCanvasProps {
   offScreenThreshold_percent?: number;
   onFeetPositionsChange?: (feetPositions: FeetPositions) => void;
   canvasStyle?: React.CSSProperties;
+  maskType?: "binary" | "colored" | "extremities";
 }
 
 export default function CharacterCanvas({
@@ -20,6 +22,7 @@ export default function CharacterCanvas({
   offScreenThreshold_percent,
   onFeetPositionsChange,
   canvasStyle,
+  maskType = "binary",
 }: CharacterCanvasProps) {
   const [net, setNet] = useState<BodySegNet | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -75,6 +78,7 @@ export default function CharacterCanvas({
           internalResolution: "high", // Adjust resolution for performance
           flipHorizontal: true, // Often needed for webcams
           segmentationThreshold: 0.65, // Confidence threshold
+          segmentBodyParts: true,
         });
 
         if (segmentation.length === 0) {
@@ -105,25 +109,8 @@ export default function CharacterCanvas({
           onFeetPositionsChange(feetPositions);
         }
 
-        // 2. Create the mask for background removal
-        const backgroundColor = { r: 0, g: 0, b: 0, a: 0 }; // Transparent
-        const foregroundColor = { r: 0, g: 0, b: 0, a: 255 }; // Opaque black
-        const backgroundMask = await bodySeg.toBinaryMask(segmentation, foregroundColor, backgroundColor);
-        // const backgroundMask = await bodySeg.toColoredMask(segmentation, maskValueToColor, backgroundColor);
-
-        // 3. Draw the masked result to the canvas
-        if (ctx) {
-          const maskBitmap = await createImageBitmap(backgroundMask);
-          ctx.save();
-          // Draw the video
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-          // Use 'destination-in' to keep only the part of the video that overlaps with the mask
-          ctx.globalCompositeOperation = "destination-in";
-          // Draw the mask
-          ctx.drawImage(maskBitmap, 0, 0, canvas.width, canvas.height);
-          // Restore composite operation
-          ctx.restore();
-        }
+        // 2. Draw the mask
+        await drawMask(video, segmentation, ctx, canvas, maskType);
 
         // Request next frame for continuous real-time processing
         requestAnimationFrame(segmentFrame);
@@ -139,7 +126,7 @@ export default function CharacterCanvas({
         mediaStream.getTracks().forEach((track) => track.stop());
       };
     }
-  }, [net, mediaStream, video, onFeetPositionsChange, offScreenThreshold_percent]);
+  }, [net, mediaStream, video, onFeetPositionsChange, offScreenThreshold_percent, maskType]);
 
   return <canvas ref={canvasRef} style={canvasStyle} />;
 }

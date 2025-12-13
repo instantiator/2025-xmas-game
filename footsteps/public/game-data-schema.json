@@ -3,11 +3,11 @@
     "definitions": {
         "ChallengeGameDisplay": {
             "properties": {
+                "backgroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "containerStyle": {
-                    "$ref": "#/definitions/React.CSSProperties"
                 },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
@@ -73,11 +73,11 @@
         },
         "OverviewGameDisplay": {
             "properties": {
+                "backgroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "containerStyle": {
-                    "$ref": "#/definitions/React.CSSProperties"
                 },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"

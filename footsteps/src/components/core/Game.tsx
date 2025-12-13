@@ -66,6 +66,8 @@ export default function Game() {
     }
   }, [gameData, gameState]);
 
+  const debug = true;
+
   return (
     <>
       <div
@@ -80,8 +82,7 @@ export default function Game() {
         }}
       >
         <GameLayersLayout
-          showCharacterCamera={true}
-          showDebugOverlay={true}
+          debug={debug}
           backgroundLayer={layers.backgroundLayer}
           backgroundStyle={layers.backgroundStyle}
           foregroundLayer={layers.foregroundLayer}

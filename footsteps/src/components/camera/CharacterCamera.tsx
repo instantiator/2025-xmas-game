@@ -1,4 +1,5 @@
 import { useEffect, useRef, type Dispatch, type SetStateAction } from "react";
+import { BODY_PARTS } from "./BodySegSupport";
 import { getCameraStream } from "./CameraSupport";
 
 interface CharacterCameraProps {
@@ -7,9 +8,17 @@ interface CharacterCameraProps {
   video: HTMLVideoElement | null;
   setVideo: Dispatch<SetStateAction<HTMLVideoElement | null>>;
   setAspect: Dispatch<SetStateAction<number | undefined>>;
+  colorKey: boolean;
 }
 
-export default function CharacterCamera({ stream, setStream, video, setVideo, setAspect }: CharacterCameraProps) {
+export default function CharacterCamera({
+  stream,
+  setStream,
+  video,
+  setVideo,
+  setAspect,
+  colorKey,
+}: CharacterCameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -32,14 +41,35 @@ export default function CharacterCamera({ stream, setStream, video, setVideo, se
   }, [video, stream, setStream, setAspect]);
 
   return (
-    <video
-      ref={videoRef}
-      style={{
-        width: "12vw",
-        height: "auto",
-      }}
-      autoPlay
-      playsInline
-    />
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
+      <video
+        ref={videoRef}
+        style={{
+          width: "12vw",
+          height: "auto",
+          transform: "scaleX(-1)",
+          border: "solid 2px grey",
+        }}
+        autoPlay
+        playsInline
+      />
+      {colorKey &&
+        Object.entries(BODY_PARTS).map(([key, part]) => (
+          <div key={`body-part-${key}`} style={{ display: "flex", alignItems: "center", backgroundColor: "#ffffffaa" }}>
+            <div
+              style={{
+                width: "1rem",
+                height: "1rem",
+                backgroundColor: `rgba(${part.color.r}, ${part.color.g}, ${part.color.b}, ${part.color.a / 255})`,
+                marginRight: "0.5rem",
+                border: "solid 1px black",
+              }}
+            />
+            <span>
+              {part.description} ({part.maskValue})
+            </span>
+          </div>
+        ))}
+    </div>
   );
 }

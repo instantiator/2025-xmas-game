@@ -8,16 +8,14 @@ interface GameLayersLayoutProps {
   backgroundStyle?: React.CSSProperties;
   backgroundLayer: ReactNode;
   foregroundLayer: ReactNode;
-  showDebugOverlay?: boolean;
-  showCharacterCamera?: boolean;
+  debug?: boolean;
 }
 
 export default function GameLayersLayout({
   backgroundStyle,
   backgroundLayer,
   foregroundLayer,
-  showDebugOverlay,
-  showCharacterCamera,
+  debug,
 }: GameLayersLayoutProps) {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const [characterStream, setCharacterStream] = useState<MediaStream | undefined>(undefined);
@@ -72,10 +70,8 @@ export default function GameLayersLayout({
     position: "absolute",
     right: "2vw",
     top: "2vh",
-    border: "solid 2px grey",
-    transform: "scaleX(-1)",
     pointerEvents: "none",
-    display: showCharacterCamera ? "block" : "none",
+    display: debug ? "block" : "none",
   };
 
   return (
@@ -87,6 +83,7 @@ export default function GameLayersLayout({
           stream={characterStream}
           setStream={setCharacterStream}
           setAspect={setAspect}
+          colorKey={debug === true}
         />
       </div>
       {isDefined(aspect) && (
@@ -102,6 +99,7 @@ export default function GameLayersLayout({
               mediaStream={characterStream}
               canvasStyle={characterCanvasStyle}
               onFeetPositionsChange={setFeetPositions}
+              maskType={debug ? "colored" : "binary"}
             />
           </div>
           <div style={{ ...outerStyle, zIndex: 3 }}>
@@ -109,7 +107,7 @@ export default function GameLayersLayout({
               {foregroundLayer}
             </div>
           </div>
-          {showDebugOverlay && (
+          {debug && (
             <div style={{ ...outerStyle, zIndex: 4 }} id="debug-overlay-layer">
               <div style={debugOverlayStyle}>
                 {isDefined(feetPositions) &&
