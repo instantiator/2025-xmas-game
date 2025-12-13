@@ -9,6 +9,10 @@ export const getCameraStream = async () => {
   }
 };
 
+export type FeetPositions = {
+  [personId: number]: FootPosition;
+};
+
 export interface FootPosition {
   absolute: { x: number; y: number };
   percent: { x: number; y: number };

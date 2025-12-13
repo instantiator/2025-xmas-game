@@ -38,14 +38,14 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
 
   useEffect(() => {
     const fetchDisplay = async (display: GameDisplayData): Promise<GameDisplayData> => {
-      if (isUndefinedOrWhitespaceOrEmpty(display.template.content)) {
-        switch (display.template.sourceType) {
+      if (isUndefinedOrWhitespaceOrEmpty(display.foregroundTemplate.content)) {
+        switch (display.foregroundTemplate.sourceType) {
           case "embedded":
             console.warn(`Display template marked as embedded but no content found: ${JSON.stringify(display)}`);
             return display;
 
           case "relative":
-            if (isUndefinedOrWhitespaceOrEmpty(display.template.templateSource)) {
+            if (isUndefinedOrWhitespaceOrEmpty(display.foregroundTemplate.templateSource)) {
               throw new Error(`Display template source is missing: ${JSON.stringify(display)}`);
             }
             switch (repositorySource.type) {
@@ -53,11 +53,11 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
                 // rewrite the display to be a url, relative to the repository url
                 return await fetchDisplay({
                   ...display,
-                  template: {
-                    ...display.template,
+                  foregroundTemplate: {
+                    ...display.foregroundTemplate,
                     sourceType: "url",
                     templateSource: new URL(
-                      display.template.templateSource!,
+                      display.foregroundTemplate.templateSource!,
                       getDirectoryURL(repositorySource.src),
                     ).toString(),
                   },
@@ -67,10 +67,10 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
                 // rewrite to fetch the template content from the public directory
                 return await fetchDisplay({
                   ...display,
-                  template: {
-                    ...display.template,
+                  foregroundTemplate: {
+                    ...display.foregroundTemplate,
                     sourceType: "url",
-                    templateSource: new URL(display.template.templateSource!, getBaseURL()).toString(),
+                    templateSource: new URL(display.foregroundTemplate.templateSource!, getBaseURL()).toString(),
                   },
                 });
 
@@ -80,13 +80,13 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
             break;
 
           case "url": {
-            if (isUndefinedOrWhitespaceOrEmpty(display.template.templateSource)) {
+            if (isUndefinedOrWhitespaceOrEmpty(display.foregroundTemplate.templateSource)) {
               throw new Error(`Display template source is missing: ${JSON.stringify(display)}`);
             }
-            console.debug(`Fetching template at: ${display.template.templateSource}`);
-            const response = await fetch(display.template.templateSource!);
+            console.debug(`Fetching template at: ${display.foregroundTemplate.templateSource}`);
+            const response = await fetch(display.foregroundTemplate.templateSource!);
             const text = await response.text();
-            return { ...display, template: { ...display.template, content: text } };
+            return { ...display, foregroundTemplate: { ...display.foregroundTemplate, content: text } };
           }
         }
       }

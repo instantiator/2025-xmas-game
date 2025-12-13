@@ -3,13 +3,16 @@
     "definitions": {
         "ChallengeGameDisplay": {
             "properties": {
-                "containerCss": {
+                "backgroundTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "containerStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
                 },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
-                "template": {
+                "foregroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
@@ -17,8 +20,9 @@
                 }
             },
             "required": [
+                "backgroundTemplate",
                 "data",
-                "template",
+                "foregroundTemplate",
                 "type"
             ],
             "type": "object"
@@ -62,9 +66,6 @@
                     },
                     "type": "array"
                 },
-                "css": {
-                    "type": "string"
-                },
                 "displays": {
                     "properties": {
                         "overview": {
@@ -76,6 +77,9 @@
                     ],
                     "type": "object"
                 },
+                "gameContainerStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -85,8 +89,8 @@
             },
             "required": [
                 "challenges",
-                "css",
                 "displays",
+                "gameContainerStyle",
                 "id",
                 "title"
             ],
@@ -111,13 +115,16 @@
         },
         "OverviewGameDisplay": {
             "properties": {
-                "containerCss": {
+                "backgroundTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "containerStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
                 },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
-                "template": {
+                "foregroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
@@ -126,8 +133,9 @@
                 }
             },
             "required": [
+                "backgroundTemplate",
                 "data",
-                "template",
+                "foregroundTemplate",
                 "type"
             ],
             "type": "object"

@@ -2,7 +2,7 @@ import type { ChallengeGameDisplay, ChallengeGameDisplayType, OverviewGameDispla
 
 export const NO_OVERVIEW_GAME_DISPLAY: OverviewGameDisplay = {
   type: "game-overview",
-  template: {
+  foregroundTemplate: {
     sourceType: "embedded",
     content: "<h1>No overview defined</h1>",
   },
@@ -11,7 +11,7 @@ export const NO_OVERVIEW_GAME_DISPLAY: OverviewGameDisplay = {
 
 export const NO_CHALLENGE_DISPLAY = (type: ChallengeGameDisplayType): ChallengeGameDisplay => ({
   type,
-  template: {
+  foregroundTemplate: {
     sourceType: "embedded",
     content: "<h1>No challenge display defined</h1><h2>Type: {{type}}</h2>",
   },

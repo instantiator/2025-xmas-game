@@ -20,9 +20,10 @@ export interface GameDisplayTemplate {
 
 export interface GameDisplayData {
   type: GameDisplayType;
-  template: GameDisplayTemplate;
+  backgroundTemplate: GameDisplayTemplate;
+  foregroundTemplate: GameDisplayTemplate;
   data: Record<string, unknown>;
-  containerCss?: CSSProperties;
+  containerStyle?: CSSProperties;
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {

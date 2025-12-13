@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { GameChallengeData } from "./GameChallengeData";
 import type { OverviewGameDisplay } from "./GameDisplayData";
 
@@ -10,5 +11,5 @@ export interface GameData {
     overview: OverviewGameDisplay;
   };
   challenges: GameChallengeData[];
-  css: string;
+  gameContainerStyle: CSSProperties;
 }

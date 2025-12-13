@@ -1,31 +1,26 @@
 import * as bodySeg from "@tensorflow-models/body-segmentation";
 import * as tf from "@tensorflow/tfjs";
-import { useEffect, useRef, useState, type CSSProperties, type PropsWithChildren } from "react";
-import { findFeet, type FootPosition } from "./CameraSupport";
+import { useEffect, useRef, useState } from "react";
+import { findFeet, type FeetPositions } from "./CameraSupport";
 
 // Define a type for the loaded model network
 type BodySegNet = bodySeg.BodySegmenter;
 
-export type FeetPositions = {
-  [personId: number]: FootPosition;
-};
-
-interface CharacterOverlayProps {
-  video: HTMLVideoElement;
-  mediaStream: MediaStream;
-  style?: CSSProperties;
+interface CharacterCanvasProps {
+  video: HTMLVideoElement | null;
+  mediaStream: MediaStream | undefined;
   offScreenThreshold_percent?: number;
   onFeetPositionsChange?: (feetPositions: FeetPositions) => void;
+  canvasStyle?: React.CSSProperties;
 }
 
-export default function CharacterOverlay({
+export default function CharacterCanvas({
   video,
   mediaStream,
-  style,
   offScreenThreshold_percent,
   onFeetPositionsChange,
-  children,
-}: PropsWithChildren<CharacterOverlayProps>) {
+  canvasStyle,
+}: CharacterCanvasProps) {
   const [net, setNet] = useState<BodySegNet | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -68,14 +63,12 @@ export default function CharacterOverlay({
 
   // Process the video stream
   useEffect(() => {
-    // The actual segmentation and rendering loop
     const runSegmentationLoop = (net: BodySegNet, video: HTMLVideoElement, canvas: HTMLCanvasElement) => {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // Set canvas dimensions to match the video feed
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      // canvas.width = video.videoWidth;
+      // canvas.height = video.videoHeight;
 
       const segmentFrame = async () => {
         const segmentation = await net.segmentPeople(video, {
@@ -103,8 +96,8 @@ export default function CharacterOverlay({
               { r: 0, g: 0, b: 0, a: 255 },
               { r: 0, g: 0, b: 0, a: 0 },
             );
-
-            const feet = findFeet(personMask, personMask.width, personMask.height, offScreenThreshold_percent);
+            //TODO: replace undefined with offScreenThreshold_percent to not track feet below the bottom
+            const feet = findFeet(personMask, personMask.width, personMask.height, undefined);
             if (feet) {
               feetPositions[i] = feet;
             }
@@ -139,26 +132,13 @@ export default function CharacterOverlay({
       segmentFrame();
     };
 
-    if (net && mediaStream) {
+    if (net && video && mediaStream) {
       runSegmentationLoop(net, video, canvasRef.current!);
       return () => {
         mediaStream.getTracks().forEach((track) => track.stop());
       };
     }
-  }, [net, mediaStream, video, onFeetPositionsChange]);
+  }, [net, mediaStream, video, onFeetPositionsChange, offScreenThreshold_percent]);
 
-  const containerStyle: CSSProperties = {
-    ...style,
-    transform: "scaleX(-1)", // mirror the canvas
-  };
-
-  return (
-    <>
-      {!net && <p style={{ color: "white" }}>Loading...</p>}
-      <div style={containerStyle}>
-        {children}
-        {net && <canvas ref={canvasRef} style={{ height: "100%", width: "auto" }} />}
-      </div>
-    </>
-  );
+  return <canvas ref={canvasRef} style={canvasStyle} />;
 }
