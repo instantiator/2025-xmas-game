@@ -8,9 +8,17 @@ interface GameLayersLayoutProps {
   backgroundStyle?: React.CSSProperties;
   backgroundLayer: ReactNode;
   foregroundLayer: ReactNode;
+  showDebugOverlay?: boolean;
+  showCharacterCamera?: boolean;
 }
 
-export default function GameLayersLayout({ backgroundStyle, backgroundLayer, foregroundLayer }: GameLayersLayoutProps) {
+export default function GameLayersLayout({
+  backgroundStyle,
+  backgroundLayer,
+  foregroundLayer,
+  showDebugOverlay,
+  showCharacterCamera,
+}: GameLayersLayoutProps) {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const [characterStream, setCharacterStream] = useState<MediaStream | undefined>(undefined);
   const [feetPositions, setFeetPositions] = useState<FeetPositions>({});
@@ -66,6 +74,8 @@ export default function GameLayersLayout({ backgroundStyle, backgroundLayer, for
     top: "2vh",
     border: "solid 2px grey",
     transform: "scaleX(-1)",
+    pointerEvents: "none",
+    display: showCharacterCamera ? "block" : "none",
   };
 
   return (
@@ -99,26 +109,28 @@ export default function GameLayersLayout({ backgroundStyle, backgroundLayer, for
               {foregroundLayer}
             </div>
           </div>
-          <div style={{ ...outerStyle, zIndex: 4 }} id="debug-overlay-layer">
-            <div style={debugOverlayStyle}>
-              {isDefined(feetPositions) &&
-                Object.values(feetPositions).map((pos, i) => (
-                  <div
-                    key={`foot-marker-${i}`}
-                    style={{
-                      position: "absolute",
-                      left: `${pos.percent.x}%`,
-                      top: `${pos.percent.y}%`,
-                      width: "10px",
-                      height: "10px",
-                      backgroundColor: "lightgreen",
-                      borderRadius: "50%",
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  />
-                ))}
+          {showDebugOverlay && (
+            <div style={{ ...outerStyle, zIndex: 4 }} id="debug-overlay-layer">
+              <div style={debugOverlayStyle}>
+                {isDefined(feetPositions) &&
+                  Object.values(feetPositions).map((pos, i) => (
+                    <div
+                      key={`foot-marker-${i}`}
+                      style={{
+                        position: "absolute",
+                        left: `${pos.percent.x}%`,
+                        top: `${pos.percent.y}%`,
+                        width: "10px",
+                        height: "10px",
+                        backgroundColor: "lightgreen",
+                        borderRadius: "50%",
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    />
+                  ))}
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </>

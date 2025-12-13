@@ -2,11 +2,7 @@ import type { CSSProperties } from "react";
 
 export type OverviewGameDisplayType = "game-overview";
 
-export type ChallengeGameDisplayType =
-  | "challenge-preview"
-  | "challenge-introduction"
-  | "challenge-solution-entry"
-  | "challenge-completed";
+export type ChallengeGameDisplayType = "challenge-in-progress" | "challenge-completed";
 
 export type GameDisplayType = OverviewGameDisplayType | ChallengeGameDisplayType;
 
@@ -20,10 +16,10 @@ export interface GameDisplayTemplate {
 
 export interface GameDisplayData {
   type: GameDisplayType;
-  backgroundTemplate: GameDisplayTemplate;
-  foregroundTemplate: GameDisplayTemplate;
+  backgroundTemplate?: GameDisplayTemplate;
+  foregroundTemplate?: GameDisplayTemplate;
   data: Record<string, unknown>;
-  containerStyle?: CSSProperties;
+  backgroundStyle?: CSSProperties;
 }
 
 export interface OverviewGameDisplay extends GameDisplayData {

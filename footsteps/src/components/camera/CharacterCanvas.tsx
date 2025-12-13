@@ -67,8 +67,8 @@ export default function CharacterCanvas({
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // canvas.width = video.videoWidth;
-      // canvas.height = video.videoHeight;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
       const segmentFrame = async () => {
         const segmentation = await net.segmentPeople(video, {
@@ -106,9 +106,10 @@ export default function CharacterCanvas({
         }
 
         // 2. Create the mask for background removal
-        const foregroundColor = { r: 0, g: 0, b: 0, a: 255 }; // Opaque black
         const backgroundColor = { r: 0, g: 0, b: 0, a: 0 }; // Transparent
+        const foregroundColor = { r: 0, g: 0, b: 0, a: 255 }; // Opaque black
         const backgroundMask = await bodySeg.toBinaryMask(segmentation, foregroundColor, backgroundColor);
+        // const backgroundMask = await bodySeg.toColoredMask(segmentation, maskValueToColor, backgroundColor);
 
         // 3. Draw the masked result to the canvas
         if (ctx) {

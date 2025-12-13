@@ -15,7 +15,7 @@
               "sourceType": "embedded",
               "content": ""
             },
-            "containerStyle": {
+            "backgroundStyle": {
               "background": "black",
               "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
               "backgroundSize": "cover",
@@ -26,7 +26,8 @@
       },
       "challenges": [],
       "gameContainerStyle": {
-        "backgroundColor": "#222222"
+        "backgroundColor": "#222222",
+        "borderRadius": "5px"
       }
     }
   }

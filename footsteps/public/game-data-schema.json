@@ -20,9 +20,7 @@
                 }
             },
             "required": [
-                "backgroundTemplate",
                 "data",
-                "foregroundTemplate",
                 "type"
             ],
             "type": "object"
@@ -30,9 +28,7 @@
         "ChallengeGameDisplayType": {
             "enum": [
                 "challenge-completed",
-                "challenge-introduction",
-                "challenge-preview",
-                "challenge-solution-entry"
+                "challenge-in-progress"
             ],
             "type": "string"
         },
@@ -95,9 +91,7 @@
                 }
             },
             "required": [
-                "backgroundTemplate",
                 "data",
-                "foregroundTemplate",
                 "type"
             ],
             "type": "object"

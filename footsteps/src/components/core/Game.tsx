@@ -1,11 +1,11 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { NO_OVERVIEW_GAME_DISPLAY } from "../../constants/DefaultGameDisplays";
+import { NO_CHALLENGE_TEMPLATE, NO_OVERVIEW_GAME_TEMPLATE } from "../../constants/DefaultGameDisplays";
+import type { ChallengeGameDisplayType } from "../../entities/GameDisplayData";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
-import { isDefined, isDefinedAndHasContent, isUndefinedOrWhitespaceOrEmpty } from "../../util/ObjectUtils";
-import ChallengeGameDisplay from "./ChallengeGameDisplay";
+import { isDefined } from "../../util/ObjectUtils";
 import GameLayersLayout from "./GameLayersLayout";
-import OverviewGameDisplay from "./OverviewGameDisplay";
+import GameTemplate from "./GameTemplate";
 
 interface DisplayLayers {
   backgroundStyle?: CSSProperties;
@@ -20,34 +20,48 @@ export default function Game() {
   const [layers, setLayers] = useState<DisplayLayers>({});
 
   useEffect(() => {
-    if (
-      !isDefined(gameState.current.challengeId) &&
-      isUndefinedOrWhitespaceOrEmpty(gameData.displays.overview.foregroundTemplate.content)
-    ) {
+    const challenge = isDefined(gameState.current.challengeId)
+      ? gameState.challenges[gameState.current.challengeId].challenge
+      : undefined;
+
+    if (isDefined(challenge)) {
+      const challengeDisplayType: ChallengeGameDisplayType = "challenge-in-progress"; // TODO: pick
+      const challengeDisplay = challenge.displays.find((d) => d.type === challengeDisplayType);
+      const backgroundTemplate = challengeDisplay?.backgroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplayType);
+      const foregroundTemplate = challengeDisplay?.foregroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplayType);
+      const templateData = {
+        gameData,
+        gameState,
+        challengeData: challengeDisplay?.data,
+        challengeState: gameState.challenges[gameState.current.challengeId!],
+      };
+
       setLayers({
+        backgroundStyle: challengeDisplay?.backgroundStyle,
         backgroundLayer: (
-          <OverviewGameDisplay display={NO_OVERVIEW_GAME_DISPLAY} gameData={gameData} gameState={gameState} />
+          <GameTemplate display={challengeDisplay} template={backgroundTemplate} gameContextData={templateData} />
         ),
-        backgroundStyle: undefined,
+        foregroundLayer: (
+          <GameTemplate display={challengeDisplay} template={foregroundTemplate} gameContextData={templateData} />
+        ),
       });
-    }
-    if (
-      !isDefined(gameState.current.challengeId) &&
-      isDefinedAndHasContent(gameData.displays.overview.foregroundTemplate.content)
-    ) {
+    } else {
+      const overviewDisplay = gameData.displays.overview;
+      const backgroundTemplate = overviewDisplay.backgroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
+      const foregroundTemplate = overviewDisplay.foregroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
+      const templateData = {
+        gameData,
+        gameState,
+      };
+
       setLayers({
+        backgroundStyle: overviewDisplay.backgroundStyle,
         backgroundLayer: (
-          <OverviewGameDisplay display={gameData.displays.overview} gameData={gameData} gameState={gameState} />
+          <GameTemplate display={overviewDisplay} template={backgroundTemplate} gameContextData={templateData} />
         ),
-        backgroundStyle: gameData.displays.overview.containerStyle,
-      });
-    }
-    if (isDefined(gameState.current.challengeId)) {
-      setLayers({
-        backgroundLayer: (
-          <ChallengeGameDisplay gameData={gameData} gameState={gameState} challengeId={gameState.current.challengeId} />
+        foregroundLayer: (
+          <GameTemplate display={overviewDisplay} template={foregroundTemplate} gameContextData={templateData} />
         ),
-        backgroundStyle: gameState.challenges[gameState.current.challengeId].challenge.displays[0].containerStyle, // TODO - pick the style
       });
     }
   }, [gameData, gameState]);
@@ -66,6 +80,8 @@ export default function Game() {
         }}
       >
         <GameLayersLayout
+          showCharacterCamera={true}
+          showDebugOverlay={true}
           backgroundLayer={layers.backgroundLayer}
           backgroundStyle={layers.backgroundStyle}
           foregroundLayer={layers.foregroundLayer}
