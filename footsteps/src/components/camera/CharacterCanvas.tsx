@@ -35,10 +35,10 @@ export default function CharacterCanvas({
 
       // Load the BodyPix model with ResNet50 arch for higher accuracy
       const modelConfig: bodySeg.BodyPixModelConfig = {
-        architecture: "ResNet50", // alternative: ResNet50 (needs multiplier 1.0)
-        outputStride: 32, // Higher stride can improve accuracy
+        architecture: "ResNet50",
+        outputStride: 32,
         multiplier: 1.0, // Use 1.0 for ResNet50
-        quantBytes: 4, // Higher precision
+        quantBytes: 4,
       };
 
       try {
