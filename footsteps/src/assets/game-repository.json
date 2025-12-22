@@ -4,30 +4,118 @@
     "test-game": {
       "id": "test-game",
       "title": "Test Game",
-      "displays": {
-        "overview": {
-            "type": "game-overview",
-            "foregroundTemplate": {
-              "sourceType": "embedded",
-              "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
-            },
-            "backgroundTemplate": {
-              "sourceType": "embedded",
-              "content": ""
-            },
-            "backgroundStyle": {
-              "background": "black",
-              "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
-              "backgroundSize": "cover",
-              "backgroundPosition": "center"
-            },
-            "data": {}
+      "modules": {
+        "camera": {
+          "enabled": true
         }
       },
-      "challenges": [],
+      "displays": {
+        "title": {
+          "type": "game-overview-title",
+          "foregroundTemplate": {
+            "sourceType": "embedded",
+            "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
+          },
+          "backgroundTemplate": {
+            "sourceType": "embedded",
+            "content": ""
+          },
+          "backgroundStyle": {
+            "background": "black",
+            "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
+            "backgroundSize": "cover",
+            "backgroundPosition": "center"
+          },
+          "data": {}
+        }
+      },
+      "stages": [],
       "gameContainerStyle": {
         "backgroundColor": "#222222",
         "borderRadius": "5px"
+      }
+    },
+    "magic-trifle": {
+      "id": "magic-trifle",
+      "title": "Nana's Magic Trifle",
+      "modules": {
+        "camera": {
+          "enabled": false
+        }
+      },
+      "displays": {
+        "title": {
+          "type": "game-overview-title",
+          "foregroundTemplate": {
+            "sourceType": "embedded",
+            "content": "<p style=\"text-align: center;\"><img src=\"/samples/magic-trifle/title/foreground.png\" /></p>"
+          },
+          "backgroundTemplate": {
+            "sourceType": "embedded",
+            "content": ""
+          },
+          "backgroundStyle": {
+            "background": "black",
+            "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
+            "backgroundSize": "cover",
+            "backgroundPosition": "center"
+          },
+          "data": {}
+        },
+        "stages": {
+          "type": "game-overview-challenges",
+          "foregroundTemplate": {
+            "sourceType": "embedded",
+            "content": "<p>Challenges</p>"
+          },
+          "backgroundTemplate": {
+            "sourceType": "embedded",
+            "content": ""
+          },
+          "backgroundStyle": {
+            "background": "lightgrey"
+          },
+          "data": {}
+        }
+      },
+      "stages": [
+        {
+          "id": "stage-1",
+          "challenges": [
+            {
+              "id": "stage-1-challenge-1",
+              "displays": {
+                "challenge-in-progress": {
+                  "type": "challenge-in-progress",
+                  "backgroundStyle": {
+                    "background": "black",
+                    "backgroundImage": "url('/samples/magic-trifle/scroll.png')",
+                    "backgroundSize": "cover",
+                    "backgroundPosition": "center"
+                  },
+                  "foregroundTemplate": {
+                    "sourceType": "embedded",
+                    "content": "<p>HERE IS THE WORDING FOR THE FIRST CHALLENGE</p>"
+                  },
+                  "backgroundTemplate": {
+                    "sourceType": "embedded",
+                    "content": ""
+                  },
+                  "data": {}
+                }
+              },
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        }
+      ],
+      "gameContainerStyle": {
+        "backgroundColor": "#222222",
+        "border": "solid 4px #222222",
+        "borderRadius": "20px"
       }
     }
   }

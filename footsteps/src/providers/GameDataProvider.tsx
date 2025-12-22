@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, type ReactNode } from "react";
-import type { GameId } from "../entities/GameData";
+import type { GameId } from "../entities/data/GameData";
 import { isDefined } from "../util/ObjectUtils";
 import GameContentCacheProvider from "./GameContentCacheProvider";
 import {
@@ -22,7 +22,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
     loadingState: "waiting-for-repository",
   });
 
-  const [gameData, setGameData] = useState<GameDataContextType | undefined>(undefined);
+  const [data, setData] = useState<GameDataContextType | undefined>(undefined);
 
   useEffect(() => {
     setGameLoading({
@@ -32,7 +32,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
           : "not-found"
         : "waiting-for-repository",
     });
-    setGameData(repository.ready ? { gameData: repository.games[id] } : undefined);
+    setData(repository.ready ? { gameId: id, gameData: repository.games[id] } : undefined);
   }, [repository, id]);
 
   useEffect(() => {
@@ -42,10 +42,10 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
   return (
     <>
       <GameDataLoadingContext.Provider value={gameLoading}>
-        {!isDefined(gameData) && loadingView}
-        {isDefined(gameData) && (
+        {!isDefined(data) && loadingView}
+        {isDefined(data) && (
           <>
-            <GameDataContext.Provider value={gameData}>
+            <GameDataContext.Provider value={data}>
               <GameContentCacheProvider>{children}</GameContentCacheProvider>
             </GameDataContext.Provider>
           </>

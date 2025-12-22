@@ -1,9 +1,11 @@
+import _ from "lodash";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { NO_CHALLENGE_TEMPLATE, NO_OVERVIEW_GAME_TEMPLATE } from "../../constants/DefaultGameDisplays";
-import type { ChallengeGameDisplayType } from "../../entities/GameDisplayData";
+import useFeatureFlags from "../../providers/FeatureFlagsHook";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
 import { isDefined } from "../../util/ObjectUtils";
+import ChallengeGrid from "./ChallengeGrid";
 import GameLayersLayout from "./GameLayersLayout";
 import GameTemplate from "./GameTemplate";
 
@@ -14,41 +16,101 @@ interface DisplayLayers {
 }
 
 export default function Game() {
-  const { gameData } = useGameData();
+  const { debug } = useFeatureFlags();
+  const { gameId, gameData } = useGameData();
   const { gameState } = useGameState();
 
   const [layers, setLayers] = useState<DisplayLayers>({});
 
+  // Select the current stage, challenge, and set the display layers
   useEffect(() => {
-    const challenge = isDefined(gameState.current.challengeId)
-      ? gameState.challenges[gameState.current.challengeId].challenge
+    const stage = isDefined(gameState.current.stageId)
+      ? gameData.stages.find((s) => s.id === gameState.current.stageId)
       : undefined;
 
-    if (isDefined(challenge)) {
-      const challengeDisplayType: ChallengeGameDisplayType = "challenge-in-progress"; // TODO: pick
-      const challengeDisplay = challenge.displays.find((d) => d.type === challengeDisplayType);
-      const backgroundTemplate = challengeDisplay?.backgroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplayType);
-      const foregroundTemplate = challengeDisplay?.foregroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplayType);
-      const templateData = {
-        gameData,
-        gameState,
-        challengeData: challengeDisplay?.data,
-        challengeState: gameState.challenges[gameState.current.challengeId!],
-      };
+    const stageState = gameState.stages.find((s) => s.stage.id === stage?.id);
+    const chunking = stage?.challengeChunking ?? 1;
+    const chunkedChallengeStates = _.chunk(stageState?.challengeStates ?? [], chunking);
+    const currentChallengeStates = chunkedChallengeStates.find((chunk) => !chunk.some((c) => c.succeeded));
+
+    if (isDefined(currentChallengeStates)) {
+      const currentChallengesDisplayData = currentChallengeStates.map((challengeState) => {
+        const challengeDisplayType = challengeState.challengeDisplay;
+        const challengeDisplay = isDefined(challengeDisplayType)
+          ? challengeState.challenge.displays[challengeDisplayType]
+          : (challengeState.challenge.displays["challenge-title"] ??
+            challengeState.challenge.displays["challenge-in-progress"] ??
+            challengeState.challenge.displays["challenge-completed"]);
+        const backgroundTemplate =
+          challengeDisplay?.backgroundTemplate ??
+          NO_CHALLENGE_TEMPLATE(challengeDisplayType ?? "challenge-in-progress");
+        const foregroundTemplate =
+          challengeDisplay?.foregroundTemplate ??
+          NO_CHALLENGE_TEMPLATE(challengeDisplayType ?? "challenge-in-progress");
+        const backgroundStyle = challengeDisplay?.backgroundStyle;
+        const templateData = {
+          gameId,
+          gameData,
+          gameState,
+          challenge: challengeState.challenge,
+          challengeData: challengeDisplay?.data,
+          challengeState: challengeState,
+        };
+        const challengeKey = `${gameId}-${stage!.id}-${challengeState.challenge.id}`;
+        return {
+          challengeKey,
+          challengeDisplay,
+          backgroundStyle,
+          backgroundTemplate,
+          foregroundTemplate,
+          templateData,
+        };
+      });
 
       setLayers({
-        backgroundStyle: challengeDisplay?.backgroundStyle,
         backgroundLayer: (
-          <GameTemplate display={challengeDisplay} template={backgroundTemplate} gameContextData={templateData} />
+          <ChallengeGrid>
+            {currentChallengesDisplayData.map(
+              ({ challengeKey, challengeDisplay, backgroundTemplate, backgroundStyle, templateData }) => (
+                <GameTemplate
+                  key={`template-bg-${challengeKey}`}
+                  display={challengeDisplay}
+                  template={backgroundTemplate}
+                  backgroundStyle={backgroundStyle}
+                  gameContextData={templateData}
+                />
+              ),
+            )}
+          </ChallengeGrid>
         ),
         foregroundLayer: (
-          <GameTemplate display={challengeDisplay} template={foregroundTemplate} gameContextData={templateData} />
+          <ChallengeGrid>
+            {currentChallengesDisplayData.map(
+              ({ challengeKey, challengeDisplay, foregroundTemplate, templateData }) => (
+                <GameTemplate
+                  key={`template-bg-${challengeKey}`}
+                  display={challengeDisplay}
+                  template={foregroundTemplate}
+                  gameContextData={templateData}
+                />
+              ),
+            )}
+          </ChallengeGrid>
         ),
       });
     } else {
-      const overviewDisplay = gameData.displays.overview;
+      // there's no current stage or challenge, so use the current game overview display
+      const overviewDisplay = isDefined(gameState.current.overviewDisplay)
+        ? Object.values(gameData.displays).find((d) => d.type === gameState.current.overviewDisplay)
+        : (gameData.displays.title ?? gameData.displays.stages ?? undefined);
+
+      if (!isDefined(overviewDisplay)) {
+        throw new Error("No overview display found for game.");
+      }
+
       const backgroundTemplate = overviewDisplay.backgroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
       const foregroundTemplate = overviewDisplay.foregroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
+
       const templateData = {
         gameData,
         gameState,
@@ -64,9 +126,7 @@ export default function Game() {
         ),
       });
     }
-  }, [gameData, gameState]);
-
-  const debug = true;
+  }, [gameId, gameData, gameState]);
 
   return (
     <>
@@ -86,6 +146,7 @@ export default function Game() {
           backgroundLayer={layers.backgroundLayer}
           backgroundStyle={layers.backgroundStyle}
           foregroundLayer={layers.foregroundLayer}
+          cameraLayer={gameData.modules?.camera}
         />
       </div>
     </>

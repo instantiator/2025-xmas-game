@@ -1,7 +1,41 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "definitions": {
-        "ChallengeGameDisplay": {
+        "CameraModuleData": {
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "enabled"
+            ],
+            "type": "object"
+        },
+        "GameChallengeData": {
+            "description": "Describes an individual challenge in the game",
+            "properties": {
+                "displays": {
+                    "$ref": "#/definitions/%7B%22challenge-title%22%3AGameChallengeDisplay%7Cundefined%3B%22challenge-in-progress%22%3AGameChallengeDisplay%7Cundefined%3B%22challenge-completed%22%3AGameChallengeDisplay%7Cundefined%3B%7D",
+                    "description": "Displays associated with this challenge"
+                },
+                "id": {
+                    "description": "Unique id for this challenge",
+                    "type": "string"
+                },
+                "solution": {
+                    "$ref": "#/definitions/GameChallengeSolution",
+                    "description": "The solution for this challenge"
+                }
+            },
+            "required": [
+                "displays",
+                "id",
+                "solution"
+            ],
+            "type": "object"
+        },
+        "GameChallengeDisplay": {
             "properties": {
                 "backgroundStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
@@ -16,7 +50,7 @@
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
-                    "$ref": "#/definitions/ChallengeGameDisplayType"
+                    "$ref": "#/definitions/GameChallengeDisplayType"
                 }
             },
             "required": [
@@ -25,69 +59,95 @@
             ],
             "type": "object"
         },
-        "ChallengeGameDisplayType": {
+        "GameChallengeDisplayType": {
             "enum": [
                 "challenge-completed",
-                "challenge-in-progress"
+                "challenge-in-progress",
+                "challenge-title"
             ],
             "type": "string"
         },
-        "GameChallengeData": {
+        "GameChallengeSolution": {
+            "description": "Information about how to respond to a user's game challenge answer",
             "properties": {
-                "displays": {
+                "answers": {
+                    "description": "One or more valid solutions for this challenge",
                     "items": {
-                        "$ref": "#/definitions/ChallengeGameDisplay"
+                        "type": "string"
                     },
                     "type": "array"
                 },
-                "id": {
-                    "type": "string"
+                "autoAccept": {
+                    "description": "Automatically accept a user's input if it matches a solution, default: true",
+                    "type": "boolean"
                 },
-                "solution": {
-                    "type": "string"
+                "hints": {
+                    "description": "A series of hints, to be offered in order, if requested - leave empty for no hints",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "ignoreCase": {
+                    "description": "Solutions can be matched ignoring case, default: true",
+                    "type": "boolean"
+                },
+                "ignoreWhitespace": {
+                    "description": "Solutions can be matched ignoring whitespace, default: true",
+                    "type": "boolean"
+                },
+                "trimWhitespace": {
+                    "description": "Solutions can be matched ignoring leading and trailing whitespace, default: true",
+                    "type": "boolean"
                 }
             },
             "required": [
-                "displays",
-                "id",
-                "solution"
+                "answers",
+                "hints"
             ],
             "type": "object"
         },
         "GameData": {
             "properties": {
-                "challenges": {
-                    "items": {
-                        "$ref": "#/definitions/GameChallengeData"
-                    },
-                    "type": "array"
-                },
                 "displays": {
                     "properties": {
-                        "overview": {
-                            "$ref": "#/definitions/OverviewGameDisplay"
+                        "stages": {
+                            "$ref": "#/definitions/GameOverviewDisplay"
+                        },
+                        "title": {
+                            "$ref": "#/definitions/GameOverviewDisplay"
                         }
                     },
                     "required": [
-                        "overview"
+                        "title"
                     ],
                     "type": "object"
                 },
                 "gameContainerStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
                 },
-                "id": {
-                    "type": "string"
+                "modules": {
+                    "properties": {
+                        "camera": {
+                            "$ref": "#/definitions/CameraModuleData"
+                        }
+                    },
+                    "type": "object"
+                },
+                "stages": {
+                    "items": {
+                        "$ref": "#/definitions/GameStageData"
+                    },
+                    "type": "array"
                 },
                 "title": {
                     "type": "string"
                 }
             },
             "required": [
-                "challenges",
                 "displays",
                 "gameContainerStyle",
-                "id",
+                "stages",
                 "title"
             ],
             "type": "object"
@@ -109,7 +169,7 @@
             ],
             "type": "object"
         },
-        "OverviewGameDisplay": {
+        "GameOverviewDisplay": {
             "properties": {
                 "backgroundStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
@@ -124,7 +184,77 @@
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
-                    "const": "game-overview",
+                    "$ref": "#/definitions/GameOverviewDisplayType"
+                }
+            },
+            "required": [
+                "data",
+                "type"
+            ],
+            "type": "object"
+        },
+        "GameOverviewDisplayType": {
+            "enum": [
+                "game-overview-challenges",
+                "game-overview-title"
+            ],
+            "type": "string"
+        },
+        "GameStageData": {
+            "description": "Describes a game stage - including its displays, and the challenges it contains.\nA stage may contain more than one challenge, and may group its challenges together.",
+            "properties": {
+                "challengeChunking": {
+                    "description": "If set, group challenges together in the active layout, otherwise assumes a chunking of 1",
+                    "type": "number"
+                },
+                "challenges": {
+                    "description": "All challenges in a stage",
+                    "items": {
+                        "$ref": "#/definitions/GameChallengeData"
+                    },
+                    "type": "array"
+                },
+                "displays": {
+                    "description": "Display information for the stage. (Optional.)\nDefaults to undefined for overview, completed, and activeLayout.",
+                    "properties": {
+                        "completed": {
+                            "$ref": "#/definitions/GameStageDisplay",
+                            "description": "The completed view for the stage (if not provided, the game will return to the overview if all challenges are complete)"
+                        },
+                        "overview": {
+                            "$ref": "#/definitions/GameStageDisplay",
+                            "description": "The overview for the stage (if not provided, the stage will show the first incomplete challenge)"
+                        }
+                    },
+                    "type": "object"
+                },
+                "id": {
+                    "description": "Unique id for this stage",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "challenges",
+                "id"
+            ],
+            "type": "object"
+        },
+        "GameStageDisplay": {
+            "properties": {
+                "backgroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
+                "backgroundTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "data": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "foregroundTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "type": {
+                    "const": "stage-layout",
                     "type": "string"
                 }
             },
@@ -147,6 +277,20 @@
                 "url"
             ],
             "type": "string"
+        },
+        "{\"challenge-title\":GameChallengeDisplay|undefined;\"challenge-in-progress\":GameChallengeDisplay|undefined;\"challenge-completed\":GameChallengeDisplay|undefined;}": {
+            "properties": {
+                "challenge-completed": {
+                    "$ref": "#/definitions/GameChallengeDisplay"
+                },
+                "challenge-in-progress": {
+                    "$ref": "#/definitions/GameChallengeDisplay"
+                },
+                "challenge-title": {
+                    "$ref": "#/definitions/GameChallengeDisplay"
+                }
+            },
+            "type": "object"
         }
     },
     "properties": {

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { GameState } from "../entities/GameState";
+import type { GameState } from "../entities/state/GameState";
 
 export interface GameStateContextType {
   gameState: GameState;

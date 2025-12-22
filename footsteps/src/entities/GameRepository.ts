@@ -1,4 +1,4 @@
-import type { GameData, GameId } from "./GameData";
+import type { GameData, GameId } from "./data/GameData";
 
 export interface GameRepository {
   ready?: boolean;

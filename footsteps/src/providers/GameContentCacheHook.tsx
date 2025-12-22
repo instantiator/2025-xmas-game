@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { GameDisplayTemplate } from "../entities/GameDisplayData";
+import type { GameDisplayTemplate } from "../entities/data/GameDisplayData";
 import { getBaseURL, getDirectoryURL, isDefined } from "../util/ObjectUtils";
 import { GameContentCacheContext } from "./GameContentCacheContext";
 import { GameRepositoryContext } from "./GameRepositoryContext";

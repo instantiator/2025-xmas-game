@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MustacheTemplate from "react-mustache-template-component";
-import type { GameDisplayData, GameDisplayTemplate } from "../../entities/GameDisplayData";
+import type { GameDisplayData, GameDisplayTemplate } from "../../entities/data/GameDisplayData";
 import useContentCache from "../../providers/GameContentCacheHook";
 import { isDefined } from "../../util/ObjectUtils";
 
@@ -8,9 +8,10 @@ interface GameDisplayProps {
   display: GameDisplayData | undefined;
   template: GameDisplayTemplate | undefined;
   gameContextData: Record<string, unknown>;
+  backgroundStyle?: React.CSSProperties;
 }
 
-export default function GameTemplate({ display, template, gameContextData }: GameDisplayProps) {
+export default function GameTemplate({ display, template, gameContextData, backgroundStyle }: GameDisplayProps) {
   const [render, setRender] = useState<GameDisplayTemplate | undefined>();
 
   const { getTemplate } = useContentCache();
@@ -27,5 +28,9 @@ export default function GameTemplate({ display, template, gameContextData }: Gam
 
   const templateData = { ...display?.data, ...gameContextData };
 
-  return <div>{isDefined(render) && <MustacheTemplate template={render.content ?? ""} data={templateData} />}</div>;
+  return (
+    <div style={backgroundStyle}>
+      {isDefined(render) && <MustacheTemplate template={render.content ?? ""} data={templateData} />}
+    </div>
+  );
 }
