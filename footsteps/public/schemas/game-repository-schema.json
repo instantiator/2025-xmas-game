@@ -120,6 +120,9 @@
                     },
                     "type": "object"
                 },
+                "resources": {
+                    "$ref": "#/definitions/GameResourceDefinitions"
+                },
                 "stages": {
                     "items": {
                         "$ref": "#/definitions/GameStageData"
@@ -150,11 +153,20 @@
         },
         "GameDisplayScrollComponentData": {
             "properties": {
-                "contentTemplate": {
+                "backgroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
+                "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "foregroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
+                "foregroundTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "hint": {
                     "type": "string"
@@ -164,6 +176,9 @@
                 },
                 "showInput": {
                     "type": "boolean"
+                },
+                "text": {
+                    "type": "string"
                 },
                 "type": {
                     "const": "scroll",
@@ -245,6 +260,29 @@
                 "game-overview-title"
             ],
             "type": "string"
+        },
+        "GameResourceDefinitions": {
+            "additionalProperties": {
+                "properties": {
+                    "target": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "enum": [
+                            "local",
+                            "relative",
+                            "url"
+                        ],
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "target",
+                    "type"
+                ],
+                "type": "object"
+            },
+            "type": "object"
         },
         "GameStageData": {
             "description": "Describes a game stage - including its displays, and the challenges it contains.\nA stage may contain more than one challenge, and may group its challenges together.",

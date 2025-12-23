@@ -1,5 +1,5 @@
 {
-  "$schema": "../../public/game-repository-schema.json",
+  "$schema": "./schemas/game-repository-schema.json",
   "games": {
     "test-game": {
       "id": "test-game",
@@ -46,6 +46,10 @@
           "enabled": false
         }
       },
+      "resources": {
+        "title-background": { "type": "local", "target": "games/magic-trifle/title/background.png" },
+        "title-foreground": { "type": "local", "target": "games/magic-trifle/title/foreground.png" }
+      },
       "displays": [
         {
           "purpose": "game-overview-title",
@@ -53,7 +57,7 @@
             "type": "template",
             "foregroundTemplate": {
               "sourceType": "embedded",
-              "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"/samples/magic-trifle/title/foreground.png\" style=\"width: 80%;\" /></p>"
+              "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"{{resources.title-foreground}}\" style=\"width: 80%;\" /></p>"
             },
             "backgroundTemplate": {
               "sourceType": "embedded",
@@ -61,7 +65,7 @@
             },
             "backgroundStyle": {
               "background": "black",
-              "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
+              "backgroundImage": "url('{{resources.title-background}}')",
               "backgroundSize": "cover",
               "backgroundPosition": "center"
             },

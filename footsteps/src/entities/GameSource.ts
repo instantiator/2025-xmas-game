@@ -2,7 +2,7 @@ import type { GameRepository } from "./GameRepository";
 
 export type GameSourceType = "RemoteRepository" | "LocalRepository" | "RawRepository";
 
-export type GameSource = RemoteGameSource | LocalRepositoryGameSource | RawRepositoryGameSource;
+export type GameSource = RemoteGameSource | LocalGameSource | RawGameSource;
 
 export interface GameSourceBase {
   type: GameSourceType;
@@ -13,11 +13,12 @@ export interface RemoteGameSource extends GameSourceBase {
   src: URL;
 }
 
-export interface LocalRepositoryGameSource extends GameSourceBase {
+export interface LocalGameSource extends GameSourceBase {
   type: "LocalRepository";
+  path: string;
 }
 
-export interface RawRepositoryGameSource extends GameSourceBase {
+export interface RawGameSource extends GameSourceBase {
   type: "RawRepository";
   repository: GameRepository;
 }

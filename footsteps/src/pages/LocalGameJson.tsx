@@ -12,7 +12,7 @@ export function Component() {
   return (
     <>
       <FeatureFlagsProvider>
-        <GameRepositoryProvider source={{ type: "LocalRepository" }}>
+        <GameRepositoryProvider source={{ type: "LocalRepository", path: "game-repository.json" }}>
           <GameDataProvider id={id as GameId}>
             <GameStateProvider>
               <GameJson />

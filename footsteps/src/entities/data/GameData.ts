@@ -8,9 +8,13 @@ export type GameId = string;
 export interface GameData {
   title: string;
   displays: GameOverviewDisplay[];
+  stages: GameStageData[];
+  resources?: GameResourceDefinitions;
   modules?: {
     camera?: CameraModuleData;
   };
-  stages: GameStageData[];
   gameContainerStyle: CSSProperties;
+}
+export interface GameResourceDefinitions {
+  [key: string]: { type: "local" | "relative" | "url"; target: string };
 }

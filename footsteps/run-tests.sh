@@ -3,6 +3,6 @@
 set -e
 set -o pipefail
 
-./validate-repository.sh src/assets/game-repository.json
+./validate-repository.sh public/game-repository.json
 
 npx --yes vitest run

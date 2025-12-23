@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import gameRepository from "./src/assets/game-repository.json";
+import localRepository from "./public/game-repository.json";
 
 // https://vitejs.dev/config/
 // @ts-expect-error keeping mode here, for future use
@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       script: "async",
       formatting: "prettify",
       includedRoutes: async () => {
-        const ids = Object.keys(gameRepository.games);
+        const ids = Object.keys(localRepository.games);
         const dynamicRoutes = ids.flatMap((id) => [`/game/${id}`, `/game/${id}/json`]);
         return ["/", ...dynamicRoutes];
       },

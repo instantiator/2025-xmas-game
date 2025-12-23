@@ -1,3 +1,4 @@
+import Mustache from "mustache";
 import { useEffect, useId, useState } from "react";
 import MustacheTemplate from "react-mustache-template-component";
 import type { GameDisplayTemplate as GameDisplayTemplateData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
@@ -10,6 +11,10 @@ interface GameDisplayProps {
   containerStyle?: React.CSSProperties;
 }
 
+const MUSTACHE_OPTIONS: Mustache.RenderOptions = {
+  escape: (text) => text, // disable HTML escaping
+};
+
 export default function GameDisplayTemplateComponent({
   templateSource,
   templateData,
@@ -20,6 +25,15 @@ export default function GameDisplayTemplateComponent({
   const { getTemplate } = useContentCache();
 
   const uid = useId();
+
+  const containerStyleParsed = isDefined(containerStyle)
+    ? Object.fromEntries(
+        Object.entries(containerStyle).map(([key, value]) => [
+          key,
+          Mustache.render(value, templateData, undefined, MUSTACHE_OPTIONS),
+        ]),
+      )
+    : undefined;
 
   useEffect(() => {
     async function loadTemplate() {
@@ -32,7 +46,7 @@ export default function GameDisplayTemplateComponent({
   }, [templateSource, getTemplate]);
 
   return (
-    <div key={`template-${uid}`} style={{ width: "100%", height: "100%", ...containerStyle }}>
+    <div key={`template-${uid}`} style={{ width: "100%", height: "100%", ...containerStyleParsed }}>
       {isDefined(render) && <MustacheTemplate template={render.content ?? ""} data={templateData} />}
     </div>
   );

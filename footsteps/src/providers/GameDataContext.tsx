@@ -1,7 +1,12 @@
 import { createContext } from "react";
 import type { GameData, GameId } from "../entities/data/GameData";
 
-export type GameDataLoadingState = "waiting-for-repository" | "ready" | "not-found";
+export type GameDataLoadingState =
+  | "waiting-for-repository"
+  | "loading-assets"
+  | "ready"
+  | "not-found"
+  | "resource-error";
 
 export interface GameDataLoadingContextType {
   loadingState: GameDataLoadingState;
@@ -10,6 +15,7 @@ export interface GameDataLoadingContextType {
 export interface GameDataContextType {
   gameData: GameData;
   gameId: GameId;
+  resources: Record<string, string>;
 }
 
 export const GameDataLoadingContext = createContext<GameDataLoadingContextType>(null!);

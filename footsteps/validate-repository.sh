@@ -3,7 +3,7 @@
 set -e
 set -o pipefail
 
-SCHEMA_PATH="./public/game-repository-schema.json"
+SCHEMA_PATH="./public/schemas/game-repository-schema.json"
 DATA_FILE="$1"
 
 if [ -z "$DATA_FILE" ]; then

@@ -22,6 +22,7 @@ export interface GameDisplayRenderData extends GameDisplayBase {
 export interface GameTemplateData {
   gameState: GameState;
   componentData: Record<string, any>;
+  resources: Record<string, any>;
   challenge?: GameChallengeData;
   challengeState?: GameChallengeState;
 }
@@ -34,7 +35,7 @@ export const getRenderMode = (gameState: GameState): GameDisplayMode =>
  * @param gameState the current game state
  * @returns a GameDisplayRenderData[] with components to render
  */
-export const getRenderData = (gameState: GameState): GameDisplayRenderData[] => {
+export const getRenderData = (gameState: GameState, resources: Record<string, string>): GameDisplayRenderData[] => {
   const mode = getRenderMode(gameState);
   const { stage, activeChallengeStates } = getCurrentStageState(gameState);
 
@@ -44,6 +45,7 @@ export const getRenderData = (gameState: GameState): GameDisplayRenderData[] => 
       if (isDefined(overviewDisplay)) {
         const overviewTemplateData: GameTemplateData = {
           gameState,
+          resources: resources ?? {},
           componentData: overviewDisplay.component.data,
         };
         return [
@@ -65,6 +67,7 @@ export const getRenderData = (gameState: GameState): GameDisplayRenderData[] => 
             if (isDefined(challengeDisplay)) {
               const challengeTemplateData: GameTemplateData = {
                 gameState,
+                resources: resources ?? {},
                 challenge: challengeState.challenge,
                 challengeState: challengeState,
                 componentData: challengeDisplay.component.data,
@@ -134,101 +137,3 @@ export const getCurrentStageState = (
   const currentChallengeStates = chunkedChallengeStates.find((chunk) => !chunk.some((c) => c.succeeded));
   return { stage: stageState ?? null, activeChallengeStates: currentChallengeStates ?? null };
 };
-
-// /**
-//  * Generates GameOverviewRenderData for the current game overview.
-//  * @param gameState the current game state
-//  * @param gameData the game data
-//  * @returns a GamerOverviewRenderData for the current overview.
-//  */
-// export const generateOverviewRenderData = (
-//   gameId: GameId,
-//   gameData: GameData,
-//   gameState: GameState,
-// ): GameDisplayRenderData => {
-//   const overviewDisplay = getOverviewDisplay(gameState.current.overviewDisplay, gameData);
-
-//   if (!isDefined(overviewDisplay)) {
-//     throw new Error("No overview display found for game.");
-//   }
-
-//   const templateData: GameTemplateData = {
-//     gameId,
-//     gameData,
-//     gameState,
-//     componentData: overviewDisplay.component.data,
-//   };
-
-//   return {
-//     ...overviewDisplay,
-//     templateData,
-//   };
-// };
-
-// /**
-//  * Selects the appropriate display for a challenge, based on the current display type,
-//  * or falling back to defaults if none is specified.
-//  * @param challengeDisplayType the current display type
-//  * @param challenge challenge data
-//  * @returns a GameChallengeDisplay, or undefined if not possible to determine
-//  */
-// export const selectChallengeDisplay = (
-//   challengeDisplayType: GameChallengeDisplayPurpose | null,
-//   challenge: GameChallengeData,
-// ): GameChallengeDisplay | undefined =>
-//   isDefined(challengeDisplayType)
-//     ? challenge.displays.find((d) => d.purpose === challengeDisplayType)
-//     : (challenge.displays.find((d) => d.purpose === "challenge-title") ??
-//       challenge.displays.find((d) => d.purpose === "challenge-in-progress") ??
-//       challenge.displays.find((d) => d.purpose === "challenge-completed"));
-
-// /**
-//  * Generates GameChallengeRenderData for the given challenge states.
-//  * This includes picking the appropriate display and preparing template data.
-//  * This can be used to render a game challenge with GameTemplates.
-//  *
-//  * @param gameId id of the game
-//  * @param gameData game data
-//  * @param gameState game state
-//  * @param challengeStates the challenge states to generate render data for
-//  * @returns a GameChallengeRenderData[] for the given challenges
-//  */
-// export const generateChallengesRenderData = (
-//   gameId: GameId,
-//   gameData: GameData,
-//   gameState: GameState,
-//   challengeStates: GameChallengeState[],
-// ): GameChallengeRenderData[] =>
-//   challengeStates.map((challengeState) => {
-//     const challengeDisplayType = challengeState.displayPurpose;
-//     const challengeDisplay = selectChallengeDisplay(challengeDisplayType, challengeState.challenge);
-
-//     if (!isDefined(challengeDisplay)) {
-//       throw new Error(`No ${challengeDisplayType} display found for challenge.`);
-//     }
-
-//     const backgroundTemplate =
-//       challengeDisplay?.component.backgroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplay.purpose);
-//     const foregroundTemplate =
-//       challengeDisplay?.component.foregroundTemplate ?? NO_CHALLENGE_TEMPLATE(challengeDisplay.purpose);
-//     const backgroundStyle = challengeDisplay?.component.backgroundStyle;
-//     const foregroundStyle = challengeDisplay?.component.foregroundStyle;
-//     const templateData: GameChallengeTemplateData = {
-//       gameId,
-//       gameData,
-//       gameState,
-//       challenge: challengeState.challenge,
-//       displayData: challengeDisplay.component.data,
-//       challengeState: challengeState,
-//     };
-//     const challengeKey = `${gameId}-${gameState.current.stageId}-${challengeState.challenge.id}`;
-//     return {
-//       challengeKey,
-//       challengeDisplay,
-//       backgroundStyle,
-//       foregroundStyle,
-//       backgroundTemplate,
-//       foregroundTemplate,
-//       templateData,
-//     };
-//   });

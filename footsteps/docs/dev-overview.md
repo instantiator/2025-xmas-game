@@ -25,11 +25,12 @@ Launch footsteps locally with `npm run dev`
 
 ## Sample games
 
-All games in the local repository at `src/assets/game-repository.json` are pre-built and made available at their own url.
+All games in the local repository at `public/game-repository.json` are pre-built and made available at their own url.
 
-| Game        | Game URL                             | Game data URL                             |
-| ----------- | ------------------------------------ | ----------------------------------------- |
-| `test-game` | http://localhost:5173/game/test-game | http://localhost:5173/game/test-game/json |
+| Game           | Game URL                                | Game data URL                                |
+| -------------- | --------------------------------------- | -------------------------------------------- |
+| `test-game`    | http://localhost:5173/game/test-game    | http://localhost:5173/game/test-game/json    |
+| `magic-trifle` | http://localhost:5173/game/magic-trifle | http://localhost:5173/game/magic-trifle/json |
 
 ## Schemas
 
@@ -43,7 +44,7 @@ JSON schemas are generated and placed into the `src/assets/` directory by the `p
 ### Validate data
 
 ```bash
-$ ./validate-repository.sh src/assets/game-repository.json
+$ ./validate-repository.sh public/game-repository.json
 ```
 
 ```bash

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import oldPaperImage from "../../../assets/resources/old-paper.png";
 import type { GameDisplayScrollComponentData } from "../../../entities/data/displays/GameDisplayScrollComponentData";
 import type { GameDisplayTemplate } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
 import type { LayerHint } from "./GameDisplayComponent";
@@ -41,7 +42,7 @@ export default function GameDisplayScrollComponent({
           ...containerStyle,
         }
       : {
-          backgroundImage: "url('/resources/old-paper.png')",
+          backgroundImage: `url(${oldPaperImage})`,
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",

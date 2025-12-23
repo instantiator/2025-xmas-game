@@ -20,11 +20,12 @@ Output from builds goes to the `dist/` directory. A simple way to serve from the
 
 Launch footsteps locally with `npm run dev`
 
-All games in the local repository at `src/assets/game-repository.json` are available at their own url.
+All games are in the local repository at `public/game-repository.json` should be available at their own url.
 
-| Game        | Game URL                             | Game data URL                             |
-| ----------- | ------------------------------------ | ----------------------------------------- |
-| `test-game` | http://localhost:5173/game/test-game | http://localhost:5173/game/test-game/json |
+| Game           | Game URL                                | Game data URL                                |
+| -------------- | --------------------------------------- | -------------------------------------------- |
+| `test-game`    | http://localhost:5173/game/test-game    | http://localhost:5173/game/test-game/json    |
+| `magic-trifle` | http://localhost:5173/game/magic-trifle | http://localhost:5173/game/magic-trifle/json |
 
 ## Coding practices
 
