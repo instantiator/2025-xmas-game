@@ -1,0 +1,8 @@
+#foreground-layer,
+#background-layer,
+#debug-overlay-layer {
+  pointer-events: none;
+  & > * {
+    pointer-events: auto;
+  }
+}

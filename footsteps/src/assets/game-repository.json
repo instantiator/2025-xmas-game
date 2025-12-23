@@ -9,8 +9,8 @@
           "enabled": true
         }
       },
-      "displays": {
-        "title": {
+      "displays": [
+        {
           "type": "game-overview-title",
           "foregroundTemplate": {
             "sourceType": "embedded",
@@ -28,7 +28,7 @@
           },
           "data": {}
         }
-      },
+      ],
       "stages": [],
       "gameContainerStyle": {
         "backgroundColor": "#222222",
@@ -43,12 +43,12 @@
           "enabled": false
         }
       },
-      "displays": {
-        "title": {
+      "displays": [
+        {
           "type": "game-overview-title",
           "foregroundTemplate": {
             "sourceType": "embedded",
-            "content": "<p style=\"text-align: center;\"><img src=\"/samples/magic-trifle/title/foreground.png\" /></p>"
+            "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"/samples/magic-trifle/title/foreground.png\" style=\"width: 80%;\" /></p>"
           },
           "backgroundTemplate": {
             "sourceType": "embedded",
@@ -62,11 +62,11 @@
           },
           "data": {}
         },
-        "stages": {
-          "type": "game-overview-challenges",
+        {
+          "type": "game-overview-stages",
           "foregroundTemplate": {
             "sourceType": "embedded",
-            "content": "<p>Challenges</p>"
+            "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}}</li>{{/gameState.stages}}</ul>"
           },
           "backgroundTemplate": {
             "sourceType": "embedded",
@@ -75,35 +75,42 @@
           "backgroundStyle": {
             "background": "lightgrey"
           },
-          "data": {}
+          "data": {},
+          "clickIdToStageId": {
+            "stages-link-stage-1": "stage-1"
+          }
         }
-      },
+      ],
       "stages": [
         {
           "id": "stage-1",
           "challenges": [
             {
               "id": "stage-1-challenge-1",
-              "displays": {
-                "challenge-in-progress": {
+              "displays": [
+                {
                   "type": "challenge-in-progress",
                   "backgroundStyle": {
-                    "background": "black",
-                    "backgroundImage": "url('/samples/magic-trifle/scroll.png')",
+                    "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
                     "backgroundSize": "cover",
-                    "backgroundPosition": "center"
-                  },
-                  "foregroundTemplate": {
-                    "sourceType": "embedded",
-                    "content": "<p>HERE IS THE WORDING FOR THE FIRST CHALLENGE</p>"
+                    "backgroundPosition": "center",
+                    "backgroundColor": "rgba(128, 128, 128, 1)",
+                    "backgroundBlendMode": "multiply"
                   },
                   "backgroundTemplate": {
                     "sourceType": "embedded",
                     "content": ""
                   },
+                  "foregroundStyle": {
+                    "backdropFilter": "blur(5px)"
+                  },
+                  "foregroundTemplate": {
+                    "sourceType": "embedded",
+                    "content": "<div style=\"width: 100%; height: 100%; background-image: url('/samples/magic-trifle/old-paper.png'); background-size: contain; background-repeat: no-repeat; background-position: center\">content for stage 1 challenge 1</div>"
+                  },
                   "data": {}
                 }
-              },
+              ],
               "solution": {
                 "answers": ["ANSWER"],
                 "hints": []
@@ -114,8 +121,8 @@
       ],
       "gameContainerStyle": {
         "backgroundColor": "#222222",
-        "border": "solid 4px #222222",
-        "borderRadius": "20px"
+        "borderRadius": "20px",
+        "box-shadow": "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
       }
     }
   }

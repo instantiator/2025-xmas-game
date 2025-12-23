@@ -5,6 +5,7 @@ import CameraDebugOverlay from "../camera/CameraDebugOverlay";
 import type { FeetPositions } from "../camera/CameraSupport";
 import CharacterCamera from "../camera/CharacterCamera";
 import CharacterCanvas from "../camera/CharacterCanvas";
+import "./GameLayersLayout.css";
 
 interface GameLayersLayoutProps {
   backgroundStyle?: React.CSSProperties;
@@ -12,6 +13,7 @@ interface GameLayersLayoutProps {
   foregroundLayer: ReactNode;
   cameraLayer: CameraModuleData | undefined;
   debug?: boolean;
+  onElementClick?: (layerId: string, targetId: string) => void;
 }
 
 export default function GameLayersLayout({
@@ -20,11 +22,31 @@ export default function GameLayersLayout({
   foregroundLayer,
   cameraLayer,
   debug,
+  onElementClick,
 }: GameLayersLayoutProps) {
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const [characterStream, setCharacterStream] = useState<MediaStream | undefined>(undefined);
   const [feetPositions, setFeetPositions] = useState<FeetPositions>({});
   const [aspect, setAspect] = useState<number>();
+
+  /**
+   * Handles clicks on the clickable layers.
+   * @param event a javascript event raised by the click
+   */
+  const clickHandler = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    layerIdOverride?: string,
+    stopPropagationOnId: boolean = true,
+  ) => {
+    const targetId = (event.target as HTMLElement).id;
+    const layerId = isDefined(layerIdOverride) ? layerIdOverride : event.currentTarget.id;
+    if (isDefined(onElementClick) && targetId) {
+      onElementClick(layerId, targetId);
+      if (stopPropagationOnId) {
+        event.stopPropagation();
+      }
+    }
+  };
 
   const outerStyle: CSSProperties = {
     position: "absolute",
@@ -37,7 +59,6 @@ export default function GameLayersLayout({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "stretch",
-    pointerEvents: "none", // allow clicks to pass through
   };
 
   const innerStyle: CSSProperties = {
@@ -93,7 +114,11 @@ export default function GameLayersLayout({
       {show && (
         <>
           <div style={{ ...outerStyle, zIndex: 1 }}>
-            <div style={backgroundContainerStyle} id="background-layer">
+            <div
+              style={backgroundContainerStyle}
+              id="background-layer"
+              onClick={(event) => clickHandler(event, "background-layer")}
+            >
               {backgroundLayer}
             </div>
           </div>
@@ -109,12 +134,20 @@ export default function GameLayersLayout({
             </div>
           )}
           <div style={{ ...outerStyle, zIndex: 3 }}>
-            <div style={foregroundContainerStyle} id="foreground-layer">
+            <div
+              style={foregroundContainerStyle}
+              id="foreground-layer"
+              onClick={(event) => clickHandler(event, "foreground-layer")}
+            >
               {foregroundLayer}
             </div>
           </div>
           {debug && (
-            <div style={{ ...outerStyle, zIndex: 4 }} id="debug-overlay-layer">
+            <div
+              style={{ ...outerStyle, zIndex: 4 }}
+              id="debug-overlay-layer"
+              onClick={(event) => clickHandler(event, undefined, false)}
+            >
               {cameraLayer?.enabled === true && (
                 <CameraDebugOverlay style={debugOverlayStyle} feetPositions={feetPositions} />
               )}

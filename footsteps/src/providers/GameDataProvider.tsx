@@ -42,7 +42,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
   return (
     <>
       <GameDataLoadingContext.Provider value={gameLoading}>
-        {!isDefined(data) && loadingView}
+        {!isDefined(data) && <>{loadingView}</>}
         {isDefined(data) && (
           <>
             <GameDataContext.Provider value={data}>

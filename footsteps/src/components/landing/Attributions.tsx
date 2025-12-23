@@ -7,6 +7,15 @@ export default function Attributions() {
             Shoe icons created by jessicurr11 - Flaticon
           </a>
         </li>
+        <li>
+          <a
+            href="https://gallery.yopriceville.com/Free-Clipart-Pictures/Scrolls-PNG/Old_Large_Paper_PNG_Clipart"
+            title="parchment image"
+          >
+            Old Large Paper PNG Clipart
+          </a>{" "}
+          by <a href="https://gallery.yopriceville.com/">YoPriceVille Gallery</a>
+        </li>
       </ul>
     </>
   );

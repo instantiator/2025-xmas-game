@@ -9,7 +9,7 @@ export interface GameDataLoadingContextType {
 
 export interface GameDataContextType {
   gameData: GameData;
-  gameId: GameId | undefined;
+  gameId: GameId;
 }
 
 export const GameDataLoadingContext = createContext<GameDataLoadingContextType>(null!);

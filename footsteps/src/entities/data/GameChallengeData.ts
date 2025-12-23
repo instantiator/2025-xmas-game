@@ -1,5 +1,5 @@
 import type { GameChallengeSolution } from "./GameChallengeSolution";
-import type { GameChallengeDisplay, GameChallengeDisplayType } from "./GameDisplayData";
+import type { GameChallengeDisplay } from "./GameDisplayData";
 
 export type GameChallengeId = string;
 
@@ -9,7 +9,7 @@ export interface GameChallengeData {
   id: GameChallengeId;
 
   /** Displays associated with this challenge */
-  displays: { [T in GameChallengeDisplayType]: GameChallengeDisplay | undefined };
+  displays: GameChallengeDisplay[];
 
   /** The solution for this challenge */
   solution: GameChallengeSolution;

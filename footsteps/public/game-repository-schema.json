@@ -16,8 +16,11 @@
             "description": "Describes an individual challenge in the game",
             "properties": {
                 "displays": {
-                    "$ref": "#/definitions/%7B%22challenge-title%22%3AGameChallengeDisplay%7Cundefined%3B%22challenge-in-progress%22%3AGameChallengeDisplay%7Cundefined%3B%22challenge-completed%22%3AGameChallengeDisplay%7Cundefined%3B%7D",
-                    "description": "Displays associated with this challenge"
+                    "description": "Displays associated with this challenge",
+                    "items": {
+                        "$ref": "#/definitions/GameChallengeDisplay"
+                    },
+                    "type": "array"
                 },
                 "id": {
                     "description": "Unique id for this challenge",
@@ -110,18 +113,10 @@
         "GameData": {
             "properties": {
                 "displays": {
-                    "properties": {
-                        "stages": {
-                            "$ref": "#/definitions/GameOverviewDisplay"
-                        },
-                        "title": {
-                            "$ref": "#/definitions/GameOverviewDisplay"
-                        }
+                    "items": {
+                        "$ref": "#/definitions/GameOverviewDisplay"
                     },
-                    "required": [
-                        "title"
-                    ],
-                    "type": "object"
+                    "type": "array"
                 },
                 "gameContainerStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
@@ -177,6 +172,9 @@
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
+                "clickIdToStageId": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -195,7 +193,7 @@
         },
         "GameOverviewDisplayType": {
             "enum": [
-                "game-overview-challenges",
+                "game-overview-stages",
                 "game-overview-title"
             ],
             "type": "string"
@@ -247,6 +245,9 @@
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
+                "clickIdToChallengeId": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -254,7 +255,7 @@
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
-                    "const": "stage-layout",
+                    "const": "stage-overview",
                     "type": "string"
                 }
             },
@@ -267,6 +268,9 @@
         "React.CSSProperties": {
             "type": "object"
         },
+        "Record<string,string>": {
+            "type": "object"
+        },
         "Record<string,unknown>": {
             "type": "object"
         },
@@ -277,20 +281,6 @@
                 "url"
             ],
             "type": "string"
-        },
-        "{\"challenge-title\":GameChallengeDisplay|undefined;\"challenge-in-progress\":GameChallengeDisplay|undefined;\"challenge-completed\":GameChallengeDisplay|undefined;}": {
-            "properties": {
-                "challenge-completed": {
-                    "$ref": "#/definitions/GameChallengeDisplay"
-                },
-                "challenge-in-progress": {
-                    "$ref": "#/definitions/GameChallengeDisplay"
-                },
-                "challenge-title": {
-                    "$ref": "#/definitions/GameChallengeDisplay"
-                }
-            },
-            "type": "object"
         }
     },
     "properties": {

@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { NO_CHALLENGE_TEMPLATE, NO_OVERVIEW_GAME_TEMPLATE } from "../../constants/DefaultGameDisplays";
 import useFeatureFlags from "../../providers/FeatureFlagsHook";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
@@ -8,6 +7,8 @@ import { isDefined } from "../../util/ObjectUtils";
 import ChallengeGrid from "./ChallengeGrid";
 import GameLayersLayout from "./GameLayersLayout";
 import GameTemplate from "./GameTemplate";
+import { getNewGameStateForClick } from "./logic/GameClickHandling";
+import { generateChallengesRenderData, generateOverviewRenderData } from "./logic/GameDisplayRenderDataGeneration";
 
 interface DisplayLayers {
   backgroundStyle?: CSSProperties;
@@ -18,7 +19,7 @@ interface DisplayLayers {
 export default function Game() {
   const { debug } = useFeatureFlags();
   const { gameId, gameData } = useGameData();
-  const { gameState } = useGameState();
+  const { gameState, setGameState } = useGameState();
 
   const [layers, setLayers] = useState<DisplayLayers>({});
 
@@ -34,49 +35,22 @@ export default function Game() {
     const currentChallengeStates = chunkedChallengeStates.find((chunk) => !chunk.some((c) => c.succeeded));
 
     if (isDefined(currentChallengeStates)) {
-      const currentChallengesDisplayData = currentChallengeStates.map((challengeState) => {
-        const challengeDisplayType = challengeState.challengeDisplay;
-        const challengeDisplay = isDefined(challengeDisplayType)
-          ? challengeState.challenge.displays[challengeDisplayType]
-          : (challengeState.challenge.displays["challenge-title"] ??
-            challengeState.challenge.displays["challenge-in-progress"] ??
-            challengeState.challenge.displays["challenge-completed"]);
-        const backgroundTemplate =
-          challengeDisplay?.backgroundTemplate ??
-          NO_CHALLENGE_TEMPLATE(challengeDisplayType ?? "challenge-in-progress");
-        const foregroundTemplate =
-          challengeDisplay?.foregroundTemplate ??
-          NO_CHALLENGE_TEMPLATE(challengeDisplayType ?? "challenge-in-progress");
-        const backgroundStyle = challengeDisplay?.backgroundStyle;
-        const templateData = {
-          gameId,
-          gameData,
-          gameState,
-          challenge: challengeState.challenge,
-          challengeData: challengeDisplay?.data,
-          challengeState: challengeState,
-        };
-        const challengeKey = `${gameId}-${stage!.id}-${challengeState.challenge.id}`;
-        return {
-          challengeKey,
-          challengeDisplay,
-          backgroundStyle,
-          backgroundTemplate,
-          foregroundTemplate,
-          templateData,
-        };
-      });
-
+      const currentStageChallengesRenderData = generateChallengesRenderData(
+        gameId,
+        gameData,
+        gameState,
+        currentChallengeStates,
+      );
       setLayers({
         backgroundLayer: (
           <ChallengeGrid>
-            {currentChallengesDisplayData.map(
+            {currentStageChallengesRenderData.map(
               ({ challengeKey, challengeDisplay, backgroundTemplate, backgroundStyle, templateData }) => (
                 <GameTemplate
                   key={`template-bg-${challengeKey}`}
                   display={challengeDisplay}
                   template={backgroundTemplate}
-                  backgroundStyle={backgroundStyle}
+                  containerStyle={backgroundStyle}
                   gameContextData={templateData}
                 />
               ),
@@ -85,12 +59,13 @@ export default function Game() {
         ),
         foregroundLayer: (
           <ChallengeGrid>
-            {currentChallengesDisplayData.map(
-              ({ challengeKey, challengeDisplay, foregroundTemplate, templateData }) => (
+            {currentStageChallengesRenderData.map(
+              ({ challengeKey, challengeDisplay, foregroundTemplate, foregroundStyle, templateData }) => (
                 <GameTemplate
                   key={`template-bg-${challengeKey}`}
                   display={challengeDisplay}
                   template={foregroundTemplate}
+                  containerStyle={foregroundStyle}
                   gameContextData={templateData}
                 />
               ),
@@ -100,33 +75,37 @@ export default function Game() {
       });
     } else {
       // there's no current stage or challenge, so use the current game overview display
-      const overviewDisplay = isDefined(gameState.current.overviewDisplay)
-        ? Object.values(gameData.displays).find((d) => d.type === gameState.current.overviewDisplay)
-        : (gameData.displays.title ?? gameData.displays.stages ?? undefined);
-
-      if (!isDefined(overviewDisplay)) {
-        throw new Error("No overview display found for game.");
-      }
-
-      const backgroundTemplate = overviewDisplay.backgroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
-      const foregroundTemplate = overviewDisplay.foregroundTemplate ?? NO_OVERVIEW_GAME_TEMPLATE;
-
-      const templateData = {
-        gameData,
-        gameState,
-      };
-
+      const overviewRenderData = generateOverviewRenderData(gameId, gameData, gameState);
       setLayers({
-        backgroundStyle: overviewDisplay.backgroundStyle,
+        // backgroundStyle: overviewRenderData.overviewDisplay.backgroundStyle,
         backgroundLayer: (
-          <GameTemplate display={overviewDisplay} template={backgroundTemplate} gameContextData={templateData} />
+          <GameTemplate
+            display={overviewRenderData.overviewDisplay}
+            template={overviewRenderData.backgroundTemplate}
+            containerStyle={overviewRenderData.overviewDisplay.backgroundStyle}
+            gameContextData={overviewRenderData.templateData}
+          />
         ),
         foregroundLayer: (
-          <GameTemplate display={overviewDisplay} template={foregroundTemplate} gameContextData={templateData} />
+          <GameTemplate
+            display={overviewRenderData.overviewDisplay}
+            template={overviewRenderData.foregroundTemplate}
+            containerStyle={overviewRenderData.overviewDisplay.foregroundStyle}
+            gameContextData={overviewRenderData.templateData}
+          />
         ),
       });
     }
   }, [gameId, gameData, gameState]);
+
+  const handleElementClick = (layerId: string, elementId: string) => {
+    console.info(`Element ${elementId} on layer ${layerId} clicked.`);
+    const newState = getNewGameStateForClick(gameState, layerId, elementId);
+    if (isDefined(newState)) {
+      console.info("Updating game state from click.", newState);
+      setGameState(newState);
+    }
+  };
 
   return (
     <>
@@ -147,6 +126,7 @@ export default function Game() {
           backgroundStyle={layers.backgroundStyle}
           foregroundLayer={layers.foregroundLayer}
           cameraLayer={gameData.modules?.camera}
+          onElementClick={handleElementClick}
         />
       </div>
     </>

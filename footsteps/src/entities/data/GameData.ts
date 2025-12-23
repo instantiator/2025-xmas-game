@@ -7,10 +7,7 @@ export type GameId = string;
 
 export interface GameData {
   title: string;
-  displays: {
-    title: GameOverviewDisplay;
-    stages?: GameOverviewDisplay;
-  };
+  displays: GameOverviewDisplay[];
   modules?: {
     camera?: CameraModuleData;
   };

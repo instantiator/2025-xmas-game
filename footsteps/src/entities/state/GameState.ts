@@ -1,3 +1,4 @@
+import { selectOverviewDisplay } from "../../components/core/logic/GameDisplayRenderDataGeneration";
 import type { GameData } from "../data/GameData";
 import type { GameOverviewDisplayType } from "../data/GameDisplayData";
 import type { GameStageId } from "../data/GameStageData";
@@ -26,6 +27,6 @@ export function createBlankGameState(game: GameData): GameState {
   return {
     game,
     stages: stages,
-    current: { stageId: null, overviewDisplay: null },
+    current: { stageId: null, overviewDisplay: selectOverviewDisplay(null, game)?.type ?? "game-overview-title" },
   };
 }
