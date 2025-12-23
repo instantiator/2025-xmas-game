@@ -11,22 +11,25 @@
       },
       "displays": [
         {
-          "type": "game-overview-title",
-          "foregroundTemplate": {
-            "sourceType": "embedded",
-            "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
-          },
-          "backgroundTemplate": {
-            "sourceType": "embedded",
-            "content": ""
-          },
-          "backgroundStyle": {
-            "background": "black",
-            "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
-            "backgroundSize": "cover",
-            "backgroundPosition": "center"
-          },
-          "data": {}
+          "purpose": "game-overview-title",
+          "component": {
+            "type": "template",
+            "foregroundTemplate": {
+              "sourceType": "embedded",
+              "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
+            },
+            "backgroundTemplate": {
+              "sourceType": "embedded",
+              "content": ""
+            },
+            "backgroundStyle": {
+              "background": "black",
+              "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
+              "backgroundSize": "cover",
+              "backgroundPosition": "center"
+            },
+            "data": {}
+          }
         }
       ],
       "stages": [],
@@ -45,37 +48,43 @@
       },
       "displays": [
         {
-          "type": "game-overview-title",
-          "foregroundTemplate": {
-            "sourceType": "embedded",
-            "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"/samples/magic-trifle/title/foreground.png\" style=\"width: 80%;\" /></p>"
-          },
-          "backgroundTemplate": {
-            "sourceType": "embedded",
-            "content": ""
-          },
-          "backgroundStyle": {
-            "background": "black",
-            "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
-            "backgroundSize": "cover",
-            "backgroundPosition": "center"
-          },
-          "data": {}
+          "purpose": "game-overview-title",
+          "component": {
+            "type": "template",
+            "foregroundTemplate": {
+              "sourceType": "embedded",
+              "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"/samples/magic-trifle/title/foreground.png\" style=\"width: 80%;\" /></p>"
+            },
+            "backgroundTemplate": {
+              "sourceType": "embedded",
+              "content": ""
+            },
+            "backgroundStyle": {
+              "background": "black",
+              "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
+              "backgroundSize": "cover",
+              "backgroundPosition": "center"
+            },
+            "data": {}
+          }
         },
         {
-          "type": "game-overview-stages",
-          "foregroundTemplate": {
-            "sourceType": "embedded",
-            "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}}</li>{{/gameState.stages}}</ul>"
+          "purpose": "game-overview-stages",
+          "component": {
+            "type": "template",
+            "foregroundTemplate": {
+              "sourceType": "embedded",
+              "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}}</li>{{/gameState.stages}}</ul>"
+            },
+            "backgroundTemplate": {
+              "sourceType": "embedded",
+              "content": ""
+            },
+            "backgroundStyle": {
+              "background": "lightgrey"
+            },
+            "data": {}
           },
-          "backgroundTemplate": {
-            "sourceType": "embedded",
-            "content": ""
-          },
-          "backgroundStyle": {
-            "background": "lightgrey"
-          },
-          "data": {},
           "clickIdToStageId": {
             "stages-link-stage-1": "stage-1"
           }
@@ -89,26 +98,12 @@
               "id": "stage-1-challenge-1",
               "displays": [
                 {
-                  "type": "challenge-in-progress",
-                  "backgroundStyle": {
-                    "backgroundImage": "url('/samples/magic-trifle/title/background.png')",
-                    "backgroundSize": "cover",
-                    "backgroundPosition": "center",
-                    "backgroundColor": "rgba(128, 128, 128, 1)",
-                    "backgroundBlendMode": "multiply"
-                  },
-                  "backgroundTemplate": {
-                    "sourceType": "embedded",
-                    "content": ""
-                  },
-                  "foregroundStyle": {
-                    "backdropFilter": "blur(5px)"
-                  },
-                  "foregroundTemplate": {
-                    "sourceType": "embedded",
-                    "content": "<div style=\"width: 100%; height: 100%; background-image: url('/samples/magic-trifle/old-paper.png'); background-size: contain; background-repeat: no-repeat; background-position: center\">content for stage 1 challenge 1</div>"
-                  },
-                  "data": {}
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "data": {},
+                    "text": "This is the first prompt"
+                  }
                 }
               ],
               "solution": {
@@ -122,7 +117,7 @@
       "gameContainerStyle": {
         "backgroundColor": "#222222",
         "borderRadius": "20px",
-        "box-shadow": "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
+        "boxShadow": "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
       }
     }
   }

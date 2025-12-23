@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { GameDisplayTemplate } from "../entities/data/GameDisplayData";
+import type { GameDisplayTemplate } from "../entities/data/displays/GameDisplayTemplateComponentData";
 import { getBaseURL, getDirectoryURL, isDefined } from "../util/ObjectUtils";
 import { GameContentCacheContext } from "./GameContentCacheContext";
 import { GameRepositoryContext } from "./GameRepositoryContext";
@@ -13,9 +13,12 @@ export default function useContentCache() {
       return undefined;
     }
     // first check the cache
-    const cached = cache.templates.find(
-      (t) => t.sourceType === template.sourceType && t.templateSource === template.templateSource,
-    );
+    const cached =
+      template.sourceType !== "embedded"
+        ? cache.templates.find(
+            (t) => t.sourceType === template.sourceType && t.templateSource === template.templateSource,
+          )
+        : undefined;
 
     if (isDefined(cached)) {
       return cached;

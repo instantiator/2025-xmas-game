@@ -1,10 +1,10 @@
 import type { GameChallengeData } from "../data/GameChallengeData";
 import type { GameChallengeAnswer } from "../data/GameChallengeSolution";
-import type { GameChallengeDisplayType } from "../data/GameDisplayData";
+import type { GameChallengeDisplayPurpose } from "../data/displays/GameDisplayData";
 
 export interface GameChallengeState {
   challenge: GameChallengeData;
-  challengeDisplay: GameChallengeDisplayType | null;
+  displayPurpose: GameChallengeDisplayPurpose | null;
   attempts: GameChallengeAnswer[];
   succeeded: boolean;
 }

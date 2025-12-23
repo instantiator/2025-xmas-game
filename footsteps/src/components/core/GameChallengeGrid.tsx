@@ -1,6 +1,6 @@
 import { Children } from "react";
 
-export default function ChallengeGrid({ children }: { children: React.ReactNode }) {
+export default function GameChallengeGrid({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{

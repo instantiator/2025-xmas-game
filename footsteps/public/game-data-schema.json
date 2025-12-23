@@ -40,29 +40,20 @@
         },
         "GameChallengeDisplay": {
             "properties": {
-                "backgroundStyle": {
-                    "$ref": "#/definitions/React.CSSProperties"
+                "component": {
+                    "$ref": "#/definitions/GameDisplayComponentData"
                 },
-                "backgroundTemplate": {
-                    "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "data": {
-                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
-                },
-                "foregroundTemplate": {
-                    "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "type": {
-                    "$ref": "#/definitions/GameChallengeDisplayType"
+                "purpose": {
+                    "$ref": "#/definitions/GameChallengeDisplayPurpose"
                 }
             },
             "required": [
-                "data",
-                "type"
+                "component",
+                "purpose"
             ],
             "type": "object"
         },
-        "GameChallengeDisplayType": {
+        "GameChallengeDisplayPurpose": {
             "enum": [
                 "challenge-completed",
                 "challenge-in-progress",
@@ -110,6 +101,44 @@
             ],
             "type": "object"
         },
+        "GameDisplayComponentData": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/GameDisplayTemplateComponentData"
+                },
+                {
+                    "$ref": "#/definitions/GameDisplayScrollComponentData"
+                }
+            ]
+        },
+        "GameDisplayScrollComponentData": {
+            "properties": {
+                "contentTemplate": {
+                    "$ref": "#/definitions/GameDisplayTemplate"
+                },
+                "data": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "hint": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "showInput": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "const": "scroll",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "data",
+                "type"
+            ],
+            "type": "object"
+        },
         "GameDisplayTemplate": {
             "properties": {
                 "content": {
@@ -127,7 +156,7 @@
             ],
             "type": "object"
         },
-        "GameOverviewDisplay": {
+        "GameDisplayTemplateComponentData": {
             "properties": {
                 "backgroundStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
@@ -135,17 +164,18 @@
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
-                "clickIdToStageId": {
-                    "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
-                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                },
+                "foregroundStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
                 },
                 "foregroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplate"
                 },
                 "type": {
-                    "$ref": "#/definitions/GameOverviewDisplayType"
+                    "const": "template",
+                    "type": "string"
                 }
             },
             "required": [
@@ -154,7 +184,25 @@
             ],
             "type": "object"
         },
-        "GameOverviewDisplayType": {
+        "GameOverviewDisplay": {
+            "properties": {
+                "clickIdToStageId": {
+                    "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
+                },
+                "component": {
+                    "$ref": "#/definitions/GameDisplayComponentData"
+                },
+                "purpose": {
+                    "$ref": "#/definitions/GameOverviewDisplayPurpose"
+                }
+            },
+            "required": [
+                "component",
+                "purpose"
+            ],
+            "type": "object"
+        },
+        "GameOverviewDisplayPurpose": {
             "enum": [
                 "game-overview-stages",
                 "game-overview-title"
@@ -202,29 +250,20 @@
         },
         "GameStageDisplay": {
             "properties": {
-                "backgroundStyle": {
-                    "$ref": "#/definitions/React.CSSProperties"
-                },
-                "backgroundTemplate": {
-                    "$ref": "#/definitions/GameDisplayTemplate"
-                },
                 "clickIdToChallengeId": {
                     "$ref": "#/definitions/Record%3Cstring%2Cstring%3E"
                 },
-                "data": {
-                    "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
+                "component": {
+                    "$ref": "#/definitions/GameDisplayComponentData"
                 },
-                "foregroundTemplate": {
-                    "$ref": "#/definitions/GameDisplayTemplate"
-                },
-                "type": {
+                "purpose": {
                     "const": "stage-overview",
                     "type": "string"
                 }
             },
             "required": [
-                "data",
-                "type"
+                "component",
+                "purpose"
             ],
             "type": "object"
         },

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { GameOverviewDisplay } from "./GameDisplayData";
+import type { GameOverviewDisplay } from "./displays/GameDisplayData";
 import type { CameraModuleData } from "./GameModuleData";
 import type { GameStageData } from "./GameStageData";
 

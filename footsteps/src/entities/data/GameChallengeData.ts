@@ -1,5 +1,5 @@
 import type { GameChallengeSolution } from "./GameChallengeSolution";
-import type { GameChallengeDisplay } from "./GameDisplayData";
+import type { GameChallengeDisplay } from "./displays/GameDisplayData";
 
 export type GameChallengeId = string;
 

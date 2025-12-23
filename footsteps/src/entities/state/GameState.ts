@@ -1,15 +1,16 @@
-import { selectOverviewDisplay } from "../../components/core/logic/GameDisplayRenderDataGeneration";
+import { GameOverviewPurposeSequence } from "../../components/core/logic/GameClickHandling";
+import { isDefined } from "../../util/ObjectUtils";
+import type { GameOverviewDisplayPurpose } from "../data/displays/GameDisplayData";
 import type { GameData } from "../data/GameData";
-import type { GameOverviewDisplayType } from "../data/GameDisplayData";
 import type { GameStageId } from "../data/GameStageData";
 import type { GameStageState } from "./GameStageState";
 
 export interface GameState {
-  game: GameData;
+  gameData: GameData;
   stages: GameStageState[];
   current: {
     stageId: GameStageId | null;
-    overviewDisplay: GameOverviewDisplayType | null;
+    overviewDisplay: GameOverviewDisplayPurpose | null;
   };
 }
 
@@ -18,15 +19,25 @@ export function createBlankGameState(game: GameData): GameState {
     stage: stage,
     challengeStates: stage.challenges.map((challenge) => ({
       challenge: challenge,
-      challengeDisplay: null,
+      displayPurpose: null,
       attempts: [],
       succeeded: false,
     })),
   }));
 
+  const overviewDisplay = GameOverviewPurposeSequence.find((purpose) =>
+    game.displays.some((d) => purpose === d.purpose),
+  );
+  if (!isDefined(overviewDisplay)) {
+    throw new Error(`No initial overview display found, from: ${GameOverviewPurposeSequence.join(", ")}`);
+  }
+
   return {
-    game,
+    gameData: game,
     stages: stages,
-    current: { stageId: null, overviewDisplay: selectOverviewDisplay(null, game)?.type ?? "game-overview-title" },
+    current: {
+      stageId: null,
+      overviewDisplay,
+    },
   };
 }

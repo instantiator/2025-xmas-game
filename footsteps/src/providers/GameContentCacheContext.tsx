@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { GameDisplayTemplate } from "../entities/data/GameDisplayData";
+import type { GameDisplayTemplate } from "../entities/data/displays/GameDisplayTemplateComponentData";
 
 export interface GameContentCache {
   templates: GameDisplayTemplate[];
