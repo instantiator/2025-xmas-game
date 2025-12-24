@@ -43,6 +43,7 @@ export default function HeadsUpDisplay() {
           borderTopRightRadius: "10px",
           display: "flex",
           flexDirection: "row",
+          alignItems: "center",
           gap: "5px",
         }}
       >
