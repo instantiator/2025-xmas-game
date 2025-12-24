@@ -19,7 +19,7 @@
     {{/showCompleted}}
 
     {{#showUnlocked}}
-    <img id="stages-link-{{stage.id}}" src="{{resources.stepping-stone}}" style="width: calc( 60vw / {{gameState.totalStages}} ); height: auto;" />
+    <img id="stages-link-{{stage.id}}" src="{{resources.stepping-stone}}" style="width: calc( 60vw / {{gameState.totalStages}} ); height: auto; animation: floatAndZoom 3s ease-in-out infinite alternate;" />
     {{/showUnlocked}}
 
     {{#showLocked}}
