@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { GameDisplayComponentBase } from "./GameDisplayData";
 
-export type TemplateSourceType = "relative" | "url" | "embedded";
+export type TemplateSourceType = "local" | "relative" | "url" | "embedded";
 
 export interface GameDisplayTemplateComponentData extends GameDisplayComponentBase {
   type: "template";

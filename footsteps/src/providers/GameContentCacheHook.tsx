@@ -30,6 +30,23 @@ export default function useContentCache() {
       case "embedded":
         return template;
 
+      case "local":
+        switch (repositorySource.type) {
+          case "RemoteRepository":
+            throw "Remote repository does not support local template sources";
+
+          case "LocalRepository":
+            return await getTemplate({
+              ...template,
+              sourceType: "url",
+              templateSource: new URL(template.templateSource!, getBaseURL()).toString(),
+            });
+
+          case "RawRepository":
+            throw "Raw repository does not support local template sources";
+        }
+        break;
+
       // convert all "relative" type sources to "url"
       case "relative":
         switch (repositorySource.type) {
