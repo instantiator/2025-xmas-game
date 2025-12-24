@@ -16,6 +16,9 @@ export default function Attributions() {
           </a>{" "}
           by <a href="https://gallery.yopriceville.com/">YoPriceVille Gallery</a>
         </li>
+        <li>
+          Bubble text created with <a href="https://www.textstudio.com/">Font generator</a>
+        </li>
       </ul>
     </>
   );
