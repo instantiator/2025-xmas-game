@@ -131,7 +131,12 @@ export default function GameDisplayScrollComponent({
                   <input
                     type="text"
                     disabled={solved}
-                    style={{ width: "80%", textTransform: "uppercase" }}
+                    style={{
+                      width: "80%",
+                      textTransform: "uppercase",
+                      fontSize: "inherit",
+                      fontFamily: "inherit",
+                    }}
                     onChange={(e) => {
                       setInput(e.target.value);
                     }}

@@ -10,7 +10,7 @@ import GameDisplayComponent from "./display/GameDisplayComponent";
 import GameChallengeGrid from "./GameChallengeGrid";
 import GameLayersLayout from "./GameLayersLayout";
 import { getNewGameStateForClick } from "./logic/GameClickUtils";
-import { findChallenge } from "./logic/GameDataUtils";
+import { findChallengeState } from "./logic/GameDataUtils";
 import { completeChallenge, validateAnswer } from "./logic/GameStateUtils";
 import { getRenderData } from "./logic/RenderDataUtils";
 
@@ -44,7 +44,12 @@ export default function Game() {
   // Set the display layers whenever the game state changes
   useEffect(() => {
     const onAnswer: GameAnswerFunction = (stageId, challengeId, answer): GameChallengeAnswerValidation[] | true => {
-      const challenge = findChallenge(gameState.gameData, stageId, challengeId);
+      const challengeState = findChallengeState(gameState, stageId, challengeId);
+      if (challengeState.succeeded) {
+        return true; // ignore further attempts to submit an answer to a succeeded challenge
+      }
+
+      const challenge = challengeState.challenge;
       const validations = validateAnswer(challenge, answer);
 
       if (validations !== true) {

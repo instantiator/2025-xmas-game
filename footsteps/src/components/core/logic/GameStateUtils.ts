@@ -87,8 +87,7 @@ export const getChunkedChallengeStates = (stageState: GameStageState): GameChall
  */
 export const getCurrentChallengeStates = (
   chunkedChallengeStates: GameChallengeState[][],
-): GameChallengeState[] | undefined =>
-  chunkedChallengeStates.find((chunk) => !chunk.some((c) => c.succeeded)) ?? undefined;
+): GameChallengeState[] | undefined => chunkedChallengeStates.find((chunk) => chunk.some((c) => !c.succeeded));
 
 /**
  * Marks a challenge as complete in the game state, and advances the game.

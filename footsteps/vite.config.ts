@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       Unfonts({
         /* options */
         google: {
-          families: ["Crimson Pro", "Open Sans", "Material+Icons"],
+          families: ["Crimson Pro", "Open Sans", "Material+Icons", "DynaPuff"],
         },
       }),
     ],
