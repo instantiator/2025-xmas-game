@@ -1,0 +1,33 @@
+<!--
+<h1>Stages</h1>
+<ul>
+  {{#gameState.stages}}
+  <li id="stages-link-{{stage.id}}">{{stage.id}} ({{availability}}, {{completion}})</li>
+  {{/gameState.stages}}
+</ul>
+-->
+
+<div
+  id="horizontal-stepping-stones"
+  style="width: 100%; height: 20vh; margin-top: 70vh; display: flex; flex-direction: row; align-items: end; justify-content: space-evenly;">
+  {{#gameState.stages}}
+  <div id="stepping-stone-stage-{{stage.id}}" style="display: flex; flex-direction: column; align-items: center; justify-content: end;">
+
+    {{#showCompleted}}
+    <img src="{{resources.star}}" style="width: calc( 40vw / {{gameState.totalStages}} ); height: auto;" />
+    <img id="stages-link-{{stage.id}}" src="{{resources.stepping-stone}}" style="width: calc( 60vw / {{gameState.totalStages}} ); height: auto;" />
+    {{/showCompleted}}
+
+    {{#showUnlocked}}
+    <img id="stages-link-{{stage.id}}" src="{{resources.stepping-stone}}" style="width: calc( 60vw / {{gameState.totalStages}} ); height: auto;" />
+    {{/showUnlocked}}
+
+    {{#showLocked}}
+    <img id="stages-link-{{stage.id}}" src="{{resources.stepping-stone}}" style="width: calc( 60vw / {{gameState.totalStages}} ); height: auto; opacity: 0.5;" />
+    {{/showLocked}}
+
+    <div style="height: calc( 5vh * {{index}} )"></div>
+
+  </div>
+  {{/gameState.stages}}
+</div>

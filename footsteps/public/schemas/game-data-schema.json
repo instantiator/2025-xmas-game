@@ -119,6 +119,9 @@
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplateSourceData"
                 },
+                "backgroundTemplateStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -127,6 +130,9 @@
                 },
                 "foregroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplateSourceData"
+                },
+                "foregroundTemplateStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
                 },
                 "hint": {
                     "type": "string"
@@ -159,6 +165,9 @@
                 "backgroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplateSourceData"
                 },
+                "backgroundTemplateStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -167,6 +176,9 @@
                 },
                 "foregroundTemplate": {
                     "$ref": "#/definitions/GameDisplayTemplateSourceData"
+                },
+                "foregroundTemplateStyle": {
+                    "$ref": "#/definitions/React.CSSProperties"
                 },
                 "type": {
                     "const": "template",
@@ -305,6 +317,7 @@
         "TemplateSourceType": {
             "enum": [
                 "embedded",
+                "local",
                 "relative",
                 "url"
             ],

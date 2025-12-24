@@ -12,6 +12,7 @@ import type { GameChallengeState } from "../../../entities/state/GameChallengeSt
 import type { GameState } from "../../../entities/state/GameState";
 import { isDefined } from "../../../util/ObjectUtils";
 import { getActiveStageStateChallenges } from "./GameStateUtils";
+import { decorateGameState, type DecoratedGameState } from "./TemplateDecorationUtils";
 
 export type GameDisplayMode = "overview" | "stage";
 
@@ -31,7 +32,7 @@ export interface LayeredGameDisplayRenderData {
  * Data to provide to game challenge Mustache templates.
  */
 export interface GameTemplateData {
-  gameState: GameState;
+  gameState: DecoratedGameState;
   componentData: Record<string, any>;
   resources: Record<string, any>;
   challenge: GameChallengeData | undefined;
@@ -52,7 +53,7 @@ export const getInheritedRenderData = (
     const stageDisplay = getStageDisplay(stageState.stage, "shared");
     if (isDefined(stageDisplay)) {
       const stageTemplateData: GameTemplateData = {
-        gameState,
+        gameState: decorateGameState(gameState),
         resources: resources ?? {},
         componentData: stageDisplay.component.data,
         challenge: undefined,
@@ -91,7 +92,7 @@ export const getRenderData = (
     case "overview": {
       if (isDefined(overviewDisplay)) {
         const overviewTemplateData: GameTemplateData = {
-          gameState,
+          gameState: decorateGameState(gameState),
           resources: resources ?? {},
           componentData: overviewDisplay.component.data,
           challenge: undefined,
@@ -123,7 +124,7 @@ export const getRenderData = (
               const challengeDisplay = getChallengeDisplay(challengeState);
               if (isDefined(challengeDisplay)) {
                 const challengeTemplateData: GameTemplateData = {
-                  gameState,
+                  gameState: decorateGameState(gameState),
                   resources: resources ?? {},
                   challenge: challengeState.challenge,
                   challengeState: challengeState,

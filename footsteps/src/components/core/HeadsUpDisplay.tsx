@@ -50,7 +50,11 @@ export default function HeadsUpDisplay() {
         <button style={{ margin: 0, padding: 5 }} onClick={returnToTitle}>
           Title
         </button>
-        {showCloseChallengeButton && <button onClick={closeChallenge}>Close</button>}
+        {showCloseChallengeButton && (
+          <button style={{ margin: 0, padding: 5 }} onClick={closeChallenge}>
+            Close
+          </button>
+        )}
       </div>
     </>
   );

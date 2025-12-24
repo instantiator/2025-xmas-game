@@ -1,4 +1,5 @@
 import type { GameDisplayComponentBase } from "./GameDisplayData";
+import type { GameDisplayMediaData } from "./GameDisplayMediaData";
 import type { GameDisplayTemplateSourceData } from "./GameDisplayTemplateComponentData";
 
 export interface GameDisplayScrollComponentData extends GameDisplayComponentBase {
@@ -7,8 +8,11 @@ export interface GameDisplayScrollComponentData extends GameDisplayComponentBase
   foregroundTemplate?: GameDisplayTemplateSourceData;
   backgroundStyle?: React.CSSProperties;
   foregroundStyle?: React.CSSProperties;
+  backgroundTemplateStyle?: React.CSSProperties;
+  foregroundTemplateStyle?: React.CSSProperties;
   text?: string;
   showInput?: boolean;
   hint?: string;
   label?: string;
+  media?: GameDisplayMediaData;
 }

@@ -9,6 +9,8 @@ export interface GameDisplayTemplateComponentData extends GameDisplayComponentBa
   foregroundTemplate?: GameDisplayTemplateSourceData;
   backgroundStyle?: CSSProperties;
   foregroundStyle?: CSSProperties;
+  backgroundTemplateStyle?: CSSProperties;
+  foregroundTemplateStyle?: CSSProperties;
 }
 
 export interface GameDisplayTemplateSourceData {

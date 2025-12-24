@@ -24,12 +24,18 @@ export default function GameDisplayComponent({ render, layerHint, onAnswer }: Ga
     layerHint: LayerHint,
   ) => (layerHint === "background" ? component.backgroundStyle : component.foregroundStyle);
 
+  const getTemplateStyle = (
+    component: GameDisplayTemplateComponentData | GameDisplayScrollComponentData,
+    layerHint: LayerHint,
+  ) => (layerHint === "background" ? component.backgroundTemplateStyle : component.foregroundTemplateStyle);
+
   return (
     <>
       {render.component.type === "template" && (
         <GameDisplayTemplateComponent
           templateSource={getTemplateSource(render.component, layerHint)}
           containerStyle={getContainerStyle(render.component, layerHint)}
+          templateStyle={getTemplateStyle(render.component, layerHint)}
           templateData={render.templateData}
           challengeId={render.challengeId}
           solution={render.solution}
@@ -40,6 +46,7 @@ export default function GameDisplayComponent({ render, layerHint, onAnswer }: Ga
         <GameDisplayScrollComponent
           templateSource={getTemplateSource(render.component, layerHint)}
           containerStyle={getContainerStyle(render.component, layerHint)}
+          templateStyle={getTemplateStyle(render.component, layerHint)}
           templateData={render.templateData}
           scrollData={render.component}
           layerHint={layerHint}

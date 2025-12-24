@@ -40,7 +40,7 @@
     },
     "magic-trifle": {
       "id": "magic-trifle",
-      "title": "Nana's Magic Trifle",
+      "title": "Nanny's Magic Trifle",
       "modules": {
         "camera": {
           "enabled": false
@@ -48,7 +48,11 @@
       },
       "resources": {
         "title-background": { "type": "local", "target": "games/magic-trifle/title/background.png" },
-        "title-foreground": { "type": "local", "target": "games/magic-trifle/title/foreground.png" }
+        "title-foreground": { "type": "local", "target": "games/magic-trifle/title/foreground.png" },
+        "blank-river": { "type": "local", "target": "games/magic-trifle/overview/blank-river.png" },
+        "stepping-stone": { "type": "local", "target": "games/magic-trifle/overview/stepping-stone.png" },
+        "star": { "type": "local", "target": "games/magic-trifle/overview/star-2.gif" },
+        "bells": { "type": "local", "target": "games/magic-trifle/bells.mp3" }
       },
       "displays": [
         {
@@ -56,9 +60,10 @@
           "component": {
             "type": "template",
             "foregroundTemplate": {
-              "sourceType": "embedded",
-              "content": "<p style=\"text-align: center;\"><img id=\"magic-trifle-title\" src=\"{{resources.title-foreground}}\" style=\"width: 80%;\" /></p>"
+              "sourceType": "relative",
+              "templateSource": "games/magic-trifle/title/foreground.mustache"
             },
+            "foregroundTemplateStyle": { "width": "100%", "height": "100%" },
             "backgroundTemplate": {
               "sourceType": "embedded",
               "content": ""
@@ -77,15 +82,20 @@
           "component": {
             "type": "template",
             "foregroundTemplate": {
-              "sourceType": "embedded",
-              "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}} ({{availability}}, {{completion}})</li>{{/gameState.stages}}</ul>"
+              "sourceType": "relative",
+              "templateSource": "games/magic-trifle/overview/foreground.mustache"
             },
+            "foregroundTemplateStyle": { "width": "100%", "height": "100%" },
             "backgroundTemplate": {
               "sourceType": "embedded",
               "content": ""
             },
+            "backgroundTemplateStyle": { "width": "100%", "height": "100%" },
             "backgroundStyle": {
-              "background": "lightgrey"
+              "background": "black",
+              "backgroundImage": "url('{{resources.blank-river}}')",
+              "backgroundSize": "cover",
+              "backgroundPosition": "center"
             },
             "data": {}
           },
@@ -102,6 +112,31 @@
       "stages": [
         {
           "id": "stage-1",
+          "displays": [
+            {
+              "purpose": "shared",
+              "component": {
+                "type": "template",
+                "foregroundTemplate": {
+                  "sourceType": "relative",
+                  "templateSource": "games/magic-trifle/overview/foreground.mustache"
+                },
+                "foregroundTemplateStyle": { "width": "100%", "height": "100%" },
+                "backgroundTemplate": {
+                  "sourceType": "embedded",
+                  "content": ""
+                },
+                "backgroundTemplateStyle": { "width": "100%", "height": "100%" },
+                "backgroundStyle": {
+                  "background": "black",
+                  "backgroundImage": "url('{{resources.blank-river}}')",
+                  "backgroundSize": "cover",
+                  "backgroundPosition": "center"
+                },
+                "data": {}
+              }
+            }
+          ],
           "challenges": [
             {
               "id": "stage-1-challenge-1",
@@ -135,6 +170,10 @@
                     "type": "scroll",
                     "showInput": true,
                     "text": "This is the second prompt.",
+                    "media": {
+                      "type": "audio",
+                      "resource": "bells"
+                    },
                     "data": {}
                   }
                 }
@@ -177,6 +216,75 @@
                     "type": "scroll",
                     "showInput": true,
                     "text": "This is the fourth prompt.",
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-4",
+          "challenges": [
+            {
+              "id": "stage-4-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "showInput": true,
+                    "text": "This is the fifth prompt.",
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-5",
+          "challenges": [
+            {
+              "id": "stage-5-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "showInput": true,
+                    "text": "This is the sixth prompt.",
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-6",
+          "challenges": [
+            {
+              "id": "stage-6-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "showInput": true,
+                    "text": "This is the seventh prompt.",
                     "data": {}
                   }
                 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import metadata from "../../../assets/resources/assets-metadata.json";
 import oldPaperImage from "../../../assets/resources/old-paper.png";
-import metadata from "../../../assets/resources/resource-metadata.json";
 import type { GameDisplayScrollComponentData } from "../../../entities/data/displays/GameDisplayScrollComponentData";
 import type { GameDisplayTemplateSourceData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
 import type { GameChallengeId } from "../../../entities/data/GameChallengeData";
@@ -10,6 +10,7 @@ import type {
   GameChallengeSolution,
 } from "../../../entities/data/GameChallengeSolution";
 import type { GameStageId } from "../../../entities/data/GameStageData";
+import { useGameData } from "../../../providers/GameDataHook";
 import { isDefined } from "../../../util/ObjectUtils";
 import type { GameAnswerFunction } from "../Game";
 import type { LayerHint } from "./GameDisplayComponent";
@@ -18,6 +19,7 @@ import GameDisplayTemplateComponent from "./GameDisplayTemplateComponent";
 interface GameDisplayScrollComponentProps {
   templateSource?: GameDisplayTemplateSourceData;
   containerStyle?: React.CSSProperties;
+  templateStyle?: CSSProperties;
   templateData?: Record<string, any>;
   scrollData: GameDisplayScrollComponentData;
   layerHint: LayerHint;
@@ -30,6 +32,7 @@ interface GameDisplayScrollComponentProps {
 export default function GameDisplayScrollComponent({
   templateSource,
   containerStyle,
+  templateStyle,
   templateData,
   scrollData,
   layerHint,
@@ -38,6 +41,8 @@ export default function GameDisplayScrollComponent({
   solution,
   onAnswer,
 }: GameDisplayScrollComponentProps) {
+  const { resources } = useGameData();
+
   const paperMetadataEntry = metadata.resources.find((entry) => entry.file === "old-paper.png");
   const paperAspectRatio = `${paperMetadataEntry?.width}/${paperMetadataEntry?.height}`;
 
@@ -80,7 +85,7 @@ export default function GameDisplayScrollComponent({
           content: "<!-- scroll -->",
         } as GameDisplayTemplateSourceData));
 
-  const templateStyle: CSSProperties =
+  const templateContainerStyle: CSSProperties =
     layerHint === "foreground"
       ? {
           width: "auto",
@@ -118,11 +123,19 @@ export default function GameDisplayScrollComponent({
         >
           <GameDisplayTemplateComponent
             templateSource={template}
-            containerStyle={templateStyle}
+            containerStyle={templateContainerStyle}
+            templateStyle={templateStyle}
             templateData={{ text: scrollData.text, ...templateData }}
             solution={solution}
             onAnswer={onAnswer}
           >
+            {layerHint === "foreground" && isDefined(scrollData.media) && scrollData.media.type === "audio" && (
+              <audio key={`audio-${scrollData.media.resource}`} controls style={{ margin: "20px" }}>
+                <source src={resources[scrollData.media.resource]} />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+
             {layerHint === "foreground" && scrollData.showInput && (
               <>
                 <p>

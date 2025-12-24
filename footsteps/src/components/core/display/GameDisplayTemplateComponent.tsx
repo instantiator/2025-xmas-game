@@ -13,6 +13,7 @@ interface GameDisplayTemplateProps {
   templateSource: GameDisplayTemplateData | undefined;
   templateData: Record<string, any>;
   containerStyle?: React.CSSProperties;
+  templateStyle?: React.CSSProperties;
   stageId?: GameStageId; // TODO (currently unused)
   challengeId?: GameChallengeId; // TODO (currently unused)
   solution?: GameChallengeSolution; // TODO (currently unused)
@@ -27,6 +28,7 @@ export default function GameDisplayTemplateComponent({
   templateSource,
   templateData,
   containerStyle,
+  templateStyle,
   children,
 }: PropsWithChildren<GameDisplayTemplateProps>) {
   const [render, setRender] = useState<GameDisplayTemplateData | undefined>();
@@ -54,7 +56,9 @@ export default function GameDisplayTemplateComponent({
 
   return (
     <div key={`template-${uid}`} style={{ width: "100%", height: "100%", ...containerStyleParsed }}>
-      {isDefined(render) && <MustacheTemplate template={render.content ?? ""} data={templateData} />}
+      {isDefined(render) && (
+        <MustacheTemplate template={render.content ?? ""} data={templateData} style={templateStyle} />
+      )}
       {children}
     </div>
   );

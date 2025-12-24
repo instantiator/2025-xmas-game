@@ -28,9 +28,11 @@ export default function useContentCache() {
 
     switch (template.sourceType) {
       case "embedded":
+        console.info(`Loaded embedded template.`);
         return template;
 
       case "local":
+        console.debug(`Loading local template: ${template.templateSource}`);
         switch (repositorySource.type) {
           case "RemoteRepository":
             throw "Remote repository does not support local template sources";
@@ -49,6 +51,8 @@ export default function useContentCache() {
 
       // convert all "relative" type sources to "url"
       case "relative":
+        console.debug(`Loading relative template: ${template.templateSource}`);
+
         switch (repositorySource.type) {
           case "RemoteRepository":
             return await getTemplate({
@@ -70,8 +74,10 @@ export default function useContentCache() {
         break;
 
       case "url": {
+        console.debug(`Loading URL template: ${template.templateSource}`);
         const response = await fetch(template.templateSource!);
         const text = await response.text();
+        console.info(`Loaded URL template: ${template.templateSource}`);
         setCache((previous) => ({ ...previous, templates: [...previous.templates, { ...template, content: text }] }));
         return { ...template, content: text };
       }
