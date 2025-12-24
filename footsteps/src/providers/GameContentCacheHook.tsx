@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { GameDisplayTemplate } from "../entities/data/displays/GameDisplayTemplateComponentData";
+import type { GameDisplayTemplateSourceData } from "../entities/data/displays/GameDisplayTemplateComponentData";
 import { getBaseURL, getDirectoryURL, isDefined } from "../util/ObjectUtils";
 import { GameContentCacheContext } from "./GameContentCacheContext";
 import { GameRepositoryContext } from "./GameRepositoryContext";
@@ -8,7 +8,9 @@ export default function useContentCache() {
   const { source: repositorySource } = useContext(GameRepositoryContext);
   const { cache, setCache } = useContext(GameContentCacheContext);
 
-  const getTemplate = async (template?: GameDisplayTemplate): Promise<GameDisplayTemplate | undefined> => {
+  const getTemplate = async (
+    template?: GameDisplayTemplateSourceData,
+  ): Promise<GameDisplayTemplateSourceData | undefined> => {
     if (!isDefined(template)) {
       return undefined;
     }

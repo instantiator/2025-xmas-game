@@ -1,7 +1,7 @@
 import type { GameOverviewDisplayPurpose } from "../../../entities/data/displays/GameDisplayData";
 import type { GameState } from "../../../entities/state/GameState";
 import { isDefined } from "../../../util/ObjectUtils";
-import { getOverviewDisplay } from "./GameDisplayRenderDataGeneration";
+import { getOverviewDisplay } from "./RenderDataUtils";
 
 export const GameOverviewPurposeSequence: GameOverviewDisplayPurpose[] = [
   "game-overview-title",

@@ -6,9 +6,11 @@ import type { FeetPositions } from "../camera/CameraSupport";
 import CharacterCamera from "../camera/CharacterCamera";
 import CharacterCanvas from "../camera/CharacterCanvas";
 import "./GameLayersLayout.css";
+import HeadsUpDisplay from "./HeadsUpDisplay";
 
 interface GameLayersLayoutProps {
-  backgroundStyle?: React.CSSProperties;
+  inheritedBackgroundLayer?: ReactNode;
+  inheritedBackgroundStyle?: CSSProperties;
   backgroundLayer: ReactNode;
   foregroundLayer: ReactNode;
   cameraLayer: CameraModuleData | undefined;
@@ -17,7 +19,8 @@ interface GameLayersLayoutProps {
 }
 
 export default function GameLayersLayout({
-  backgroundStyle,
+  inheritedBackgroundStyle,
+  inheritedBackgroundLayer,
   backgroundLayer,
   foregroundLayer,
   cameraLayer,
@@ -68,9 +71,20 @@ export default function GameLayersLayout({
     overflow: "hidden",
   };
 
+  const inheritedBackgroundContainerStyle: CSSProperties = {
+    ...outerStyle,
+    ...inheritedBackgroundStyle,
+    zIndex: 100,
+  };
+
   const backgroundContainerStyle: CSSProperties = {
-    ...innerStyle,
-    ...backgroundStyle,
+    ...outerStyle,
+    zIndex: 101,
+  };
+
+  const characterCanvasContainerStyle: CSSProperties = {
+    ...outerStyle,
+    zIndex: 200,
   };
 
   const characterCanvasStyle: CSSProperties = {
@@ -78,8 +92,18 @@ export default function GameLayersLayout({
     ...innerStyle,
   };
 
-  const foregroundContainerStyle: CSSProperties = {
+  const foregroundLayerContainerStyle: CSSProperties = {
+    ...outerStyle,
+    zIndex: 300,
+  };
+
+  const foregroundLayerStyle: CSSProperties = {
     ...innerStyle,
+  };
+
+  const debugOverlayContainerStyle: CSSProperties = {
+    ...outerStyle,
+    zIndex: 400,
   };
 
   const debugOverlayStyle: CSSProperties = {
@@ -93,6 +117,14 @@ export default function GameLayersLayout({
     top: "2vh",
     pointerEvents: "none",
     display: debug ? "block" : "none",
+    zIndex: 500,
+  };
+
+  const hudLayerContainerStyle: CSSProperties = {
+    zIndex: 600,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
   };
 
   const show = cameraLayer?.enabled === false || isDefined(aspect);
@@ -100,7 +132,7 @@ export default function GameLayersLayout({
   return (
     <>
       {cameraLayer?.enabled === true && (
-        <div style={{ ...characterCameraStyle, zIndex: 5 }} id="character-camera-layer">
+        <div style={characterCameraStyle} id="character-camera-layer">
           <CharacterCamera
             video={video}
             setVideo={setVideo}
@@ -113,17 +145,16 @@ export default function GameLayersLayout({
       )}
       {show && (
         <>
-          <div style={{ ...outerStyle, zIndex: 1 }}>
-            <div
-              style={backgroundContainerStyle}
-              id="background-layer"
-              onClick={(event) => clickHandler(event, "background-layer")}
-            >
-              {backgroundLayer}
-            </div>
+          <div id={`inherited-background-layer-container`} style={inheritedBackgroundContainerStyle}>
+            {inheritedBackgroundLayer}
           </div>
+
+          <div id={`background-layer-container`} style={backgroundContainerStyle}>
+            {backgroundLayer}
+          </div>
+
           {cameraLayer?.enabled === true && (
-            <div style={{ ...outerStyle, zIndex: 2 }}>
+            <div id="character-canvas-container" style={characterCanvasContainerStyle}>
               <CharacterCanvas
                 video={video}
                 mediaStream={characterStream}
@@ -133,9 +164,9 @@ export default function GameLayersLayout({
               />
             </div>
           )}
-          <div style={{ ...outerStyle, zIndex: 3 }}>
+          <div id="foreground-layer-container" style={foregroundLayerContainerStyle}>
             <div
-              style={foregroundContainerStyle}
+              style={foregroundLayerStyle}
               id="foreground-layer"
               onClick={(event) => clickHandler(event, "foreground-layer")}
             >
@@ -144,8 +175,8 @@ export default function GameLayersLayout({
           </div>
           {debug && (
             <div
-              style={{ ...outerStyle, zIndex: 4 }}
-              id="debug-overlay-layer"
+              style={debugOverlayContainerStyle}
+              id="debug-overlay-container"
               onClick={(event) => clickHandler(event, undefined, false)}
             >
               {cameraLayer?.enabled === true && (
@@ -153,6 +184,9 @@ export default function GameLayersLayout({
               )}
             </div>
           )}
+          <div id="hud-layer-container" style={hudLayerContainerStyle}>
+            <HeadsUpDisplay />
+          </div>
         </>
       )}
     </>

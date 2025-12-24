@@ -78,7 +78,7 @@
             "type": "template",
             "foregroundTemplate": {
               "sourceType": "embedded",
-              "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}}</li>{{/gameState.stages}}</ul>"
+              "content": "<h1>Stages</h1><ul>{{#gameState.stages}}<li id=\"stages-link-{{stage.id}}\">{{stage.id}} ({{availability}}, {{completion}})</li>{{/gameState.stages}}</ul>"
             },
             "backgroundTemplate": {
               "sourceType": "embedded",
@@ -90,7 +90,8 @@
             "data": {}
           },
           "clickIdToStageId": {
-            "stages-link-stage-1": "stage-1"
+            "stages-link-stage-1": "stage-1",
+            "stages-link-stage-2": "stage-2"
           }
         }
       ],
@@ -105,8 +106,32 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "data": {},
-                    "text": "This is the first prompt"
+                    "showInput": true,
+                    "text": "This is the first prompt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus. Nulla in magna commodo, rutrum nibh quis, ultricies libero. Sed vitae tempor felis. Aenean malesuada vel turpis eu suscipit. Fusce porta dui tellus, sit amet scelerisque tortor fermentum et. Cras tincidunt auctor ex, vel eleifend felis volutpat sed. Ut vehicula eleifend dui et ornare. Aenean a sapien posuere, blandit justo in, hendrerit lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer at sapien scelerisque neque auctor sagittis. Nullam tempor at justo non semper. Cras commodo lorem sit amet turpis sodales, at tincidunt leo dictum. Sed volutpat nulla vel risus pulvinar efficitur sed at purus. Praesent non consequat justo. Ut sit amet odio vitae erat efficitur vulputate quis vitae dui. Nunc quis vehicula leo. Donec eget magna in risus varius porta. Nunc vestibulum lorem vel dui egestas tincidunt. Nam ut velit ligula. Suspendisse eget velit hendrerit, tincidunt mi at, ullamcorper eros. Pellentesque id leo sit amet ligula porta venenatis eget nec lorem. Nullam condimentum nisl eget tincidunt egestas.",
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-2",
+          "challenges": [
+            {
+              "id": "stage-1-challenge-2",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "showInput": true,
+                    "text": "This is the second prompt.",
+                    "data": {}
                   }
                 }
               ],

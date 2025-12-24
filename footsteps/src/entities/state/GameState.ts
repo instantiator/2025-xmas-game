@@ -1,4 +1,4 @@
-import { GameOverviewPurposeSequence } from "../../components/core/logic/GameClickHandling";
+import { GameOverviewPurposeSequence } from "../../components/core/logic/GameClickUtils";
 import { isDefined } from "../../util/ObjectUtils";
 import type { GameOverviewDisplayPurpose } from "../data/displays/GameDisplayData";
 import type { GameData } from "../data/GameData";
@@ -15,8 +15,10 @@ export interface GameState {
 }
 
 export function createBlankGameState(game: GameData): GameState {
-  const stages: GameStageState[] = game.stages.map((stage) => ({
+  const stages: GameStageState[] = game.stages.map((stage, index) => ({
     stage: stage,
+    availability: (game.config?.sequential ?? true) ? (index === 0 ? "unlocked" : "locked") : "unlocked",
+    completion: "ready",
     challengeStates: stage.challenges.map((challenge) => ({
       challenge: challenge,
       displayPurpose: null,

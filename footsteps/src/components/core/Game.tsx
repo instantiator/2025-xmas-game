@@ -1,4 +1,7 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import type { GameChallengeId } from "../../entities/data/GameChallengeData";
+import type { GameChallengeAnswerValidation } from "../../entities/data/GameChallengeSolution";
+import type { GameStageId } from "../../entities/data/GameStageData";
 import useFeatureFlags from "../../providers/FeatureFlagsHook";
 import { useGameData } from "../../providers/GameDataHook";
 import { useGameState } from "../../providers/GameStateHook";
@@ -6,13 +9,22 @@ import { isDefined } from "../../util/ObjectUtils";
 import GameDisplayComponent from "./display/GameDisplayComponent";
 import GameChallengeGrid from "./GameChallengeGrid";
 import GameLayersLayout from "./GameLayersLayout";
-import { getNewGameStateForClick } from "./logic/GameClickHandling";
-import { getRenderData } from "./logic/GameDisplayRenderDataGeneration";
+import { getNewGameStateForClick } from "./logic/GameClickUtils";
+import { findChallenge } from "./logic/GameDataUtils";
+import { completeChallenge, validateAnswer } from "./logic/GameStateUtils";
+import { getRenderData } from "./logic/RenderDataUtils";
+
+export type GameAnswerFunction = (
+  stageId: GameStageId,
+  challengeId: GameChallengeId,
+  answer: string,
+) => GameChallengeAnswerValidation[] | true;
 
 interface DisplayLayers {
-  backgroundStyle?: CSSProperties;
-  backgroundLayer?: ReactNode;
-  foregroundLayer?: ReactNode;
+  inheritedBackgroundLayer?: ReactNode;
+  inheritedBackgroundStyle?: CSSProperties;
+  backgroundLayer: ReactNode;
+  foregroundLayer: ReactNode;
 }
 
 export default function Game() {
@@ -20,28 +32,66 @@ export default function Game() {
   const { resources } = useGameData();
   const { gameState, setGameState } = useGameState();
 
-  const [layers, setLayers] = useState<DisplayLayers>({});
+  const [layers, setLayers] = useState<DisplayLayers>({
+    backgroundLayer: <></>,
+    foregroundLayer: <></>,
+  });
+
+  useEffect(() => {
+    console.debug(gameState);
+  }, [gameState]);
 
   // Set the display layers whenever the game state changes
   useEffect(() => {
+    const onAnswer: GameAnswerFunction = (stageId, challengeId, answer): GameChallengeAnswerValidation[] | true => {
+      const challenge = findChallenge(gameState.gameData, stageId, challengeId);
+      const validations = validateAnswer(challenge, answer);
+
+      if (validations !== true) {
+        return validations;
+      }
+
+      // complete the challenge and update the game state
+      const changes = completeChallenge(gameState, stageId, challengeId);
+      setGameState((prevState) => ({
+        ...prevState,
+        ...changes,
+      }));
+
+      return true;
+    };
+
     const renderData = getRenderData(gameState, resources);
+
+    const inheritedBackgroundLayer = isDefined(renderData.inheritedRenderDatum) ? (
+      <GameDisplayComponent render={renderData.inheritedRenderDatum} layerHint="background" onAnswer={onAnswer} />
+    ) : undefined;
+
+    const inheritedBackgroundStyle = renderData.inheritedRenderDatum?.component.backgroundStyle;
+
+    const backgroundLayer = (
+      <GameChallengeGrid>
+        {renderData.gameRenderData.map((renderDatum) => (
+          <GameDisplayComponent render={renderDatum} layerHint="background" onAnswer={onAnswer} />
+        ))}
+      </GameChallengeGrid>
+    );
+
+    const foregroundLayer = (
+      <GameChallengeGrid>
+        {renderData.gameRenderData.map((renderDatum) => (
+          <GameDisplayComponent render={renderDatum} layerHint="foreground" onAnswer={onAnswer} />
+        ))}
+      </GameChallengeGrid>
+    );
+
     setLayers({
-      backgroundLayer: (
-        <GameChallengeGrid>
-          {renderData.map((renderDatum) => (
-            <GameDisplayComponent render={renderDatum} layerHint="background" />
-          ))}
-        </GameChallengeGrid>
-      ),
-      foregroundLayer: (
-        <GameChallengeGrid>
-          {renderData.map((renderDatum) => (
-            <GameDisplayComponent render={renderDatum} layerHint="foreground" />
-          ))}
-        </GameChallengeGrid>
-      ),
+      inheritedBackgroundLayer: inheritedBackgroundLayer,
+      inheritedBackgroundStyle: inheritedBackgroundStyle,
+      backgroundLayer: backgroundLayer,
+      foregroundLayer: foregroundLayer,
     });
-  }, [gameState, resources]);
+  }, [gameState, resources, setGameState]);
 
   const handleElementClick = (layerId: string, elementId: string) => {
     console.info(`Element ${elementId} on layer ${layerId} clicked.`);
@@ -55,6 +105,7 @@ export default function Game() {
   return (
     <>
       <div
+        id="game-container"
         style={{
           position: "absolute",
           top: "5px",
@@ -67,8 +118,9 @@ export default function Game() {
       >
         <GameLayersLayout
           debug={debug}
+          inheritedBackgroundLayer={layers.inheritedBackgroundLayer}
+          inheritedBackgroundStyle={layers.inheritedBackgroundStyle}
           backgroundLayer={layers.backgroundLayer}
-          backgroundStyle={layers.backgroundStyle}
           foregroundLayer={layers.foregroundLayer}
           cameraLayer={gameState.gameData.modules?.camera}
           onElementClick={handleElementClick}

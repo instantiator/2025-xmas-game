@@ -7,6 +7,8 @@ export const DEFAULT_GAME_CHALLENGE_SOLUTION_PROPS: Partial<GameChallengeSolutio
 
 export type GameChallengeAnswer = string;
 
+export type GameChallengeAnswerValidation = string;
+
 /**
  * Information about how to respond to a user's game challenge answer
  */

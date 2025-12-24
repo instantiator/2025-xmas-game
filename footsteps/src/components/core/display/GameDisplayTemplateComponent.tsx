@@ -1,14 +1,22 @@
 import Mustache from "mustache";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, type PropsWithChildren } from "react";
 import MustacheTemplate from "react-mustache-template-component";
-import type { GameDisplayTemplate as GameDisplayTemplateData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
+import type { GameDisplayTemplateSourceData as GameDisplayTemplateData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
+import type { GameChallengeId } from "../../../entities/data/GameChallengeData";
+import type { GameChallengeSolution } from "../../../entities/data/GameChallengeSolution";
+import type { GameStageId } from "../../../entities/data/GameStageData";
 import useContentCache from "../../../providers/GameContentCacheHook";
 import { isDefined } from "../../../util/ObjectUtils";
+import type { GameAnswerFunction } from "../Game";
 
-interface GameDisplayProps {
-  templateSource: GameDisplayTemplateData;
+interface GameDisplayTemplateProps {
+  templateSource: GameDisplayTemplateData | undefined;
   templateData: Record<string, any>;
   containerStyle?: React.CSSProperties;
+  stageId?: GameStageId; // TODO (currently unused)
+  challengeId?: GameChallengeId; // TODO (currently unused)
+  solution?: GameChallengeSolution; // TODO (currently unused)
+  onAnswer?: GameAnswerFunction; // TODO (currently unused)
 }
 
 const MUSTACHE_OPTIONS: Mustache.RenderOptions = {
@@ -19,7 +27,8 @@ export default function GameDisplayTemplateComponent({
   templateSource,
   templateData,
   containerStyle,
-}: GameDisplayProps) {
+  children,
+}: PropsWithChildren<GameDisplayTemplateProps>) {
   const [render, setRender] = useState<GameDisplayTemplateData | undefined>();
 
   const { getTemplate } = useContentCache();
@@ -37,9 +46,7 @@ export default function GameDisplayTemplateComponent({
 
   useEffect(() => {
     async function loadTemplate() {
-      console.debug("Loading template...", templateSource);
       const retrieved = await getTemplate(templateSource);
-      console.debug("Template loaded.");
       setRender(retrieved);
     }
     loadTemplate();
@@ -48,6 +55,7 @@ export default function GameDisplayTemplateComponent({
   return (
     <div key={`template-${uid}`} style={{ width: "100%", height: "100%", ...containerStyleParsed }}>
       {isDefined(render) && <MustacheTemplate template={render.content ?? ""} data={templateData} />}
+      {children}
     </div>
   );
 }

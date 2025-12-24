@@ -5,13 +5,13 @@ export type TemplateSourceType = "relative" | "url" | "embedded";
 
 export interface GameDisplayTemplateComponentData extends GameDisplayComponentBase {
   type: "template";
-  backgroundTemplate?: GameDisplayTemplate;
-  foregroundTemplate?: GameDisplayTemplate;
+  backgroundTemplate?: GameDisplayTemplateSourceData;
+  foregroundTemplate?: GameDisplayTemplateSourceData;
   backgroundStyle?: CSSProperties;
   foregroundStyle?: CSSProperties;
 }
 
-export interface GameDisplayTemplate {
+export interface GameDisplayTemplateSourceData {
   sourceType: TemplateSourceType;
   templateSource?: string;
   content?: string;

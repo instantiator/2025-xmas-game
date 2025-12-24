@@ -1,11 +1,11 @@
 import type { GameDisplayScrollComponentData } from "./GameDisplayScrollComponentData";
 import type { GameDisplayTemplateComponentData } from "./GameDisplayTemplateComponentData";
 
-export type GameOverviewDisplayPurpose = "game-overview-title" | "game-overview-stages";
+export type GameOverviewDisplayPurpose = "game-overview-title" | "game-overview-stages" | "game-overview-complete";
 
 export type GameChallengeDisplayPurpose = "challenge-title" | "challenge-in-progress" | "challenge-completed";
 
-export type GameStageDisplayPurpose = "stage-overview";
+export type GameStageDisplayPurpose = "shared";
 
 export type GameDisplayComponentType = "template" | "scroll";
 
@@ -30,7 +30,6 @@ export interface GameOverviewDisplay extends GameDisplayBase {
 
 export interface GameStageDisplay extends GameDisplayBase {
   purpose: GameStageDisplayPurpose;
-  clickIdToChallengeId?: Record<string, string>;
 }
 
 export interface GameChallengeDisplay extends GameDisplayBase {

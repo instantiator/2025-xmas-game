@@ -13,6 +13,10 @@ export interface GameData {
   modules?: {
     camera?: CameraModuleData;
   };
+  config?: {
+    sequential: boolean;
+    autoAdvanceStages: boolean;
+  };
   gameContainerStyle: CSSProperties;
 }
 export interface GameResourceDefinitions {

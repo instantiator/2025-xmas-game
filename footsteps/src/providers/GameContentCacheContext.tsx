@@ -1,8 +1,8 @@
 import { createContext } from "react";
-import type { GameDisplayTemplate } from "../entities/data/displays/GameDisplayTemplateComponentData";
+import type { GameDisplayTemplateSourceData } from "../entities/data/displays/GameDisplayTemplateComponentData";
 
 export interface GameContentCache {
-  templates: GameDisplayTemplate[];
+  templates: GameDisplayTemplateSourceData[];
 }
 
 export const BLANK_CACHE: GameContentCache = {

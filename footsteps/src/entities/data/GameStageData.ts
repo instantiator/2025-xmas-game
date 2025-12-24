@@ -13,15 +13,8 @@ export interface GameStageData {
 
   /**
    * Display information for the stage. (Optional.)
-   * Defaults to undefined for overview, completed, and activeLayout.
    */
-  displays?: {
-    /** The overview for the stage (if not provided, the stage will show the first incomplete challenge) */
-    overview?: GameStageDisplay;
-
-    /** The completed view for the stage (if not provided, the game will return to the overview if all challenges are complete) */
-    completed?: GameStageDisplay;
-  };
+  displays?: GameStageDisplay[];
 
   /** If set, group challenges together in the active layout, otherwise assumes a chunking of 1 */
   challengeChunking?: number;

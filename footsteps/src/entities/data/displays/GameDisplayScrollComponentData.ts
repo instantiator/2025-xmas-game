@@ -1,10 +1,10 @@
 import type { GameDisplayComponentBase } from "./GameDisplayData";
-import type { GameDisplayTemplate } from "./GameDisplayTemplateComponentData";
+import type { GameDisplayTemplateSourceData } from "./GameDisplayTemplateComponentData";
 
 export interface GameDisplayScrollComponentData extends GameDisplayComponentBase {
   type: "scroll";
-  backgroundTemplate?: GameDisplayTemplate;
-  foregroundTemplate?: GameDisplayTemplate;
+  backgroundTemplate?: GameDisplayTemplateSourceData;
+  foregroundTemplate?: GameDisplayTemplateSourceData;
   backgroundStyle?: React.CSSProperties;
   foregroundStyle?: React.CSSProperties;
   text?: string;
