@@ -35,8 +35,20 @@ export default function HeadsUpDisplay() {
 
   return (
     <>
-      <div style={{ background: "#ffffff88", backdropFilter: "blur(5px)", padding: "10px" }}>
-        <button onClick={returnToTitle}>Title</button>
+      <div
+        style={{
+          background: "#ffffff22",
+          backdropFilter: "blur(4px)",
+          padding: "10px",
+          borderTopRightRadius: "10px",
+          display: "flex",
+          flexDirection: "row",
+          gap: "5px",
+        }}
+      >
+        <button style={{ margin: 0, padding: 5 }} onClick={returnToTitle}>
+          Title
+        </button>
         {showCloseChallengeButton && <button onClick={closeChallenge}>Close</button>}
       </div>
     </>
