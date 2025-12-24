@@ -17,6 +17,13 @@ export const getNewGameStateForClick = (state: GameState, layerId: string, targe
       if (isDefined(currentOverviewDisplay.clickIdToStageId)) {
         const stageId = currentOverviewDisplay.clickIdToStageId[targetId];
         if (isDefined(stageId)) {
+          const stageState = state.stages.find((stage) => stage.stage.id === stageId);
+          if (!isDefined(stageState)) {
+            throw new Error("Stage state not found for stage id: " + stageId);
+          }
+          if (stageState.completion === "completed" || stageState.availability === "locked") {
+            return undefined; // do not enter completed stages, or unavailable stages
+          }
           return {
             ...state,
             current: {

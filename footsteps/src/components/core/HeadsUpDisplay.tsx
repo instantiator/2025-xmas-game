@@ -12,6 +12,17 @@ export default function HeadsUpDisplay() {
     setShowCloseChallengeButton(gameMode === "stage");
   }, [gameState]);
 
+  const returnToTitle = () => {
+    setGameState({
+      ...gameState,
+      current: {
+        ...gameState.current,
+        overviewDisplay: "game-overview-title",
+        stageId: null,
+      },
+    });
+  };
+
   const closeChallenge = () => {
     setGameState({
       ...gameState,
@@ -23,8 +34,11 @@ export default function HeadsUpDisplay() {
   };
 
   return (
-    <div style={{ background: "#ffffff88", backdropFilter: "blur(5px)", padding: "10px" }}>
-      {showCloseChallengeButton && <button onClick={closeChallenge}>Close</button>}
-    </div>
+    <>
+      <div style={{ background: "#ffffff88", backdropFilter: "blur(5px)", padding: "10px" }}>
+        <button onClick={returnToTitle}>Title</button>
+        {showCloseChallengeButton && <button onClick={closeChallenge}>Close</button>}
+      </div>
+    </>
   );
 }

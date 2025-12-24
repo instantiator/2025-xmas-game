@@ -129,6 +129,14 @@ export function completeChallenge(gameState: GameState, stageId: GameStageId, ch
     ),
   };
 
+  const nextStageId = getNextStageId(gameState, stageId);
+  const updatedNextStageState: GameStageState | undefined = isDefined(nextStageId)
+    ? {
+        ...getStageState(gameState, nextStageId)!,
+        availability: "unlocked",
+      }
+    : undefined;
+
   // Determine if all stages are complete.
   const allStagesComplete = gameState.stages.every((s) =>
     s.stage.id === stageId ? allStageChallengesComplete : s.completion === "completed",
@@ -150,7 +158,7 @@ export function completeChallenge(gameState: GameState, stageId: GameStageId, ch
   const newCurrentStageId = allStageChallengesComplete
     ? gameStagesDisplayDefined
       ? null // return to the stage overview if one exists
-      : getNextStageId(gameState, stageId) // advance to the next stage if no overview
+      : nextStageId // advance to the next stage if no overview
     : gameState.current.stageId;
 
   // Determine the new overview display.
@@ -166,7 +174,13 @@ export function completeChallenge(gameState: GameState, stageId: GameStageId, ch
 
   const newState: GameState = {
     ...gameState,
-    stages: gameState.stages.map((s) => (s.stage.id === stageId ? updatedStageState : s)),
+    stages: gameState.stages.map((s) =>
+      s.stage.id === stageId
+        ? updatedStageState
+        : isDefined(nextStageId) && isDefined(updatedNextStageState) && s.stage.id === nextStageId
+          ? updatedNextStageState
+          : s,
+    ),
     current: {
       ...gameState.current,
       stageId: newCurrentStageId,

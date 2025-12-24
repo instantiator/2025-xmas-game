@@ -52,11 +52,8 @@ export default function Game() {
       }
 
       // complete the challenge and update the game state
-      const changes = completeChallenge(gameState, stageId, challengeId);
-      setGameState((prevState) => ({
-        ...prevState,
-        ...changes,
-      }));
+      const newGameState = completeChallenge(gameState, stageId, challengeId);
+      setGameState(newGameState);
 
       return true;
     };
