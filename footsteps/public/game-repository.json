@@ -147,10 +147,17 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "label": "What's the answer?",
-                    "text": "This is the first prompt.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "text": "This is the first prompt.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus."
+                      },
+                      {
+                        "text": "Part 2 - some more text and questions and such",
+                        "showInput": true,
+                        "label": "What's the answer?"
+                      }
+                    ]
                   }
                 }
               ],
@@ -171,16 +178,20 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the second prompt.",
-                    "label": "What do you hear?",
-                    "media": {
-                      "type": "audio",
-                      "resource": "bells",
-                      "stillImageResource": "tape-still",
-                      "motionImageResource": "tape-motion"
-                    },
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the second prompt.",
+                        "label": "What do you hear?",
+                        "media": {
+                          "type": "audio",
+                          "resource": "bells",
+                          "stillImageResource": "tape-still",
+                          "motionImageResource": "tape-motion"
+                        }
+                      }
+                    ]
                   }
                 }
               ],
@@ -202,9 +213,13 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the third prompt.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the third prompt."
+                      }
+                    ]
                   }
                 }
               ],
@@ -220,9 +235,13 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the fourth prompt.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the fourth prompt."
+                      }
+                    ]
                   }
                 }
               ],
@@ -243,9 +262,13 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the fifth prompt.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the fifth prompt."
+                      }
+                    ]
                   }
                 }
               ],
@@ -266,9 +289,13 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the sixth prompt.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the sixth prompt."
+                      }
+                    ]
                   }
                 }
               ],
@@ -289,9 +316,13 @@
                   "purpose": "challenge-in-progress",
                   "component": {
                     "type": "scroll",
-                    "showInput": true,
-                    "text": "This is the seventh prompt.",
-                    "data": {}
+                    "data": {},
+                    "contents": [
+                      {
+                        "showInput": true,
+                        "text": "This is the seventh prompt."
+                      }
+                    ]
                   }
                 }
               ],

@@ -1,8 +1,13 @@
 // import { useReward } from "partycles";
+import ArrowCircleLeftTwoToneIcon from "@mui/icons-material/ArrowCircleLeftTwoTone";
+import ArrowCircleRightTwoToneIcon from "@mui/icons-material/ArrowCircleRightTwoTone";
 import { useEffect, useState, type CSSProperties } from "react";
 import metadata from "../../../assets/resources/assets-metadata.json";
 import oldPaperImage from "../../../assets/resources/old-paper.png";
-import type { GameDisplayScrollComponentData } from "../../../entities/data/displays/GameDisplayScrollComponentData";
+import type {
+  GameDisplayScrollComponentData,
+  GameDisplayScrollComponentDataContent,
+} from "../../../entities/data/displays/GameDisplayScrollComponentData";
 import type { GameDisplayTemplateSourceData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
 import type { GameChallengeId } from "../../../entities/data/GameChallengeData";
 import type { GameChallengeSolution } from "../../../entities/data/GameChallengeSolution";
@@ -47,6 +52,24 @@ export default function GameDisplayScrollComponent({
   const [template, setTemplate] = useState<GameDisplayTemplateSourceData | undefined>(undefined);
   const [templateContainerStyle, setTemplateContainerStyle] = useState<React.CSSProperties>({});
 
+  const [contentIndex, setContentIndex] = useState<number>(0);
+  const [content, setContent] = useState<GameDisplayScrollComponentDataContent | undefined>(undefined);
+
+  useEffect(() => {
+    setContent(scrollData.contents[contentIndex]);
+  }, [scrollData.contents, contentIndex]);
+
+  const onAdvanceClick = () => {
+    if (contentIndex < scrollData.contents.length - 1) {
+      setContentIndex(contentIndex + 1);
+    }
+  };
+  const onRetreatClick = () => {
+    if (contentIndex > 0) {
+      setContentIndex(contentIndex - 1);
+    }
+  };
+
   useEffect(() => {
     setTemplate(
       templateSource ??
@@ -64,20 +87,23 @@ export default function GameDisplayScrollComponent({
     setTemplateContainerStyle(
       layerHint === "foreground"
         ? {
-            width: "auto",
-            height: "auto",
-            maxWidth: "100%",
-            maxHeight: "100%",
             aspectRatio: paperAspectRatio,
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "start",
             alignItems: "center",
-            paddingLeft: "5%",
-            paddingRight: "5%",
+            width: "auto",
+            height: "80%",
+            overflowY: "auto",
+            marginTop: "18vh",
+            marginBottom: "5vh",
+            maskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
+            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
             ...containerStyle,
           }
         : {
+            width: "100%",
+            height: "100%",
             backgroundImage: `url(${oldPaperImage})`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
@@ -88,6 +114,10 @@ export default function GameDisplayScrollComponent({
     );
   }, [templateSource, layerHint, paperAspectRatio, containerStyle]);
 
+  const showAdvance = contentIndex < scrollData.contents.length - 1;
+  const showRetreat = contentIndex > 0;
+  const showButtons = showAdvance || showRetreat;
+
   return (
     <>
       {template && (
@@ -97,35 +127,68 @@ export default function GameDisplayScrollComponent({
             height: "100%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "start",
             alignItems: "center",
           }}
         >
           <GameDisplayTemplateComponent
             templateSource={template}
-            containerStyle={templateContainerStyle}
-            templateStyle={templateStyle}
-            templateData={{ text: scrollData.text, lines: parseLines(scrollData.text), ...templateData }}
+            containerStyle={{ ...templateContainerStyle }}
+            templateStyle={{ ...templateStyle }}
+            templateData={{ text: content?.text, lines: parseLines(content?.text), ...templateData }}
             solution={solution}
             onAnswer={onAnswer}
           >
-            {layerHint === "foreground" && scrollData.media?.type === "audio" && (
-              <GameAudioComponent
-                audioStyle={{ margin: "10px", opacity: 0.25 }}
-                media={scrollData.media}
-                controls={true}
-              />
-            )}
+            {layerHint === "foreground" && (
+              <>
+                {content?.media?.type === "audio" && (
+                  <GameAudioComponent
+                    audioStyle={{ margin: "10px", opacity: 0.25 }}
+                    media={content?.media}
+                    controls={true}
+                  />
+                )}
 
-            {layerHint === "foreground" && scrollData.showInput && (
-              <GameTextInputComponent
-                stageId={stageId}
-                challengeId={challengeId}
-                solved={solved}
-                setSolved={setSolved}
-                autoSubmit={true}
-                onAnswer={onAnswer}
-              />
+                {content?.showInput && (
+                  <GameTextInputComponent
+                    stageId={stageId}
+                    challengeId={challengeId}
+                    solved={solved}
+                    setSolved={setSolved}
+                    autoSubmit={true}
+                    onAnswer={onAnswer}
+                  />
+                )}
+
+                {showButtons && (
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: "5%",
+                      marginBottom: "10%",
+                      paddingLeft: "2%",
+                      paddingRight: "2%",
+                    }}
+                  >
+                    {showRetreat && (
+                      <span onClick={onRetreatClick} style={{ cursor: "pointer" }}>
+                        <ArrowCircleLeftTwoToneIcon style={{ fontSize: "3em" }} />
+                      </span>
+                    )}
+                    {!showRetreat && <div style={{ width: "3em" }}></div>}
+                    {showAdvance && (
+                      <span onClick={onAdvanceClick} style={{ cursor: "pointer" }}>
+                        <ArrowCircleRightTwoToneIcon style={{ fontSize: "3em" }} />
+                      </span>
+                    )}
+                    {!showAdvance && <div style={{ width: "3em" }}></div>}
+                  </div>
+                )}
+              </>
             )}
           </GameDisplayTemplateComponent>
         </div>

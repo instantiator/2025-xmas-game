@@ -47,7 +47,7 @@ export default function HeadsUpDisplay() {
           gap: "5px",
         }}
       >
-        <button style={{ margin: 0, padding: 5 }} onClick={returnToTitle}>
+        <button style={{ margin: 0, padding: 5, fontSize: "0.75em" }} onClick={returnToTitle}>
           Title
         </button>
         {showCloseChallengeButton && (

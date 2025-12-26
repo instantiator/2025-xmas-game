@@ -168,6 +168,9 @@
         },
         "GameDisplayMediaData": {
             "properties": {
+                "audioDescription": {
+                    "type": "string"
+                },
                 "motionImageResource": {
                     "type": "string"
                 },
@@ -199,6 +202,12 @@
                 "backgroundTemplateStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
                 },
+                "contents": {
+                    "items": {
+                        "$ref": "#/definitions/GameDisplayScrollComponentDataContent"
+                    },
+                    "type": "array"
+                },
                 "data": {
                     "$ref": "#/definitions/Record%3Cstring%2Cunknown%3E"
                 },
@@ -211,6 +220,20 @@
                 "foregroundTemplateStyle": {
                     "$ref": "#/definitions/React.CSSProperties"
                 },
+                "type": {
+                    "const": "scroll",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contents",
+                "data",
+                "type"
+            ],
+            "type": "object"
+        },
+        "GameDisplayScrollComponentDataContent": {
+            "properties": {
                 "hint": {
                     "type": "string"
                 },
@@ -225,16 +248,8 @@
                 },
                 "text": {
                     "type": "string"
-                },
-                "type": {
-                    "const": "scroll",
-                    "type": "string"
                 }
             },
-            "required": [
-                "data",
-                "type"
-            ],
             "type": "object"
         },
         "GameDisplayTemplateComponentData": {
