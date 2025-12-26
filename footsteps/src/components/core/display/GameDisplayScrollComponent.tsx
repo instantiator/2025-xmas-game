@@ -73,8 +73,8 @@ export default function GameDisplayScrollComponent({
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            paddingLeft: "60px",
-            paddingRight: "50px",
+            paddingLeft: "5%",
+            paddingRight: "5%",
             ...containerStyle,
           }
         : {
