@@ -52,7 +52,9 @@
         "blank-river": { "type": "local", "target": "games/magic-trifle/overview/blank-river.png" },
         "stepping-stone": { "type": "local", "target": "games/magic-trifle/overview/stepping-stone.png" },
         "star": { "type": "local", "target": "games/magic-trifle/overview/star-2.gif" },
-        "bells": { "type": "local", "target": "games/magic-trifle/bells.mp3" }
+        "bells": { "type": "local", "target": "games/magic-trifle/bells.mp3" },
+        "tape-still": { "type": "local", "target": "games/magic-trifle/tape-still.png" },
+        "tape-motion": { "type": "local", "target": "games/magic-trifle/tape-motion.gif" }
       },
       "displays": [
         {

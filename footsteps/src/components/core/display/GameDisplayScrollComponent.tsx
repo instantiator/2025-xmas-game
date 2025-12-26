@@ -130,10 +130,12 @@ export default function GameDisplayScrollComponent({
             onAnswer={onAnswer}
           >
             {layerHint === "foreground" && isDefined(scrollData.media) && scrollData.media.type === "audio" && (
-              <audio key={`audio-${scrollData.media.resource}`} controls style={{ margin: "20px" }}>
-                <source src={resources[scrollData.media.resource]} />
-                Your browser does not support the audio element.
-              </audio>
+              <>
+                <audio key={`audio-${scrollData.media.resource}`} controls style={{ margin: "20px" }}>
+                  <source src={resources[scrollData.media.resource]} />
+                  Your browser does not support the audio element.
+                </audio>
+              </>
             )}
 
             {layerHint === "foreground" && scrollData.showInput && (
