@@ -33,19 +33,26 @@ export default function GameDisplayTemplateComponent({
   children,
 }: PropsWithChildren<GameDisplayTemplateProps>) {
   const [render, setRender] = useState<GameDisplayTemplateData | undefined>();
+  const [containerStyleParsed, setContainerStyleParsed] = useState<React.CSSProperties>({});
 
   const { getTemplate } = useContentCache();
 
   const uid = useId();
 
-  const containerStyleParsed = isDefined(containerStyle)
-    ? Object.fromEntries(
-        Object.entries(containerStyle).map(([key, value]) => [
-          key,
-          Mustache.render(value, templateData, undefined, MUSTACHE_OPTIONS),
-        ]),
-      )
-    : undefined;
+  console.debug("Rendering GameDisplayTemplateComponent");
+
+  useEffect(() => {
+    setContainerStyleParsed(
+      isDefined(containerStyle)
+        ? Object.fromEntries(
+            Object.entries(containerStyle).map(([key, value]) => [
+              key,
+              Mustache.render(value, templateData, undefined, MUSTACHE_OPTIONS),
+            ]),
+          )
+        : {},
+    );
+  }, [containerStyle, templateData]);
 
   useEffect(() => {
     async function loadTemplate() {

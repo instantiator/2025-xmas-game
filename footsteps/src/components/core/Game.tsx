@@ -1,4 +1,9 @@
+import { useReward } from "partycles";
 import { useEffect, useState } from "react";
+import music1 from "../../assets/resources/music-1.mp3";
+import music2 from "../../assets/resources/music-2.mp3";
+import winSound from "../../assets/resources/win-sound.mp3";
+import type { GameOverviewDisplayPurpose } from "../../entities/data/displays/GameDisplayData";
 import type { GameChallengeId } from "../../entities/data/GameChallengeData";
 import type { GameChallengeAnswerValidation } from "../../entities/data/GameChallengeSolution";
 import type { GameStageId } from "../../entities/data/GameStageData";
@@ -12,7 +17,7 @@ import GameLayersLayout, { type GameLayers } from "./layout/GameLayersLayout";
 import { getNewGameStateForClick } from "./logic/GameClickUtils";
 import { findChallengeState } from "./logic/GameDataUtils";
 import { completeChallenge, validateAnswer } from "./logic/GameStateUtils";
-import { getLayeredRenderData, type GameDisplayRenderData } from "./logic/RenderDataUtils";
+import { calcOverviewDisplay, getLayeredRenderData, type GameDisplayRenderData } from "./logic/RenderDataUtils";
 
 export type GameAnswerFunction = (
   stageId: GameStageId,
@@ -23,13 +28,58 @@ export type GameAnswerFunction = (
 export default function Game() {
   const { debug } = useFeatureFlags();
   const { resources } = useGameData();
-  const { gameState, setGameState } = useGameState();
 
+  // rendering
   const [layers, setLayers] = useState<GameLayers>({});
+
+  // tracking
+  const { gameState, setGameState } = useGameState();
+  const [completedStagesTracker, setCompletedStagesTracker] = useState<GameStageId[]>([]);
+  const [overviewDisplayPurposeTracker, setOverviewDisplayPurposeTracker] = useState<
+    GameOverviewDisplayPurpose | undefined
+  >();
+
+  // animation and sound
+  const { reward } = useReward("reward-element", "fireworks", {
+    particleCount: 200,
+  });
+
+  const playAudio = async (res: string) => {
+    try {
+      const audio = new Audio(res);
+      await audio.play();
+    } catch (err: any) {
+      console.error("Error playing audio:", err);
+    }
+  };
 
   useEffect(() => {
     console.debug(gameState);
-  }, [gameState]);
+
+    const newCompletedStages = gameState.stages
+      .filter((stageState) => stageState.completion === "completed")
+      .map((stageState) => stageState.stage.id);
+
+    if (newCompletedStages.some((stageId) => !completedStagesTracker.includes(stageId))) {
+      reward();
+      playAudio(winSound);
+      setCompletedStagesTracker(newCompletedStages);
+    }
+  }, [gameState, completedStagesTracker, reward]);
+
+  useEffect(() => {
+    const currentOverviewDisplay = calcOverviewDisplay(gameState);
+    if (currentOverviewDisplay?.purpose !== overviewDisplayPurposeTracker) {
+      setOverviewDisplayPurposeTracker(currentOverviewDisplay?.purpose);
+      // TODO: do this with a real resource
+      if (currentOverviewDisplay?.purpose === "game-overview-stages") {
+        playAudio(music1);
+      }
+      if (currentOverviewDisplay?.purpose === "game-overview-complete") {
+        playAudio(music2);
+      }
+    }
+  }, [gameState, overviewDisplayPurposeTracker]);
 
   // Set the display layers whenever the game state changes
   useEffect(() => {
@@ -111,6 +161,10 @@ export default function Game() {
           ...gameState.gameData.gameContainerStyle,
         }}
       >
+        <div
+          id="reward-element"
+          style={{ position: "absolute", top: "50vh", left: "50vw", width: 0, height: 0, pointerEvents: "none" }}
+        />
         <GameLayersLayout
           debug={debug}
           gameLayers={layers}

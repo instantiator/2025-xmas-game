@@ -59,6 +59,9 @@ export default function GameDisplayScrollComponent({
       if (!isDefined(onAnswer)) {
         throw new Error("No onAnswer handler defined.");
       }
+      if (solved) {
+        return;
+      }
       if (!isDefined(stageId) || !isDefined(challengeId)) {
         throw new Error(`Stage id (${stageId}) and challenge id (${challengeId}) must be defined to submit an answer.`);
       }
@@ -69,7 +72,7 @@ export default function GameDisplayScrollComponent({
       //   reward();
       // }
     },
-    [onAnswer, stageId, challengeId],
+    [onAnswer, stageId, challengeId, solved],
   );
 
   useEffect(() => {
@@ -129,13 +132,6 @@ export default function GameDisplayScrollComponent({
   const [mediaPlaying, setMediaPlaying] = useState(false);
   const handlePlay = () => setMediaPlaying(true);
   const handlePause = () => setMediaPlaying(false);
-
-  // reward
-  // useEffect(() => {
-  //   if (solved) {
-  //     reward();
-  //   }
-  // }, [solved, reward]);
 
   return (
     <>
