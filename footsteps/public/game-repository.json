@@ -24,7 +24,8 @@
         "tape-motion": { "type": "local", "target": "games/magic-trifle/tape-motion.gif" },
         "end-music": { "type": "local", "target": "games/magic-trifle/arrival-of-a-princess.mp3" },
         "end-magic-still": { "type": "local", "target": "games/magic-trifle/magic-explosion-2.webp" },
-        "end-magic-motion": { "type": "local", "target": "games/magic-trifle/magic-explosion-2.webp" }
+        "end-magic-motion": { "type": "local", "target": "games/magic-trifle/magic-explosion-2.webp" },
+        "piano-keyboard-key": { "type": "local", "target": "games/magic-trifle/piano-keyboard-key.png" }
       },
       "displays": [
         {
@@ -152,7 +153,7 @@
                     "data": {},
                     "contents": [
                       {
-                        "text": "Split into teams with a leader to turn to!\nAvery's team one, and Eden's team two\nSo Ernie's team three\nwith the twins, you see!\nFollow directions, and stick to the plan\nFind the cross, spot the scroll, and come back as fast as you can!"
+                        "text": "Split into teams with a leader to turn to!\nAvery's team one, and Eden's team two\nSo Ernie's team three\nwith the twins, you see!\nFollow directions, and stick to the plan\nFind the cross, spot the scroll, and come back as fast as you can!\nNow go to your room!"
                       },
                       {
                         "text": "Bring back to base whatever you find\nCount them up, find the sum,\nthen the puzzle's half-done!\nLook for a poster to give you a key,\nand transform your numbers into A-B-Cs"
@@ -250,8 +251,8 @@
                         "media": {
                           "type": "audio",
                           "resource": "bells",
-                          "stillImageResource": "tape-still",
-                          "motionImageResource": "tape-motion"
+                          "stillImageResource": "piano-keyboard-key",
+                          "motionImageResource": "piano-keyboard-key"
                         }
                       }
                     ]
@@ -313,7 +314,7 @@
                         "text": "Auntie Laura's got a secret cipher\nTo help unlock the box beside her..."
                       },
                       {
-                        "text": "Three symbols will open the locks\nSo you can get at what's in the box!\nEden, Avery, Ernest are a winning combination\nor Vicki, Morgan, and Harriet...\nor Ashley, Nanny, Rich...\nIt's not just my imagination!\n(☂️ = 8)",
+                        "text": "Three symbols will open the locks\nSo you can get at what's in the box!\nEden, Avery, Ernest are a winning combination\nor Vicki, Morgan, Harriet...\nor Ashley, Nanny, Rich...\nIt's not just my imagination!\n(☂️ = 8)",
                         "showInput": true,
                         "label": "What's in the box?"
                       }
