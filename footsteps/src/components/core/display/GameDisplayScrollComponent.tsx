@@ -1,22 +1,18 @@
 // import { useReward } from "partycles";
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import metadata from "../../../assets/resources/assets-metadata.json";
 import oldPaperImage from "../../../assets/resources/old-paper.png";
 import type { GameDisplayScrollComponentData } from "../../../entities/data/displays/GameDisplayScrollComponentData";
 import type { GameDisplayTemplateSourceData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
 import type { GameChallengeId } from "../../../entities/data/GameChallengeData";
-import type {
-  GameChallengeAnswer,
-  GameChallengeAnswerValidation,
-  GameChallengeSolution,
-} from "../../../entities/data/GameChallengeSolution";
+import type { GameChallengeSolution } from "../../../entities/data/GameChallengeSolution";
 import type { GameStageId } from "../../../entities/data/GameStageData";
-import { useGameData } from "../../../providers/GameDataHook";
-import { isDefined } from "../../../util/ObjectUtils";
 import type { GameAnswerFunction } from "../Game";
 import { parseLines } from "../logic/TemplateUtils";
+import GameAudioComponent from "./GameAudioComponent";
 import type { LayerHint } from "./GameDisplayComponent";
 import GameDisplayTemplateComponent from "./GameDisplayTemplateComponent";
+import GameTextInputComponent from "./GameTextInputComponent";
 
 interface GameDisplayScrollComponentProps {
   templateSource?: GameDisplayTemplateSourceData;
@@ -43,45 +39,10 @@ export default function GameDisplayScrollComponent({
   solution,
   onAnswer,
 }: GameDisplayScrollComponentProps) {
-  const { resources } = useGameData();
-
-  // const { reward } = useReward(`input-${stageId}-${challengeId}`, "confetti");
-
   const paperMetadataEntry = metadata.resources.find((entry) => entry.file === "old-paper.png");
   const paperAspectRatio = `${paperMetadataEntry?.width}/${paperMetadataEntry?.height}`;
 
-  const [input, setInput] = useState<string>("");
-  const [validations, setValidations] = useState<GameChallengeAnswerValidation[]>([]);
   const [solved, setSolved] = useState<boolean>(false);
-
-  const submitAnswer = useCallback(
-    (answer: GameChallengeAnswer) => {
-      if (!isDefined(onAnswer)) {
-        throw new Error("No onAnswer handler defined.");
-      }
-      if (solved) {
-        return;
-      }
-      if (!isDefined(stageId) || !isDefined(challengeId)) {
-        throw new Error(`Stage id (${stageId}) and challenge id (${challengeId}) must be defined to submit an answer.`);
-      }
-      const validation = onAnswer(stageId, challengeId, answer);
-      setSolved(validation === true);
-      setValidations(validation === true ? [] : validation);
-      // if (validation === true) {
-      //   reward();
-      // }
-    },
-    [onAnswer, stageId, challengeId, solved],
-  );
-
-  useEffect(() => {
-    if (isDefined(onAnswer)) {
-      if (solution?.autoAccept ?? true) {
-        submitAnswer(input);
-      }
-    }
-  }, [input, solution, onAnswer, challengeId, stageId, submitAnswer]);
 
   const [template, setTemplate] = useState<GameDisplayTemplateSourceData | undefined>(undefined);
   const [templateContainerStyle, setTemplateContainerStyle] = useState<React.CSSProperties>({});
@@ -127,12 +88,6 @@ export default function GameDisplayScrollComponent({
     );
   }, [templateSource, layerHint, paperAspectRatio, containerStyle]);
 
-  // media handling
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [mediaPlaying, setMediaPlaying] = useState(false);
-  const handlePlay = () => setMediaPlaying(true);
-  const handlePause = () => setMediaPlaying(false);
-
   return (
     <>
       {template && (
@@ -154,86 +109,23 @@ export default function GameDisplayScrollComponent({
             solution={solution}
             onAnswer={onAnswer}
           >
-            {layerHint === "foreground" && isDefined(scrollData.media) && scrollData.media.type === "audio" && (
-              <>
-                {!mediaPlaying && isDefined(scrollData.media.stillImageResource) && (
-                  <img
-                    src={resources[scrollData.media.stillImageResource]}
-                    alt="Audio not playing"
-                    style={{
-                      height: "15vh",
-                      margin: "10px",
-                      animation: "floatAndZoom 3s ease-in-out infinite alternate",
-                      filter: "drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))",
-                    }}
-                    onClick={() => {
-                      if (isDefined(audioRef.current)) {
-                        audioRef.current.play();
-                      }
-                    }}
-                  />
-                )}
-                {mediaPlaying && isDefined(scrollData.media.motionImageResource) && (
-                  <img
-                    src={resources[scrollData.media.motionImageResource]}
-                    alt="Audio playing"
-                    style={{
-                      height: "15vh",
-                      margin: "10px",
-                      animation: "floatAndZoom 3s ease-in-out infinite alternate",
-                      filter: "drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))",
-                    }}
-                    onClick={() => {
-                      if (isDefined(audioRef.current)) {
-                        audioRef.current.pause();
-                        audioRef.current.currentTime = 0;
-                      }
-                    }}
-                  />
-                )}
-                <audio
-                  ref={audioRef}
-                  key={`audio-${scrollData.media.resource}`}
-                  controls
-                  style={{ margin: "10px", opacity: 0.25 }}
-                  onPlay={handlePlay}
-                  onPause={handlePause}
-                  onEnded={handlePause}
-                >
-                  <source src={resources[scrollData.media.resource]} />
-                  Your browser does not support the audio element.
-                </audio>
-              </>
+            {layerHint === "foreground" && scrollData.media?.type === "audio" && (
+              <GameAudioComponent
+                audioStyle={{ margin: "10px", opacity: 0.25 }}
+                media={scrollData.media}
+                controls={true}
+              />
             )}
 
             {layerHint === "foreground" && scrollData.showInput && (
-              <>
-                <div style={{ marginTop: "10px", textAlign: "center" }}>
-                  {/* {solved && <Sparkle />} */}
-                  {scrollData.label && <p>{scrollData.label}</p>}
-                  <input
-                    id={`input-${stageId}-${challengeId}`}
-                    type="text"
-                    disabled={solved}
-                    style={{
-                      width: "90%",
-                      textTransform: "uppercase",
-                      fontSize: "inherit",
-                      fontFamily: "inherit",
-                    }}
-                    onChange={(e) => {
-                      setInput(e.target.value);
-                    }}
-                  />
-                </div>
-                {validations.length > 0 && (
-                  <ul style={{ color: "red" }}>
-                    {validations.map((v, i) => (
-                      <li key={`validation-${i}`}>{v}</li>
-                    ))}
-                  </ul>
-                )}
-              </>
+              <GameTextInputComponent
+                stageId={stageId}
+                challengeId={challengeId}
+                solved={solved}
+                setSolved={setSolved}
+                autoSubmit={true}
+                onAnswer={onAnswer}
+              />
             )}
           </GameDisplayTemplateComponent>
         </div>

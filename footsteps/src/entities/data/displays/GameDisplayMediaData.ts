@@ -3,4 +3,5 @@ export interface GameDisplayMediaData {
   resource: string;
   stillImageResource?: string;
   motionImageResource?: string;
+  audioDescription?: string;
 }

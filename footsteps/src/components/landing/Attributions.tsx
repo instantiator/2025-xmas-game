@@ -19,6 +19,28 @@ export default function Attributions() {
         <li>
           Bubble text created with <a href="https://www.textstudio.com/">Font generator</a>
         </li>
+        <li>
+          Musical tracks
+          <ul>
+            <li>
+              <a href="https://uppbeat.io/track/paul-yudin/magical-christmas">Magical Christmas</a> by{" "}
+              <a href="https://uppbeat.io/browse/artist/paul-yudin">Paul Yudin</a>
+            </li>
+            <li>
+              <a href="https://uppbeat.io/track/simon-folwar/elves-workshop">Elves Workshop</a> by{" "}
+              <a href="https://uppbeat.io/browse/artist/simon-folwar">Simon Folwar</a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          Sound effects
+          <ul>
+            <li>
+              <a href="https://freesound.org/s/813273/">Magic Sound Effect</a> by AnnaBaX01Q (Creative Commons 0
+              license)
+            </li>
+          </ul>
+        </li>
       </ul>
     </>
   );

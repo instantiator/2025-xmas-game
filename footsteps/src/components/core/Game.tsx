@@ -1,14 +1,17 @@
+import _ from "lodash";
 import { useReward } from "partycles";
-import { useEffect, useState } from "react";
-import music1 from "../../assets/resources/music-1.mp3";
-import music2 from "../../assets/resources/music-2.mp3";
-import winSound from "../../assets/resources/win-sound.mp3";
+import { useCallback, useEffect, useState } from "react";
+import sfxMagicalEvent from "../../assets/resources/magical-event.m4a";
+import musicOpening from "../../assets/resources/music-1.mp3";
+import musicClosing from "../../assets/resources/music-2.mp3";
+import sfxSuccess from "../../assets/resources/win-sound.mp3";
 import type { GameOverviewDisplayPurpose } from "../../entities/data/displays/GameDisplayData";
 import type { GameChallengeId } from "../../entities/data/GameChallengeData";
 import type { GameChallengeAnswerValidation } from "../../entities/data/GameChallengeSolution";
 import type { GameStageId } from "../../entities/data/GameStageData";
 import useFeatureFlags from "../../providers/FeatureFlagsHook";
 import { useGameData } from "../../providers/GameDataHook";
+import useGameMusic from "../../providers/GameMusicHook";
 import { useGameState } from "../../providers/GameStateHook";
 import { isDefined } from "../../util/ObjectUtils";
 import GameDisplayComponent, { type LayerHint } from "./display/GameDisplayComponent";
@@ -17,7 +20,8 @@ import GameLayersLayout, { type GameLayers } from "./layout/GameLayersLayout";
 import { getNewGameStateForClick } from "./logic/GameClickUtils";
 import { findChallengeState } from "./logic/GameDataUtils";
 import { completeChallenge, validateAnswer } from "./logic/GameStateUtils";
-import { calcOverviewDisplay, getLayeredRenderData, type GameDisplayRenderData } from "./logic/RenderDataUtils";
+import { getLayeredRenderData, type GameDisplayRenderData } from "./logic/RenderDataUtils";
+import { playAudio } from "./sfx/AudioUtils";
 
 export type GameAnswerFunction = (
   stageId: GameStageId,
@@ -28,62 +32,71 @@ export type GameAnswerFunction = (
 export default function Game() {
   const { debug } = useFeatureFlags();
   const { resources } = useGameData();
+  const { playMusic } = useGameMusic();
 
   // rendering
   const [layers, setLayers] = useState<GameLayers>({});
 
   // tracking
   const { gameState, setGameState } = useGameState();
-  const [completedStagesTracker, setCompletedStagesTracker] = useState<GameStageId[]>([]);
-  const [overviewDisplayPurposeTracker, setOverviewDisplayPurposeTracker] = useState<
-    GameOverviewDisplayPurpose | undefined
-  >();
+  const [progressTracker, setProgressTracker] = useState<GameStageId[]>([]);
+  const [overviewTracker, setOverviewTracker] = useState<GameOverviewDisplayPurpose | null>(null);
+  const [stageIdTracker, setStageIdTracker] = useState<GameStageId | null>(null);
 
   // animation and sound
   const { reward } = useReward("reward-element", "fireworks", {
     particleCount: 200,
   });
 
-  const playAudio = async (res: string) => {
-    try {
-      const audio = new Audio(res);
-      await audio.play();
-    } catch (err: any) {
-      console.error("Error playing audio:", err);
-    }
-  };
-
+  /** Whenever the game state changes, check for and reward completed stages */
   useEffect(() => {
     console.debug(gameState);
-
-    const newCompletedStages = gameState.stages
-      .filter((stageState) => stageState.completion === "completed")
-      .map((stageState) => stageState.stage.id);
-
-    if (newCompletedStages.some((stageId) => !completedStagesTracker.includes(stageId))) {
+    const newProgress = gameState.stages.filter((s) => s.completion === "completed").map((s) => s.stage.id);
+    if (!_.isEqual(newProgress, progressTracker)) {
       reward();
-      playAudio(winSound);
-      setCompletedStagesTracker(newCompletedStages);
+      playAudio(sfxSuccess);
+      setProgressTracker(newProgress);
     }
-  }, [gameState, completedStagesTracker, reward]);
+  }, [gameState, reward, progressTracker]);
 
+  /** Play music when switching to the game-overview-stages, and game-overview-complete */
   useEffect(() => {
-    const currentOverviewDisplay = calcOverviewDisplay(gameState);
-    if (currentOverviewDisplay?.purpose !== overviewDisplayPurposeTracker) {
-      setOverviewDisplayPurposeTracker(currentOverviewDisplay?.purpose);
-      // TODO: do this with a real resource
-      if (currentOverviewDisplay?.purpose === "game-overview-stages") {
-        playAudio(music1);
+    // Play music on overview display change
+    if (gameState.current.overviewDisplay !== overviewTracker) {
+      if (gameState.current.overviewDisplay === "game-overview-stages") {
+        playMusic(musicOpening);
       }
-      if (currentOverviewDisplay?.purpose === "game-overview-complete") {
-        playAudio(music2);
+      if (gameState.current.overviewDisplay === "game-overview-complete") {
+        playMusic(musicClosing);
       }
+      setOverviewTracker(gameState.current.overviewDisplay);
     }
-  }, [gameState, overviewDisplayPurposeTracker]);
+  }, [gameState, overviewTracker, playMusic]);
 
-  // Set the display layers whenever the game state changes
+  /** Play a sound effect when switching stages */
   useEffect(() => {
-    const onAnswer: GameAnswerFunction = (stageId, challengeId, answer): GameChallengeAnswerValidation[] | true => {
+    if (gameState.current.stageId !== stageIdTracker) {
+      if (isDefined(gameState.current.stageId)) {
+        playAudio(sfxMagicalEvent);
+      }
+      setStageIdTracker(gameState.current.stageId);
+    }
+  }, [gameState, stageIdTracker]);
+
+  /**
+   * The callback function used when an answer is submitted (or tested) by a display component.
+   * Accepts the answer, and if correct, updates the game state to complete the challenge.
+   *
+   * @param stageId The ID of the stage containing the challenge being answered
+   * @param challengeId The ID of the challenge being answered
+   * @param answer The answer string being submitted
+   * @returns true if the answer is correct (ie. the challenge is completed), or an array of validations.
+   *
+   * NB. Not all incorrect answers result in validations.
+   * An empty array of validation also indicates an incorrect answer.
+   */
+  const onAnswer: GameAnswerFunction = useCallback(
+    (stageId, challengeId, answer): GameChallengeAnswerValidation[] | true => {
       const challengeState = findChallengeState(gameState, stageId, challengeId);
       if (challengeState.succeeded) {
         return true; // ignore further attempts to submit an answer to a succeeded challenge
@@ -101,8 +114,12 @@ export default function Game() {
       setGameState(newGameState);
 
       return true;
-    };
+    },
+    [gameState, setGameState],
+  );
 
+  /** Set the display layers whenever the game state changes */
+  useEffect(() => {
     const createDisplayComponents = (
       renderData: (GameDisplayRenderData | undefined)[] | undefined,
       layerHint: LayerHint,
@@ -133,7 +150,7 @@ export default function Game() {
         foregroundLayerNodes: createDisplayComponents(renderData.challengesRenderData, "foreground"),
       },
     });
-  }, [gameState, resources, setGameState]);
+  }, [gameState, onAnswer, resources, setGameState]);
 
   const handleElementClick = (layerId: string, elementId: string) => {
     console.info(`Element ${elementId} on layer ${layerId} clicked.`);
