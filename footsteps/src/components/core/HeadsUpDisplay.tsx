@@ -6,10 +6,12 @@ export default function HeadsUpDisplay() {
   const { gameState, setGameState } = useGameState();
 
   const [showCloseChallengeButton, setShowCloseChallengeButton] = useState<boolean>(false);
+  const [showTitleReturnButton, setShowTitleReturnButton] = useState<boolean>(false);
 
   useEffect(() => {
     const gameMode = getRenderMode(gameState);
     setShowCloseChallengeButton(gameMode === "stage");
+    setShowTitleReturnButton(gameState.current.overviewDisplay !== "game-overview-title");
   }, [gameState]);
 
   const returnToTitle = () => {
@@ -33,6 +35,8 @@ export default function HeadsUpDisplay() {
     });
   };
 
+  const showAny = showCloseChallengeButton || showTitleReturnButton;
+
   return (
     <>
       <div
@@ -40,19 +44,21 @@ export default function HeadsUpDisplay() {
           background: "#ffffff22",
           backdropFilter: "blur(4px)",
           padding: "10px",
-          borderTopRightRadius: "10px",
-          display: "flex",
+          borderBottomLeftRadius: "10px",
+          display: showAny ? "flex" : "none",
           flexDirection: "row",
           alignItems: "center",
           gap: "5px",
         }}
       >
-        <button style={{ margin: 0, padding: 5, fontSize: "0.75em" }} onClick={returnToTitle}>
-          Title
-        </button>
         {showCloseChallengeButton && (
-          <button style={{ margin: 0, padding: 5 }} onClick={closeChallenge}>
-            Close
+          <button style={{ margin: 0, padding: 5, fontSize: "0.75em" }} onClick={closeChallenge}>
+            Close challenge
+          </button>
+        )}
+        {showTitleReturnButton && (
+          <button style={{ margin: 0, padding: 5, fontSize: "0.75em" }} onClick={returnToTitle}>
+            To title
           </button>
         )}
       </div>
