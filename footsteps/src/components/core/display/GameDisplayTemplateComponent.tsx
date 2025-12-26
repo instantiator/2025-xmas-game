@@ -8,6 +8,7 @@ import type { GameStageId } from "../../../entities/data/GameStageData";
 import useContentCache from "../../../providers/GameContentCacheHook";
 import { isDefined } from "../../../util/ObjectUtils";
 import type { GameAnswerFunction } from "../Game";
+import { summariseTemplateSource } from "../logic/TemplateUtils";
 
 interface GameDisplayTemplateProps {
   templateSource: GameDisplayTemplateData | undefined;
@@ -55,7 +56,11 @@ export default function GameDisplayTemplateComponent({
   }, [templateSource, getTemplate]);
 
   return (
-    <div key={`template-${uid}`} style={{ width: "100%", height: "100%", ...containerStyleParsed }}>
+    <div
+      id={summariseTemplateSource(templateSource)}
+      key={`template-${uid}`}
+      style={{ width: "100%", height: "100%", ...containerStyleParsed }}
+    >
       {isDefined(render) && (
         <MustacheTemplate template={render.content ?? ""} data={templateData} style={templateStyle} />
       )}

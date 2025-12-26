@@ -73,16 +73,20 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
   }, [id, repository, repositorySource]);
 
   useEffect(() => {
-    setGameLoading({
-      loadingState: repository.ready
-        ? isDefined(repository.games[id])
-          ? isDefined(data)
-            ? "ready"
-            : "loading-assets"
-          : "not-found"
-        : "waiting-for-repository",
-    });
-  }, [repository, data, id]);
+    if (!repository.ready) {
+      setGameLoading({ loadingState: "waiting-for-repository" });
+    }
+    if (repository.ready && !isDefined(repository.games[id])) {
+      setData(undefined);
+      setGameLoading({ loadingState: "not-found" });
+    }
+    if (repository.ready && isDefined(repository.games[id]) && !isDefined(data)) {
+      setGameLoading({ loadingState: "loading-resources" });
+    }
+    if (repository.ready && isDefined(repository.games[id]) && isDefined(data)) {
+      setGameLoading({ loadingState: "ready" });
+    }
+  }, [repository, id, data]);
 
   useEffect(() => {
     console.info(`Game loading state: ${gameLoading.loadingState}`);

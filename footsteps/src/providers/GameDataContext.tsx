@@ -3,7 +3,7 @@ import type { GameData, GameId } from "../entities/data/GameData";
 
 export type GameDataLoadingState =
   | "waiting-for-repository"
-  | "loading-assets"
+  | "loading-resources"
   | "ready"
   | "not-found"
   | "resource-error";

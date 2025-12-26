@@ -1,7 +1,7 @@
 import type { GameOverviewDisplayPurpose } from "../../../entities/data/displays/GameDisplayData";
 import type { GameState } from "../../../entities/state/GameState";
 import { isDefined } from "../../../util/ObjectUtils";
-import { getOverviewDisplay } from "./RenderDataUtils";
+import { calcOverviewDisplay } from "./RenderDataUtils";
 
 export const GameOverviewPurposeSequence: GameOverviewDisplayPurpose[] = [
   "game-overview-title",
@@ -12,7 +12,7 @@ export const GameOverviewPurposeSequence: GameOverviewDisplayPurpose[] = [
 
 export const getNewGameStateForClick = (state: GameState, layerId: string, targetId: string): GameState | undefined => {
   if (!isDefined(state.current.stageId)) {
-    const currentOverviewDisplay = getOverviewDisplay(state);
+    const currentOverviewDisplay = calcOverviewDisplay(state);
     if (isDefined(currentOverviewDisplay)) {
       if (isDefined(currentOverviewDisplay.clickIdToStageId)) {
         const stageId = currentOverviewDisplay.clickIdToStageId[targetId];

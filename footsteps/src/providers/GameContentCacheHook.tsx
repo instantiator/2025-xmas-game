@@ -9,7 +9,7 @@ export default function useContentCache() {
   const { cache, setCache } = useContext(GameContentCacheContext);
 
   const getTemplate = async (
-    template?: GameDisplayTemplateSourceData,
+    template: GameDisplayTemplateSourceData | undefined,
   ): Promise<GameDisplayTemplateSourceData | undefined> => {
     if (!isDefined(template)) {
       return undefined;
@@ -43,7 +43,6 @@ export default function useContentCache() {
               sourceType: "url",
               templateSource: new URL(template.templateSource!, getBaseURL()).toString(),
             });
-
           case "RawRepository":
             throw "Raw repository does not support local template sources";
         }

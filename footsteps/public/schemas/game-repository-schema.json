@@ -166,6 +166,22 @@
                 }
             ]
         },
+        "GameDisplayMediaData": {
+            "properties": {
+                "resource": {
+                    "type": "string"
+                },
+                "type": {
+                    "const": "audio",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "resource",
+                "type"
+            ],
+            "type": "object"
+        },
         "GameDisplayScrollComponentData": {
             "properties": {
                 "backgroundStyle": {
@@ -194,6 +210,9 @@
                 },
                 "label": {
                     "type": "string"
+                },
+                "media": {
+                    "$ref": "#/definitions/GameDisplayMediaData"
                 },
                 "showInput": {
                     "type": "boolean"

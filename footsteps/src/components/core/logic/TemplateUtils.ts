@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+import type { GameDisplayTemplateSourceData } from "../../../entities/data/displays/GameDisplayTemplateComponentData";
 import type { GameStageState } from "../../../entities/state/GameStageState";
 import type { GameState } from "../../../entities/state/GameState";
 
@@ -26,3 +28,6 @@ export const decorateGameState = (gameState: GameState): DecoratedGameState => (
   })),
   totalStages: gameState.stages.length,
 });
+
+export const summariseTemplateSource = (source: GameDisplayTemplateSourceData | undefined) =>
+  `${source?.sourceType ?? "undefined"}:${source?.templateSource ?? `uid:${v4()}`}`;

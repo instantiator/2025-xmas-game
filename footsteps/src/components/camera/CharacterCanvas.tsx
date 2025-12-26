@@ -12,7 +12,8 @@ interface CharacterCanvasProps {
   mediaStream: MediaStream | undefined;
   offScreenThreshold_percent?: number;
   onFeetPositionsChange?: (feetPositions: FeetPositions) => void;
-  canvasStyle?: React.CSSProperties;
+  className?: string;
+  style?: React.CSSProperties;
   maskType?: "binary" | "colored" | "extremities";
 }
 
@@ -21,7 +22,8 @@ export default function CharacterCanvas({
   mediaStream,
   offScreenThreshold_percent,
   onFeetPositionsChange,
-  canvasStyle,
+  className,
+  style,
   maskType = "binary",
 }: CharacterCanvasProps) {
   const [net, setNet] = useState<BodySegNet | null>(null);
@@ -128,5 +130,5 @@ export default function CharacterCanvas({
     }
   }, [net, mediaStream, video, onFeetPositionsChange, offScreenThreshold_percent, maskType]);
 
-  return <canvas ref={canvasRef} style={canvasStyle} />;
+  return <canvas ref={canvasRef} className={className} style={style} />;
 }

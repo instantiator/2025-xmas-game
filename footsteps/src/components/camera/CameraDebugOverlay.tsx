@@ -3,14 +3,15 @@ import { isDefined } from "../../util/ObjectUtils";
 import type { FeetPositions } from "../camera/CameraSupport";
 
 interface CameraDebugOverlayProps {
+  className?: string;
   style?: CSSProperties;
   feetPositions?: FeetPositions;
 }
 
-export default function CameraDebugOverlay({ style, feetPositions }: CameraDebugOverlayProps) {
+export default function CameraDebugOverlay({ className, style, feetPositions }: CameraDebugOverlayProps) {
   return (
     <>
-      <div style={style}>
+      <div className={className} style={style}>
         {isDefined(feetPositions) &&
           Object.values(feetPositions).map((pos, i) => (
             <div

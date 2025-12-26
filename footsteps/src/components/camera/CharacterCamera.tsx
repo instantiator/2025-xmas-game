@@ -7,7 +7,7 @@ interface CharacterCameraProps {
   setStream: Dispatch<SetStateAction<MediaStream | undefined>>;
   video: HTMLVideoElement | null;
   setVideo: Dispatch<SetStateAction<HTMLVideoElement | null>>;
-  setAspect: Dispatch<SetStateAction<number | undefined>>;
+  onAspectChange: Dispatch<SetStateAction<number | undefined>>;
   colorKey: boolean;
 }
 
@@ -16,7 +16,7 @@ export default function CharacterCamera({
   setStream,
   video,
   setVideo,
-  setAspect,
+  onAspectChange: setAspect,
   colorKey,
 }: CharacterCameraProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
