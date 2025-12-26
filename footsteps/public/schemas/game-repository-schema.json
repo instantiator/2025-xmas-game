@@ -168,7 +168,13 @@
         },
         "GameDisplayMediaData": {
             "properties": {
+                "motionImageResource": {
+                    "type": "string"
+                },
                 "resource": {
+                    "type": "string"
+                },
+                "stillImageResource": {
                     "type": "string"
                 },
                 "type": {

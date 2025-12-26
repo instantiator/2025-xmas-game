@@ -26,6 +26,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "lodash": "^4.17.21",
     "mustache": "^4.2.0",
+    "partycles": "^1.2.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-mustache-template-component": "^2.1.6",

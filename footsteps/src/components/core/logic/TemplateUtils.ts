@@ -31,3 +31,13 @@ export const decorateGameState = (gameState: GameState): DecoratedGameState => (
 
 export const summariseTemplateSource = (source: GameDisplayTemplateSourceData | undefined) =>
   `${source?.sourceType ?? "undefined"}:${source?.templateSource ?? `uid:${v4()}`}`;
+
+export const parseLines = (text: string | undefined): string[] => {
+  if (!text) {
+    return [];
+  }
+  return text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+};

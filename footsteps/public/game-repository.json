@@ -148,7 +148,8 @@
                   "component": {
                     "type": "scroll",
                     "showInput": true,
-                    "text": "This is the first prompt. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.",
+                    "label": "What's the answer?",
+                    "text": "This is the first prompt.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.",
                     "data": {}
                   }
                 }
@@ -172,9 +173,12 @@
                     "type": "scroll",
                     "showInput": true,
                     "text": "This is the second prompt.",
+                    "label": "What do you hear?",
                     "media": {
                       "type": "audio",
-                      "resource": "bells"
+                      "resource": "bells",
+                      "stillImageResource": "tape-still",
+                      "motionImageResource": "tape-motion"
                     },
                     "data": {}
                   }
