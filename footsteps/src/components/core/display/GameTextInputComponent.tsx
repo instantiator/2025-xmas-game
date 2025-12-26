@@ -61,6 +61,8 @@ export default function GameTextInputComponent({
           id={`input-${stageId}-${challengeId}-${uid}`}
           type="text"
           disabled={solved}
+          autoComplete="off"
+          autoCorrect="off"
           style={{
             width: "90%",
             textTransform: "uppercase",

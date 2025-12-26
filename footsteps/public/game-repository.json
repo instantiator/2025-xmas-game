@@ -1,43 +1,6 @@
 {
   "$schema": "./schemas/game-repository-schema.json",
   "games": {
-    "test-game": {
-      "id": "test-game",
-      "title": "Test Game",
-      "modules": {
-        "camera": {
-          "enabled": true
-        }
-      },
-      "displays": [
-        {
-          "purpose": "game-overview-title",
-          "component": {
-            "type": "template",
-            "foregroundTemplate": {
-              "sourceType": "embedded",
-              "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
-            },
-            "backgroundTemplate": {
-              "sourceType": "embedded",
-              "content": ""
-            },
-            "backgroundStyle": {
-              "background": "black",
-              "backgroundImage": "url('/samples/test-game/lava-cave-01.jpeg')",
-              "backgroundSize": "cover",
-              "backgroundPosition": "center"
-            },
-            "data": {}
-          }
-        }
-      ],
-      "stages": [],
-      "gameContainerStyle": {
-        "backgroundColor": "#222222",
-        "borderRadius": "5px"
-      }
-    },
     "magic-trifle": {
       "id": "magic-trifle",
       "title": "Nanny's Magic Trifle",
@@ -45,6 +8,10 @@
         "camera": {
           "enabled": false
         }
+      },
+      "config": {
+        "sequential": true,
+        "autoAdvanceStages": false
       },
       "resources": {
         "title-background": { "type": "local", "target": "games/magic-trifle/title/background.png" },
@@ -54,7 +21,10 @@
         "star": { "type": "local", "target": "games/magic-trifle/overview/star-2.gif" },
         "bells": { "type": "local", "target": "games/magic-trifle/bells.mp3" },
         "tape-still": { "type": "local", "target": "games/magic-trifle/tape-still.png" },
-        "tape-motion": { "type": "local", "target": "games/magic-trifle/tape-motion.gif" }
+        "tape-motion": { "type": "local", "target": "games/magic-trifle/tape-motion.gif" },
+        "end-music": { "type": "local", "target": "games/magic-trifle/arrival-of-a-princess.mp3" },
+        "end-magic-still": { "type": "local", "target": "games/magic-trifle/magic-explosion-2.webp" },
+        "end-magic-motion": { "type": "local", "target": "games/magic-trifle/magic-explosion-2.webp" }
       },
       "displays": [
         {
@@ -107,7 +77,8 @@
             "stages-link-stage-3": "stage-3",
             "stages-link-stage-4": "stage-4",
             "stages-link-stage-5": "stage-5",
-            "stages-link-stage-6": "stage-6"
+            "stages-link-stage-6": "stage-6",
+            "stages-link-stage-7": "stage-7"
           }
         }
       ],
@@ -150,19 +121,19 @@
                     "data": {},
                     "contents": [
                       {
-                        "text": "This is the first prompt.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas sem in ligula fringilla viverra. Donec luctus molestie diam, nec viverra tortor laoreet a. Mauris tellus felis, bibendum vel malesuada vel, euismod sit amet tellus."
+                        "text": "Didi the Duck wants to help you, it’s true,\nShe knows one of the ingredients, too!\nShe’s hiding inside a cold little box,\nGood luck, clever friends, undoing the locks!"
                       },
                       {
-                        "text": "Part 2 - some more text and questions and such",
+                        "text": "The code to the lock is easy to find\nWhat’s the smallest number that comes to mind?",
                         "showInput": true,
-                        "label": "What's the answer?"
+                        "label": "What ingredient does Didi know?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["LOVE"],
                 "hints": []
               }
             }
@@ -181,22 +152,22 @@
                     "data": {},
                     "contents": [
                       {
+                        "text": "Split into teams with a leader to turn to!\nAvery's team one, and Eden's team two\nSo Ernie's team three\nwith the twins, you see!\nFollow directions, and stick to the plan\nFind the cross, spot the scroll, and come back as fast as you can!"
+                      },
+                      {
+                        "text": "Bring back to base whatever you find\nCount them up, find the sum,\nthen the puzzle's half-done!\nLook for a poster to give you a key,\nand transform your numbers into A-B-Cs"
+                      },
+                      {
+                        "text": "There's 3 different letters, so what did you find?\nIt's a word we need, with those letters combined!",
                         "showInput": true,
-                        "text": "This is the second prompt.",
-                        "label": "What do you hear?",
-                        "media": {
-                          "type": "audio",
-                          "resource": "bells",
-                          "stillImageResource": "tape-still",
-                          "motionImageResource": "tape-motion"
-                        }
+                        "label": "What's the second ingredient?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["JOY"],
                 "hints": []
               }
             }
@@ -216,15 +187,19 @@
                     "data": {},
                     "contents": [
                       {
+                        "text": "Across the hall, you need to go\nTo where the big comfy chairs are on show.\nFind a sock that's big and red\nPull out a clue, and use your head!"
+                      },
+                      {
+                        "text": "Some of the squares are specially highlighted\nWhen you figure this out, Nanny's delighted!\nIt's half the ingredient to go on our list\nSo tell us now, the magic ingredient we've missed!",
                         "showInput": true,
-                        "text": "This is the third prompt."
+                        "label": "What's the first half of ingredient 3?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["RAIN"],
                 "hints": []
               }
             },
@@ -238,15 +213,19 @@
                     "data": {},
                     "contents": [
                       {
+                        "text": "The page you found has a secret key\nYou'll need it to unlock the next part, you see!\nEach number's disguised, and you'll need to find three\nTo get this ingredient for Nanny's recipe."
+                      },
+                      {
+                        "text": "On the bookshelf where many tales stand\nFind a book about Alice in Wonderland\nWith the secret code, the book opens wide\nWhat's special about the mystery inside?",
                         "showInput": true,
-                        "text": "This is the fourth prompt."
+                        "label": "What's the second half of ingredient 3?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["BOW"],
                 "hints": []
               }
             }
@@ -266,19 +245,27 @@
                     "contents": [
                       {
                         "showInput": true,
-                        "text": "This is the fifth prompt."
+                        "text": "A tiny piano hides down low,\nListen close - it has something to show.\nA colourful picture is part of it too,\nJoin all the clues and the answer will come to you!",
+                        "label": "What magic ingredient can you hear?",
+                        "media": {
+                          "type": "audio",
+                          "resource": "bells",
+                          "stillImageResource": "tape-still",
+                          "motionImageResource": "tape-motion"
+                        }
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["BELLS"],
                 "hints": []
               }
             }
           ]
         },
+
         {
           "id": "stage-5",
           "challenges": [
@@ -292,15 +279,19 @@
                     "data": {},
                     "contents": [
                       {
+                        "text": "Search the Christmas tree, high and low\nThree little watches are hiding - go slow!\nFind all three watches and bring them back here\nThe big hand will make the secret clear"
+                      },
+                      {
+                        "text": "Look around to help you do better\nand turn those numbers into letters!\nIt's the fifth magic ingredient that we need to make\nNanny's trifle, so tell us now, for goodness' sake!",
                         "showInput": true,
-                        "text": "This is the sixth prompt."
+                        "label": "What's the fifth ingredient?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["WISHES"],
                 "hints": []
               }
             }
@@ -319,15 +310,63 @@
                     "data": {},
                     "contents": [
                       {
+                        "text": "Auntie Laura's got a secret cipher\nTo help unlock the box beside her..."
+                      },
+                      {
+                        "text": "Three symbols will open the locks\nSo you can get at what's in the box!\nEden, Avery, Ernest are a winning combination\nor Vicki, Morgan, and Harriet...\nor Ashley, Nanny, Rich...\nIt's not just my imagination!\n(☂️ = 8)",
                         "showInput": true,
-                        "text": "This is the seventh prompt."
+                        "label": "What's in the box?"
                       }
                     ]
                   }
                 }
               ],
               "solution": {
-                "answers": ["ANSWER"],
+                "answers": ["STARS"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-7",
+          "challenges": [
+            {
+              "id": "stage-7-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "data": {},
+                    "contents": [
+                      {
+                        "text": "In the playroom, look around\nA wooden box can soon be found.\nOn the front, a Christmas tree\nThat's the box that unlocks, with your new key!\n(Bring it back to me...)"
+                      },
+                      {
+                        "text": "You've found the last part, now don't delay!\nReveal the recipe and save the day!"
+                      },
+                      {
+                        "text": "Nanny's Magic Trifle recipe\nSpin a rainbow\nJump with joy\nRing the bells\nSprinkle with stars\nStir with love\nMake a wish\nMagic trifle... appear!"
+                      },
+                      {
+                        "text": "One more time!\nSpin a rainbow\nJump with joy\nRing the bells\nSprinkle with stars\nStir with love\nMake a wish\nMagic trifle... appear!"
+                      },
+                      {
+                        "text": "Spin a rainbow\nJump with joy\nRing the bells\nSprinkle with stars\nStir with love\nMake a wish\nMagic trifle... appear!",
+                        "media": {
+                          "type": "audio",
+                          "resource": "end-music",
+                          "stillImageResource": "end-magic-still",
+                          "motionImageResource": "end-magic-motion"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["END"],
                 "hints": []
               }
             }

@@ -157,6 +157,7 @@ export default function GameDisplayScrollComponent({
                     setSolved={setSolved}
                     autoSubmit={true}
                     onAnswer={onAnswer}
+                    label={content.label}
                   />
                 )}
 

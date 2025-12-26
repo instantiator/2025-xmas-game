@@ -30,6 +30,14 @@ export default function Attributions() {
               <a href="https://uppbeat.io/track/simon-folwar/elves-workshop">Elves Workshop</a> by{" "}
               <a href="https://uppbeat.io/browse/artist/simon-folwar">Simon Folwar</a>
             </li>
+            <li>
+              <a href="https://uppbeat.io/t/monument-music/fairies-in-the-garden">Faiiries in the Garden</a> by Monument
+              Music
+            </li>
+            <li>
+              <a href="https://uppbeat.io/t/aaron-paul-low/arrival-of-a-princess">Arrival of a Princess</a> by Aaron
+              Paul Low
+            </li>
           </ul>
         </li>
         <li>

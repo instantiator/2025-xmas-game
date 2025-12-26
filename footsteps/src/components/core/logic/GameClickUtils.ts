@@ -22,7 +22,7 @@ export const getNewGameStateForClick = (state: GameState, layerId: string, targe
             throw new Error("Stage state not found for stage id: " + stageId);
           }
           if (stageState.completion === "completed" || stageState.availability === "locked") {
-            return undefined; // do not enter completed stages, or unavailable stages
+            return undefined; // do not enter unavailable stages
           }
           return {
             ...state,
