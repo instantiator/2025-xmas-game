@@ -27,7 +27,7 @@ export default function GameAudioComponent({ media, controls, audioStyle }: Game
         <img
           src={resources[media.stillImageResource]}
           style={{
-            height: "15vh",
+            height: "20vh",
             margin: "10px",
             animation: "floatAndZoom 3s ease-in-out infinite alternate",
             filter: "drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))",
@@ -45,7 +45,7 @@ export default function GameAudioComponent({ media, controls, audioStyle }: Game
           src={resources[media.motionImageResource]}
           alt={`Playing ${media.audioDescription}`}
           style={{
-            height: "15vh",
+            height: "20vh",
             margin: "10px",
             animation: "floatAndZoom 3s ease-in-out infinite alternate",
             filter: "drop-shadow(8px 8px 10px rgba(0, 0, 0, 0.5))",
@@ -62,7 +62,7 @@ export default function GameAudioComponent({ media, controls, audioStyle }: Game
         ref={audioRef}
         key={`audio-${media.resource}-${uid}`}
         controls={controls}
-        style={audioStyle}
+        style={{ fontFamily: "inherit", fontSize: "inherit", ...audioStyle }}
         onPlay={handlePlay}
         onPause={handlePause}
         onEnded={handlePause}

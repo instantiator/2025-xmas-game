@@ -97,6 +97,7 @@ export default function GameDisplayScrollComponent({
             overflowY: "auto",
             marginTop: "18vh",
             marginBottom: "5vh",
+            paddingBottom: "5vh",
             maskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%)",
             ...containerStyle,
@@ -170,7 +171,7 @@ export default function GameDisplayScrollComponent({
                       justifyContent: "space-between",
                       alignItems: "center",
                       marginTop: "5%",
-                      marginBottom: "10%",
+                      marginBottom: "5vh",
                       paddingLeft: "2%",
                       paddingRight: "2%",
                     }}
