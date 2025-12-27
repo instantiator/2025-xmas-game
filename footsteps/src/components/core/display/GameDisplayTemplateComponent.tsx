@@ -39,8 +39,6 @@ export default function GameDisplayTemplateComponent({
 
   const uid = useId();
 
-  console.debug("Rendering GameDisplayTemplateComponent");
-
   useEffect(() => {
     setContainerStyleParsed(
       isDefined(containerStyle)

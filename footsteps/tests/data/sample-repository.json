@@ -1,0 +1,138 @@
+{
+  "$schema": "../../public/schemas/game-repository-schema.json",
+  "games": {
+    "simple-game": {
+      "title": "Simple Game",
+      "config": {
+        "sequential": true,
+        "autoAdvanceStages": false
+      },
+      "displays": [
+        {
+          "purpose": "game-overview-title",
+          "component": {
+            "type": "template",
+            "foregroundTemplate": {
+              "sourceType": "embedded",
+              "content": "<h1 style='color: white;'>{{gameData.title}}</h1>"
+            },
+            "backgroundTemplate": {
+              "sourceType": "embedded",
+              "content": ""
+            },
+            "data": {}
+          }
+        }
+      ],
+      "stages": [
+        {
+          "id": "stage-1",
+          "challenges": [
+            {
+              "id": "stage-1-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "contents": [
+                      {
+                        "text": "This is stage 1 challenge 1. The answer is: ANSWER",
+                        "showInput": true
+                      }
+                    ],
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-2",
+          "challenges": [
+            {
+              "id": "stage-2-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "contents": [
+                      {
+                        "text": "This is stage 2 challenge 1. The answer is: ANSWER",
+                        "showInput": true
+                      }
+                    ],
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            },
+            {
+              "id": "stage-2-challenge-2",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "contents": [
+                      {
+                        "text": "This is stage 2 challenge 2. The answer is: ANSWER",
+                        "showInput": true
+                      }
+                    ],
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "stage-3",
+          "challenges": [
+            {
+              "id": "stage-3-challenge-1",
+              "displays": [
+                {
+                  "purpose": "challenge-in-progress",
+                  "component": {
+                    "type": "scroll",
+                    "contents": [
+                      {
+                        "text": "This is stage 3 challenge 1. The answer is: ANSWER",
+                        "showInput": true
+                      }
+                    ],
+                    "data": {}
+                  }
+                }
+              ],
+              "solution": {
+                "answers": ["ANSWER"],
+                "hints": []
+              }
+            }
+          ]
+        }
+      ],
+      "gameContainerStyle": {
+        "backgroundColor": "#222222",
+        "borderRadius": "5px"
+      }
+    }
+  }
+}

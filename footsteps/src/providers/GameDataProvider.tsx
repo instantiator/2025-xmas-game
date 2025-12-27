@@ -51,7 +51,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
             resources[key] = new URL(def.target).toString(); // simple urls can be used directly
             break;
         }
-        console.log(`Loaded resource [${key}]: ${resources[key]}`);
+        console.debug(`Loaded resource [${key}]: ${resources[key]}`);
       }
       return resources;
     };
@@ -89,7 +89,7 @@ export function GameDataProvider({ id, children, loadingView }: React.PropsWithC
   }, [repository, id, data]);
 
   useEffect(() => {
-    console.info(`Game loading state: ${gameLoading.loadingState}`);
+    console.debug(`Game loading state: ${gameLoading.loadingState}`);
   }, [gameLoading.loadingState]);
 
   return (

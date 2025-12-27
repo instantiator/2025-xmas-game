@@ -50,7 +50,6 @@ export default function Game() {
 
   /** Whenever the game state changes, check for and reward completed stages */
   useEffect(() => {
-    console.debug(gameState);
     const newProgress = gameState.stages.filter((s) => s.completion === "completed").map((s) => s.stage.id);
     if (!_.isEqual(newProgress, progressTracker)) {
       reward();
@@ -153,10 +152,10 @@ export default function Game() {
   }, [gameState, onAnswer, resources, setGameState]);
 
   const handleElementClick = (layerId: string, elementId: string) => {
-    console.info(`Element ${elementId} on layer ${layerId} clicked.`);
+    console.debug(`Element ${elementId} on layer ${layerId} clicked.`);
     const newState = getNewGameStateForClick(gameState, layerId, elementId);
     if (isDefined(newState)) {
-      console.info("Updating game state from click.", newState);
+      console.debug("Updating game state from click.", newState);
       setGameState(newState);
       return true;
     } else {

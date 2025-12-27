@@ -46,7 +46,6 @@ describe("GameRepositoryProvider", () => {
       ready: true,
       loading: false,
     });
-    expect(contextValue!.repository.games["test-game"]).toBeDefined();
     expect(contextValue!.repository.games["magic-trifle"]).toBeDefined();
   });
 });
